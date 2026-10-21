@@ -1,0 +1,1948 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+<meta charset="UTF-8">
+<!-- Hace que la página se adapte al celular y a la PC. No tocar. -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Título de la pestaña del navegador y del resultado en Google. -->
+<title>Nómada VN | Novelas Visuales en Español para PC y Android</title>
+<!-- Descripción que muestra Google debajo del título. -->
+<meta name="description" content="Descarga novelas visuales +18 en español para PC y Android (APK). Contenido para adultos: encontrá los últimos lanzamientos, parches de traducción y juegos destacados en Nómada VN.">
+<!-- Le dice a Google que puede indexar la página y seguir sus enlaces. -->
+<meta name="robots" content="index, follow">
+<!-- Etiqueta RTA ("Restricted To Adults"): avisa a los filtros de control parental y a los buscadores que el sitio es solo para mayores de 18. -->
+<meta name="rating" content="RTA-5042-1996-1400-1577-RTA">
+<!-- Vista previa al compartir el enlace en Discord, Telegram, WhatsApp y otras redes (Open Graph). La imagen es assets/images/logo/vista-previa.jpg (1200 x 630 px, pesa menos de 300 KB para que WhatsApp la muestre). -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nomadavn.github.io/">
+<meta property="og:title" content="Nómada VN | Novelas Visuales en Español">
+<meta property="og:description" content="Novelas visuales +18 en español para PC (Windows) y Android (APK). Solo para mayores de 18 años.">
+<meta property="og:image" content="https://nomadavn.github.io/assets/images/logo/vista-previa.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Nómada VN, traducciones de novelas visuales +18 en español">
+<!-- Vista previa en Twitter/X. -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@Nomada_VN">
+<meta name="twitter:title" content="Nómada VN | Novelas Visuales en Español">
+<meta name="twitter:description" content="Novelas visuales +18 en español para PC y Android (APK). Solo para mayores de 18 años.">
+<meta name="twitter:image" content="https://nomadavn.github.io/assets/images/logo/vista-previa.jpg">
+<!-- Color de la barra del navegador en el celular. -->
+<meta name="theme-color" content="#0d0b0d">
+<meta name="color-scheme" content="dark">
+<!-- Ícono de la pestaña del navegador (favicon): cuadrado violeta con la letra N. Para cambiar la letra, editá la N dentro de la dirección de abajo. -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23d92d48'/%3E%3Ctext x='32' y='46' font-size='40' font-weight='800' text-anchor='middle' fill='white' font-family='Arial'%3EN%3C/text%3E%3C/svg%3E">
+<!-- Google Analytics (GA4): mide las visitas del sitio. ID de medición: G-VWXX16ESML. Para quitarlo, borrá estas dos etiquetas script. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VWXX16ESML"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments)}
+gtag("js",new Date());
+gtag("config","G-VWXX16ESML");
+</script>
+<!-- Estilos del diseño: styles.css lo genera Tailwind al ejecutar compilar.bat (lee las clases de este index.html). Tiene que estar en la misma carpeta que index.html. Cada vez que cambies clases del diseño, volvé a ejecutar compilar.bat. -->
+<link rel="stylesheet" href="styles.css"><!-- (ya no es obligatorio: el diseño vive en el <style> de abajo; queda por compatibilidad) -->
+<!-- Tipografía del sitio (Plus Jakarta Sans, de Google Fonts). -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- ESTILOS DEL SITIO: sistema de diseño propio (variables, componentes, responsive). No depende de Tailwind. -->
+<style>
+/* =====================================================================
+   NÓMADA VN · SISTEMA DE DISEÑO
+   Todo el aspecto del sitio vive acá (no depende de Tailwind).
+   Orden: 1 variables · 2 base · 3 utilidades · 4 botones · 5 chips, badges y pills
+          6 cabecera · 7 intro · 8 hero · 9 filtros · 10 tarjetas y filas · 11 paginación
+          12 ventanas (modal) · 13 pestañas, acordeón, tabla, galería · 14 formularios y comentarios
+          15 pie de página · 16 imágenes +18 y carga · 17 movimiento reducido
+   ===================================================================== */
+
+/* 1. VARIABLES: cambiá un valor acá y cambia en todo el sitio. */
+:root{
+ /* colores */
+ --bg:#0d0b0d; --ink:#f1e6e2; --ink-2:#c9bab5; --ink-3:#a2918e;
+ --acc:#f23b55; --acc-2:#d92d48; --acc-3:#b3223a; --acc-ink:#ff9ba5;
+ --acc-soft:rgba(242,59,85,.14); --acc-line:rgba(242,59,85,.5);
+ --glass:rgba(26,18,20,.72); --glass-hi:rgba(42,22,27,.88);
+ --surface:#1a1214; --surface-2:#231619; --sheet:#151012;
+ --line:rgba(255,140,150,.12); --line-2:rgba(255,255,255,.09);
+ --ok:#86efac; --info:#93c5fd; --warn:#fbbf24; --focus:#ffc2c9;
+ /* radios */
+ --r-sm:10px; --r-md:14px; --r-lg:20px; --r-xl:28px; --r-pill:999px;
+ /* sombras */
+ --sh-1:0 6px 20px -8px rgba(0,0,0,.65);
+ --sh-2:0 30px 80px -24px rgba(0,0,0,.9);
+ --sh-acc:0 16px 44px -16px rgba(242,59,85,.6);
+ /* movimiento (150–250 ms) */
+ --ease:cubic-bezier(.2,.7,.2,1); --t-fast:.15s; --t:.2s; --t-slow:.25s;
+ /* espaciado */
+ --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:72px;
+ /* medidas */
+ --tap:44px; --max:1280px; --gutter:clamp(16px,4vw,32px); --card-ratio:4/3;
+ --font:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+
+/* 2. BASE */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:96px}
+body{margin:0;min-height:100vh;display:flex;flex-direction:column;background-color:var(--bg);background-image:radial-gradient(900px 420px at 12% -6%,rgba(242,59,85,.14),transparent 62%),radial-gradient(800px 380px at 100% 0,rgba(92,200,200,.06),transparent 60%);background-repeat:no-repeat;color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,p,ul,ol,figure,table{margin:0}
+h1,h2,h3,h4{font-size:inherit;font-weight:inherit}
+ul,ol{padding:0;list-style:none}
+a{color:inherit;text-decoration:none}
+img,svg{display:block;max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
+button{background:none;border:0;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+table{border-collapse:collapse;width:100%}
+::selection{background:var(--acc-2);color:#fff}
+:focus{outline:none}
+:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:var(--r-sm)}
+input:focus-visible,select:focus-visible,textarea:focus-visible{outline-offset:1px}
+.wrap{width:100%;max-width:var(--max);margin-inline:auto;padding-inline:var(--gutter)}
+.skip{position:absolute;left:12px;top:-60px;z-index:200;background:var(--acc-2);color:#fff;font-weight:700;padding:10px 16px;border-radius:var(--r-md);transition:top var(--t-fast)}
+.skip:focus{top:12px}
+
+/* 3. UTILIDADES (las que usa el JavaScript para mostrar y ocultar) */
+.flex{display:flex}
+.hidden{display:none!important}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.ico{width:18px;height:18px;flex:none}
+.ico-s{width:14px;height:14px;flex:none}
+.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+.solo-pc{display:none}@media(min-width:640px){.solo-pc{display:inline}}
+.glass{background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line)}
+.glass-hover:hover{background:var(--glass-hi);border-color:var(--acc-line)}
+.glow{box-shadow:0 0 40px -10px rgba(242,59,85,.28)}
+
+/* 4. BOTONES */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);min-height:var(--tap);padding:0 22px;border-radius:var(--r-md);font-weight:700;font-size:.9rem;line-height:1.1;text-align:center;white-space:nowrap;border:1px solid transparent;transition:transform var(--t-fast) var(--ease),background var(--t),border-color var(--t),box-shadow var(--t),color var(--t)}
+.btn:active{transform:translateY(1px) scale(.99)}
+.btn-primary{color:#fff;background:linear-gradient(135deg,var(--acc-2),var(--acc-3));box-shadow:0 10px 26px -12px rgba(242,59,85,.8)}
+.btn-primary:hover{background:linear-gradient(135deg,#e8374f,var(--acc-2));transform:translateY(-1px);box-shadow:var(--sh-acc)}
+.btn-ghost{color:var(--ink);background:rgba(255,255,255,.04);border-color:var(--line-2)}
+.btn-ghost:hover{background:var(--acc-soft);border-color:var(--acc-line);transform:translateY(-1px)}
+.btn-sm{min-height:var(--tap);padding:0 16px;font-size:.8rem;border-radius:var(--r-pill)}
+.btn-block{width:100%}
+.btn-danger{color:#ffb4bc}
+.btn-icon{display:inline-grid;place-items:center;width:var(--tap);height:var(--tap);border-radius:50%;color:var(--ink);background:rgba(13,11,13,.55);border:1px solid var(--line-2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:background var(--t),border-color var(--t),transform var(--t-fast)}
+.btn-icon:hover{background:var(--acc-2);border-color:transparent}
+.btn-icon:active{transform:scale(.94)}
+.btn-link{color:var(--ink-3);text-decoration:underline;text-underline-offset:3px;font-size:.8rem;min-height:var(--tap);display:inline-flex;align-items:center;transition:color var(--t)}
+.btn-link:hover{color:var(--ink)}
+
+/* 5. CHIPS, BADGES Y PILLS */
+.chip{max-width:100%;overflow:hidden;text-overflow:ellipsis;display:inline-flex;align-items:center;gap:6px;min-height:26px;padding:0 10px;border-radius:var(--r-pill);font-size:.72rem;font-weight:700;color:var(--acc-ink);background:var(--acc-soft);border:1px solid rgba(242,59,85,.3);white-space:nowrap;transition:background var(--t),color var(--t),border-color var(--t)}
+button.chip{min-height:36px;padding:0 14px;font-size:.78rem;cursor:pointer}
+button.chip:hover{background:var(--acc-2);color:#fff;border-color:transparent}
+.chip-more{color:var(--ink-3);background:none;border-color:transparent;padding:0 4px}
+.badge{display:inline-flex;align-items:center;min-height:24px;padding:0 9px;border-radius:8px;font-size:.7rem;font-weight:800;letter-spacing:.02em;color:#fff;box-shadow:0 4px 12px -4px rgba(0,0,0,.6)}
+.b-new{background:var(--acc-2)}
+.b-upd{background:#2563eb}
+.b-season{background:var(--warn);color:#1a1214}
+.b-18{background:rgba(13,11,13,.78);border:1px solid var(--acc-line);color:var(--acc-ink)}
+.b-size{background:rgba(13,11,13,.72);color:var(--ink-2);font-weight:700;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.plat{display:inline-flex;align-items:center;gap:6px;min-height:28px;padding:0 10px;border-radius:var(--r-pill);font-size:.72rem;font-weight:700;background:rgba(13,11,13,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.plat-pc{color:#ffb3bc;border:1px solid rgba(242,59,85,.55)}
+.plat-an{color:var(--ok);border:1px solid rgba(74,222,128,.5)}
+.pill{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:var(--tap);padding:0 16px;border-radius:var(--r-pill);font-size:.8rem;font-weight:700;color:var(--ink-2);white-space:nowrap;background:var(--glass);border:1px solid var(--line);transition:background var(--t),border-color var(--t),color var(--t),transform var(--t-fast)}
+.pill:hover{background:var(--glass-hi);border-color:var(--acc-line);color:var(--ink)}
+.pill:active{transform:scale(.97)}
+.pill .n{opacity:.7;font-weight:600}
+.pill.on,.pill[aria-pressed="true"]{background:var(--acc-2);border-color:transparent;color:#fff;box-shadow:0 8px 22px -12px rgba(242,59,85,.9)}
+.pill-f{color:#ffa6c3}
+.lp{color:var(--info)}.lp.on{background:#2563eb;border-color:transparent;color:#fff;box-shadow:none}
+.lt{color:var(--ok)}.lt.on{background:#15803d;border-color:transparent;color:#fff;box-shadow:none}
+.pill-f.on{background:#be185d;color:#fff}
+.pill-sm{min-height:var(--tap);padding:0 14px;font-size:.76rem}
+.chip-l{display:inline-flex;font-size:.7rem;font-weight:700;border-radius:var(--r-pill);padding:2px 9px}
+.chip-p{background:rgba(37,99,235,.2);color:var(--info);border:1px solid rgba(37,99,235,.45)}
+.chip-t{background:rgba(22,163,74,.2);color:var(--ok);border:1px solid rgba(22,163,74,.45)}
+.seg{display:inline-flex;align-items:center;padding:0;gap:0;overflow:hidden;border-radius:var(--r-pill);background:var(--glass);border:1px solid var(--line)}
+.seg button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:var(--tap);min-width:var(--tap);padding:0 14px;border-radius:var(--r-pill);font-size:.8rem;font-weight:700;color:var(--ink-2);transition:background var(--t),color var(--t)}
+.seg button:hover{color:var(--ink);background:rgba(255,255,255,.05)}
+.seg button[aria-pressed="true"]{background:var(--acc-2);color:#fff}
+.seg-icons button{padding:0}
+
+/* 6. CABECERA */
+.hdr{position:sticky;top:0;z-index:50;background:rgba(16,11,13,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.hdr-in{display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"logo search acts";align-items:center;gap:var(--s3) var(--s5);padding-block:var(--s3)}
+.brand{grid-area:logo;display:inline-flex;align-items:center;min-height:var(--tap);border-radius:var(--r-sm)}
+.brand img{height:46px;width:auto}
+.search{grid-area:search;position:relative;justify-self:center;width:100%;max-width:520px}
+.search-ico{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--ink-3);pointer-events:none}
+.search input{width:100%;min-height:var(--tap);padding:0 18px 0 44px;border-radius:var(--r-pill);background:rgba(0,0,0,.42);border:1px solid var(--line-2);color:var(--ink);transition:border-color var(--t),background var(--t),box-shadow var(--t)}
+.search input::placeholder{color:var(--ink-3)}
+.search input:focus{border-color:var(--acc);background:rgba(0,0,0,.6);box-shadow:0 0 0 4px var(--acc-soft)}
+.sugs{position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:60;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-2)}
+.sug{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:8px 12px;text-align:left;transition:background var(--t-fast)}
+.sug:hover,.sug:focus-visible{background:rgba(255,255,255,.06)}
+.sug-img{width:40px;height:40px;border-radius:var(--r-sm);overflow:hidden;flex:none;display:grid;place-items:center;background:var(--surface-2);font-weight:800;color:var(--ink-3)}
+.sug-img img{width:100%;height:100%;object-fit:cover}
+.sug b{display:block;font-size:.88rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sug small{display:block;font-size:.75rem;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sug-txt{min-width:0}
+.sug-vacio{padding:14px 16px;font-size:.8rem;color:var(--ink-3)}
+.acts{grid-area:acts;display:flex;align-items:center;gap:var(--s2)}
+.tag18{display:inline-flex;align-items:center;min-height:32px;padding:0 12px;border-radius:var(--r-pill);font-size:.75rem;font-weight:800;color:#ff8f9e;background:rgba(239,68,68,.14);border:1px solid rgba(239,68,68,.4)}
+@media(max-width:820px){
+ .hdr-in{grid-template-columns:1fr auto;grid-template-areas:"logo acts" "search search";gap:var(--s2) var(--s3)}
+ .search{max-width:none}
+ .brand img{height:40px}
+}
+@media(max-width:420px){.tag18{display:none}}
+
+/* 7. INTRO */
+.intro{padding-block:clamp(28px,5vw,56px) var(--s5)}
+.intro-in{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:var(--s5)}
+.intro-txt{max-width:720px}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--acc-ink)}
+.kicker::before{content:"";width:22px;height:2px;border-radius:2px;background:var(--acc)}
+.intro h1{margin-top:var(--s3);font-size:clamp(1.9rem,4.4vw,3.2rem);font-weight:800;line-height:1.08;letter-spacing:-.02em}
+.intro h1 em{white-space:nowrap;font-style:normal;color:var(--acc);text-shadow:0 0 28px rgba(242,59,85,.45)}
+.intro p{margin-top:var(--s3);color:var(--ink-2);font-size:clamp(.95rem,1.6vw,1.08rem);max-width:60ch}
+.intro-btns{display:flex;flex-wrap:wrap;gap:var(--s3)}
+@media(max-width:560px){.intro-btns{width:100%}.intro-btns .btn{flex:1 1 100%}}
+
+/* 8. HERO (carrusel de destacados) */
+.hero{padding-bottom:var(--s5)}
+.hero-card{position:relative;overflow:hidden;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;min-height:clamp(340px,46vw,460px);padding:clamp(20px,4vw,48px);padding-bottom:clamp(76px,9vw,48px);border-radius:var(--r-xl);background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh-2)}
+.hero-bg{position:absolute;inset:0;z-index:-2;background-size:cover;background-position:center 25%;opacity:.55}
+.hero-bg.hero-bg-cambia{animation:heroBg .6s var(--ease) both}
+.hero-card::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(13,11,13,.92) 0,rgba(13,11,13,.6) 45%,rgba(13,11,13,.1) 100%),linear-gradient(0deg,rgba(13,11,13,.9) 0,transparent 55%)}
+.hero-txt{max-width:640px}
+.hero-top{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2);margin-bottom:var(--s3)}
+.hero-title{font-size:clamp(1.7rem,4vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;text-shadow:0 0 22px rgba(242,59,85,.5)}
+.hero-desc{margin-top:var(--s3);color:var(--ink-2);font-size:clamp(.88rem,1.4vw,1rem);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.hero-txt .btn{margin-top:var(--s4)}
+.hero-cambia{animation:heroIn .5s var(--ease) both}
+.hero-ctl{position:absolute;right:clamp(12px,2.5vw,24px);bottom:clamp(12px,2.5vw,24px);z-index:3;align-items:center;gap:var(--s2)}
+.hero-dots{display:flex;align-items:center}
+.hero-pto{position:relative;width:26px;height:var(--tap)}
+.hero-pto::before{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;border-radius:var(--r-pill);background:rgba(255,255,255,.4);transform:translate(-50%,-50%);transition:width var(--t-slow) var(--ease),background var(--t)}
+.hero-pto:hover::before{background:rgba(255,255,255,.75)}
+.hero-pto.on::before{width:22px;background:var(--acc)}
+@keyframes heroIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes heroBg{from{opacity:0}to{opacity:.55}}
+.pchip{display:inline-flex;align-items:center;gap:6px;min-height:28px;padding:0 10px;border-radius:var(--r-pill);font-size:.74rem;font-weight:700;background:rgba(255,255,255,.1);border:1px solid var(--line-2)}
+
+/* 9. FILTROS */
+.sec-t{display:flex;align-items:center;gap:10px;font-size:clamp(1.05rem,2vw,1.3rem);font-weight:800;letter-spacing:-.01em}
+.sec-t::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--acc);box-shadow:0 0 14px var(--acc)}
+.sec-t svg{color:#fb923c}
+.sec-t.no-dot::before{display:none}
+.sec-t small{font-size:.8rem;font-weight:600;color:var(--ink-3)}
+.sec-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:var(--s2);margin-bottom:var(--s4)}
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s3) var(--s4);margin-bottom:var(--s4)}
+.tb-group{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2)}
+.tb-end{margin-left:auto}
+.select{position:relative;display:inline-flex}
+.select select{appearance:none;-webkit-appearance:none;min-height:var(--tap);padding:0 40px 0 18px;border-radius:var(--r-pill);font-size:.8rem;font-weight:700;color:var(--ink);background:var(--glass);border:1px solid var(--line);cursor:pointer;transition:border-color var(--t)}
+.select select:hover{border-color:var(--acc-line)}
+.select select option{background:var(--surface);color:var(--ink)}
+.select::after{content:"";position:absolute;right:16px;top:50%;width:7px;height:7px;border-right:2px solid var(--ink-2);border-bottom:2px solid var(--ink-2);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.note{font-size:.8rem;color:var(--ink-3);margin-bottom:var(--s4)}
+.cats-box{margin-bottom:var(--s5)}
+.cats{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2)}
+.cats-panel{margin-top:var(--s3);padding:var(--s4);border-radius:var(--r-lg);background:rgba(0,0,0,.3);border:1px solid var(--line)}
+.cats-panel .field{max-width:320px;margin-bottom:var(--s3)}
+.cats-more{color:var(--acc-ink)}
+
+/* 10. TARJETAS Y FILAS */
+.grid-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s3)}
+@media(min-width:640px){.grid-cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s5)}}
+@media(min-width:1024px){.grid-cards{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.list-rows{display:flex;flex-direction:column;gap:var(--s3)}
+.card{position:relative;display:flex;flex-direction:column;min-width:0;border-radius:var(--r-lg);overflow:hidden;cursor:pointer;background:var(--glass);border:1px solid var(--line);transition:transform var(--t) var(--ease),border-color var(--t),box-shadow var(--t),background var(--t)}
+.card:hover,.card:has(:focus-visible){transform:translateY(-5px);border-color:var(--acc-line);box-shadow:var(--sh-acc);background:var(--glass-hi)}
+.cover{position:relative;aspect-ratio:var(--card-ratio);overflow:hidden;background:var(--surface)}
+.cover>img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.card:hover .cover>img{transform:scale(1.06)}
+.cover::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(13,11,13,.88) 0,rgba(13,11,13,.15) 48%,rgba(13,11,13,.4) 100%)}
+.cover-ph{display:grid;place-items:center;width:100%;height:100%;background:linear-gradient(135deg,#5e1424,#36081b);font-size:3.4rem;font-weight:800;color:rgba(255,255,255,.28)}
+.cover>.badges{position:absolute;top:10px;left:10px;right:10px;z-index:2;display:flex;flex-wrap:wrap;gap:6px;pointer-events:none}
+.cover>.badges .b-18{margin-left:auto}
+.cover>.plats{position:absolute;left:10px;bottom:10px;z-index:2;display:flex;flex-wrap:wrap;gap:6px;max-width:calc(100% - 64px)}
+.fav-btn{position:absolute;right:6px;bottom:6px;z-index:3;display:grid;place-items:center;width:var(--tap);height:var(--tap);border-radius:50%;color:var(--ink-2);transition:color var(--t),transform var(--t-fast)}
+.fav-btn::before{content:"";position:absolute;inset:6px;border-radius:50%;background:rgba(13,11,13,.72);border:1px solid var(--line-2);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:-1;transition:background var(--t)}
+.fav-btn:hover{color:#ff8fb5}
+.fav-btn:hover::before{background:rgba(13,11,13,.92)}
+.fav-btn:active{transform:scale(.9)}
+.fav-btn.on{color:#ff6fa3}
+.card-body{display:flex;flex-direction:column;gap:var(--s2);padding:14px 14px 16px;min-width:0}
+.card-chips{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-height:26px}
+.card-title{font-size:1rem;font-weight:800;line-height:1.25;letter-spacing:-.005em}
+.card-link{display:block;padding:4px 0;max-width:100%;text-align:left;font-weight:inherit;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-radius:6px}
+.card-body>.chip-l{align-self:flex-start}
+.card-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:.75rem;color:var(--ink-3)}
+.vis{display:flex;align-items:center;gap:5px;min-height:16px;font-size:.75rem;color:var(--ink-3)}
+@media(max-width:480px){.plat span{display:none}.plat{padding:0 8px}.card-body{padding:12px 12px 14px}.card-title{font-size:.92rem}.cover-ph{font-size:2.6rem}}
+.row{display:flex;align-items:center;gap:var(--s4);padding:10px;border-radius:var(--r-lg);cursor:pointer;background:var(--glass);border:1px solid var(--line);transition:transform var(--t) var(--ease),border-color var(--t),box-shadow var(--t),background var(--t)}
+.row:hover,.row:has(:focus-visible){transform:translateX(3px);border-color:var(--acc-line);box-shadow:var(--sh-acc);background:var(--glass-hi)}
+.row-cover{position:relative;flex:none;width:104px;aspect-ratio:var(--card-ratio);border-radius:var(--r-md);overflow:hidden;background:var(--surface)}
+.row-cover>img{width:100%;height:100%;object-fit:cover}
+.row-cover .cover-ph{font-size:1.8rem}
+.row-cover .badges{position:absolute;top:5px;left:5px;z-index:2}
+.row-cover .badge{min-height:20px;padding:0 6px;font-size:.62rem}
+.row-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.row-acts{display:flex;align-items:center;gap:var(--s2);flex:none;color:var(--ink-3);padding-right:4px}
+.row-acts .fav-btn{position:relative;right:auto;bottom:auto}
+.row-acts .fav-btn::before{display:none}
+.row-pl{display:flex;gap:6px}
+.row-pl .pc{color:var(--acc-ink)}.row-pl .an{color:var(--ok)}
+@media(min-width:640px){.row-cover{width:132px}}
+@media(max-width:480px){.row-pl{display:none}.row-cover{width:88px}}
+.empty{text-align:center;color:var(--ink-3);padding:var(--s8) var(--s4)}
+.top-row{display:flex;gap:var(--s4);overflow-x:auto;padding:4px 2px var(--s3);scroll-snap-type:x proximity}
+.mini{position:relative;flex:none;width:176px;scroll-snap-align:start;border-radius:var(--r-lg);overflow:hidden;cursor:pointer;background:var(--glass);border:1px solid var(--line);transition:transform var(--t) var(--ease),border-color var(--t),box-shadow var(--t)}
+.mini:hover,.mini:has(:focus-visible){transform:translateY(-4px);border-color:var(--acc-line);box-shadow:var(--sh-acc)}
+@media(min-width:640px){.mini{width:208px}}
+.mini .cover{aspect-ratio:var(--card-ratio)}
+.rank{position:absolute;top:10px;left:10px;z-index:2;min-width:34px;height:30px;padding:0 9px;display:grid;place-items:center;border-radius:9px;font-size:.8rem;font-weight:800;background:rgba(13,11,13,.8);color:#fff;border:1px solid var(--line-2)}
+.rank-1{background:var(--warn);color:#1a1214;border:0}.rank-2{background:#d1d5db;color:#111;border:0}.rank-3{background:#c2410c;color:#fff;border:0}
+.mini-body{padding:10px 12px 12px}
+.mini-body .card-title{font-size:.9rem}
+
+/* 11. PAGINACIÓN */
+.pager{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s7)}
+.pg{display:grid;place-items:center;min-width:var(--tap);height:var(--tap);padding:0 10px;border-radius:var(--r-md);font-weight:800;color:var(--ink-2);background:var(--glass);border:1px solid var(--line);transition:background var(--t),border-color var(--t),color var(--t),transform var(--t-fast)}
+.pg:hover{background:var(--glass-hi);border-color:var(--acc-line);color:var(--ink)}
+.pg:active{transform:scale(.95)}
+.pg.on{background:var(--acc-2);border-color:transparent;color:#fff;box-shadow:0 10px 26px -12px rgba(242,59,85,.9)}
+
+/* 12. VENTANAS (modal, acceso, visor, banner) */
+.ov{position:fixed;inset:0;z-index:50;align-items:center;justify-content:center;padding:var(--s4);background:rgba(0,0,0,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:fadeIn var(--t) ease both}
+.mbox{position:relative;display:flex;flex-direction:column;width:100%;max-width:860px;max-height:min(92vh,940px);max-height:min(92dvh,940px);overflow:hidden;border-radius:var(--r-xl);background:var(--sheet);border:1px solid var(--line);box-shadow:var(--sh-2);animation:sheetIn var(--t-slow) var(--ease) both}
+.mbox.sm{max-width:440px}
+.mscroll{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.m-close{position:absolute;top:12px;right:12px;z-index:6;display:grid;place-items:center;width:var(--tap);height:var(--tap);border-radius:50%;font-size:1.1rem;color:#fff;background:rgba(13,11,13,.65);border:1px solid var(--line-2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:background var(--t),transform var(--t-fast)}
+.m-close:hover{background:var(--acc-2)}
+.m-close:active{transform:scale(.92)}
+.m-cover{position:relative;height:clamp(190px,27vw,270px);overflow:hidden;background:linear-gradient(135deg,#3a0f1b,#150d10)}
+.m-cover .skel,.m-cover>img{position:absolute;inset:0;width:100%;height:100%}
+.m-cover img{width:100%;height:100%;object-fit:cover;object-position:center 25%}
+.m-cover::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,var(--sheet) 0,rgba(21,16,18,.55) 40%,rgba(21,16,18,.15) 100%)}
+.m-title{position:absolute;left:clamp(16px,3vw,28px);right:72px;bottom:var(--s4);z-index:2;font-size:clamp(1.4rem,3.4vw,2.1rem);font-weight:800;line-height:1.15;letter-spacing:-.015em;text-shadow:0 2px 18px rgba(0,0,0,.8)}
+.m-body{padding:var(--s4) clamp(16px,3vw,28px) clamp(20px,3vw,32px);display:flex;flex-direction:column;gap:var(--s5)}
+.m-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s3)}
+.m-meta{font-size:.8rem;color:var(--ink-3)}
+.m-actions{display:flex;flex-wrap:wrap;gap:var(--s2)}
+.m-cats{display:flex;flex-wrap:wrap;gap:var(--s2)}
+.msec{display:flex;flex-direction:column;gap:var(--s3)}
+.msec-h{display:flex;align-items:center;gap:var(--s2);font-size:.95rem;font-weight:800;color:var(--ink)}
+.msec-h .n{margin-left:auto;font-size:.75rem;font-weight:600;color:var(--ink-3)}
+.panel{padding:var(--s4);border-radius:var(--r-lg);background:rgba(0,0,0,.28);border:1px solid var(--line)}
+.m-desc{font-size:.92rem;line-height:1.7;color:var(--ink-2);white-space:pre-line}
+.m-desc.clamp{display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.m-more{align-self:flex-start;min-height:var(--tap);display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:700;color:var(--acc-ink);transition:color var(--t)}
+.m-more:hover{color:#fff}
+.m-more svg{transition:transform var(--t)}
+.m-more[aria-expanded="true"] svg{transform:rotate(180deg)}
+.m-temps{flex-wrap:wrap;align-items:center;gap:var(--s2)}
+.m-temps>b{font-size:.78rem;color:var(--ink-2);margin-right:4px}
+.kofi{display:flex;flex-direction:column;align-items:center;gap:var(--s2);text-align:center;padding:var(--s5) var(--s4);border-radius:var(--r-lg);background:linear-gradient(135deg,rgba(242,59,85,.12),rgba(242,59,85,.03));border:1px solid rgba(242,59,85,.28)}
+.kofi b{font-size:.95rem}.kofi span{font-size:.82rem;color:var(--ink-2);max-width:46ch}
+.m-foot{display:flex;flex-wrap:wrap;gap:var(--s2);padding-top:var(--s4);border-top:1px solid var(--line-2)}
+.rating{align-items:center;gap:var(--s2) var(--s3);flex-wrap:wrap}
+.rating-stars{display:flex;align-items:center}
+.star{display:grid;place-items:center;width:var(--tap);height:var(--tap);transition:transform var(--t-fast),color var(--t)}
+.star svg{width:26px;height:26px}
+.star{color:#594b4b}.star.on{color:#fbbf24}.star.soft{color:rgba(252,211,77,.7)}
+.star:hover{transform:scale(1.12)}
+.rating-txt{font-size:.8rem;color:var(--ink-3)}
+@media(max-width:640px){
+ .ov{align-items:flex-end;padding:0}
+ .mbox{max-width:none;border-radius:var(--r-xl) var(--r-xl) 0 0;max-height:94vh;max-height:94dvh}
+ .mbox.sm{border-radius:var(--r-xl) var(--r-xl) 0 0}
+ .m-cover{height:200px}
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes sheetIn{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
+.lb{z-index:60;background:rgba(0,0,0,.95)}
+.lb img{max-height:85vh;max-width:100%;border-radius:var(--r-md);object-fit:contain}
+.lb .btn-icon{position:absolute}
+.lb-close{top:16px;right:16px}.lb-prev{left:clamp(8px,2vw,24px)}.lb-next{right:clamp(8px,2vw,24px)}
+.lb-count{position:absolute;bottom:16px;font-size:.78rem;color:var(--ink-2)}
+.banner{position:fixed;left:var(--s4);right:var(--s4);bottom:var(--s4);z-index:40;padding:var(--s4);border-radius:var(--r-lg);background:var(--glass-hi);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--acc-line);box-shadow:var(--sh-2);animation:sheetIn var(--t-slow) var(--ease) both}
+.banner .m-x{position:absolute;top:2px;right:2px;display:grid;place-items:center;width:var(--tap);height:var(--tap);font-size:1.3rem;color:var(--ink-3);transition:color var(--t)}
+.banner .m-x:hover{color:#fff}
+.banner b{display:block;font-size:.9rem;padding-right:36px;margin-bottom:4px}
+.banner p{font-size:.78rem;color:var(--ink-3);margin-bottom:var(--s3)}
+.banner-btns{display:flex;gap:var(--s2)}
+.banner-btns .btn{flex:1;padding:0 12px}
+.btn-discord{background:#5865f2;color:#fff}.btn-discord:hover{background:#6b77f5}
+.btn-telegram{background:#229ed9;color:#fff}.btn-telegram:hover{background:#3aaee6}
+@media(min-width:640px){.banner{left:auto;right:24px;width:340px}}
+.gate{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:var(--s4);background:var(--bg);background-image:radial-gradient(700px 400px at 50% 0,rgba(242,59,85,.18),transparent 65%)}
+.gate-box{max-width:460px;padding:clamp(24px,5vw,40px);text-align:center;border-radius:var(--r-xl);box-shadow:var(--sh-2)}
+.gate-18{display:inline-grid;place-items:center;width:72px;height:72px;margin-bottom:var(--s4);border-radius:50%;font-size:1.5rem;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--acc-2),var(--acc-3));box-shadow:var(--sh-acc)}
+.gate-box h2{font-size:1.35rem;font-weight:800;margin-bottom:var(--s2)}
+.gate-box p{font-size:.88rem;color:var(--ink-3);margin-bottom:var(--s5)}
+.gate-btns{display:flex;flex-wrap:wrap;gap:var(--s3);justify-content:center}
+
+/* 13. PESTAÑAS, ACORDEÓN, TABLA Y GALERÍA */
+.tabs{display:flex;gap:4px;padding:4px;border-radius:var(--r-pill);background:rgba(0,0,0,.4);border:1px solid var(--line)}
+.tab{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:var(--tap);padding:0 12px;border-radius:var(--r-pill);font-size:.86rem;font-weight:700;color:var(--ink-2);transition:background var(--t),color var(--t),box-shadow var(--t)}
+.tab:hover{color:var(--ink);background:rgba(255,255,255,.05)}
+.tab[aria-selected="true"]{background:linear-gradient(135deg,var(--acc-2),var(--acc-3));color:#fff;box-shadow:0 8px 22px -12px rgba(242,59,85,.9)}
+.tab.vacio:not([aria-selected="true"]){opacity:.55}
+.tabpanel{display:flex;flex-direction:column;gap:var(--s5);margin-top:var(--s4);animation:fadeIn var(--t) ease both}
+.tabpanel[hidden]{display:none}
+.dl{display:flex;flex-direction:column;gap:var(--s3)}
+.dl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:var(--s3)}
+.dl-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:var(--tap);padding:0 16px;border-radius:var(--r-md);font-size:.9rem;font-weight:700;border:1px solid transparent;transition:transform var(--t-fast) var(--ease),background var(--t),border-color var(--t),box-shadow var(--t)}
+.dl-btn:hover{transform:translateY(-1px)}
+#mPcJuego .dl-btn,#mAndroid .dl-btn{color:#fff;background:linear-gradient(135deg,var(--acc-2),var(--acc-3));box-shadow:0 10px 26px -12px rgba(242,59,85,.8)}
+#mPcJuego .dl-btn:hover,#mAndroid .dl-btn:hover{box-shadow:var(--sh-acc);background:linear-gradient(135deg,#e8374f,var(--acc-2))}
+#mPcTrad .dl-btn{color:var(--ink);background:rgba(255,255,255,.04);border-color:var(--line-2)}
+#mPcTrad .dl-btn:hover{background:var(--acc-soft);border-color:var(--acc-line)}
+.dl-note{font-size:.8rem;color:var(--ink-3)}
+.warn{display:flex;gap:var(--s3);align-items:flex-start;padding:var(--s3) var(--s4);border-radius:var(--r-md);font-size:.82rem;line-height:1.5;color:#fde68a;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.35)}
+.warn svg{margin-top:2px;color:var(--warn)}
+.warn b{color:#fff}
+.dl-sep{height:1px;background:var(--line-2);border:0;margin:0}
+.vacio-note{padding:var(--s5) var(--s4);text-align:center;font-size:.85rem;color:var(--ink-3);border-radius:var(--r-lg);border:1px dashed var(--line-2)}
+.acc{border-radius:var(--r-md);background:rgba(0,0,0,.25);border:1px solid var(--line)}
+.acc summary{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);min-height:var(--tap);padding:0 var(--s4);font-size:.84rem;font-weight:700;cursor:pointer;list-style:none;border-radius:var(--r-md)}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary::after{content:"";width:8px;height:8px;border-right:2px solid var(--ink-2);border-bottom:2px solid var(--ink-2);transform:rotate(45deg);transition:transform var(--t)}
+.acc[open] summary::after{transform:rotate(-135deg)}
+.acc summary:hover{color:#fff}
+.acc-body{padding:0 var(--s4) var(--s4);font-size:.84rem;color:var(--ink-2)}
+.acc-body ol{list-style:decimal;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.acc-body b{color:var(--ink)}
+.tbl{font-size:.86rem;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--line)}
+.tbl th,.tbl td{padding:12px var(--s4);text-align:left;vertical-align:top}
+.tbl th{width:38%;font-weight:600;color:var(--ink-3);background:rgba(255,255,255,.02)}
+.tbl td{color:var(--ink);font-weight:600}
+.tbl tr+tr>*{border-top:1px solid var(--line)}
+.gallery{display:flex;gap:var(--s3);overflow-x:auto;padding:2px 2px var(--s2);scroll-snap-type:x proximity}
+.shot{position:relative;flex:none;height:7.5rem;overflow:hidden;scroll-snap-align:start;border-radius:var(--r-md);border:1px solid var(--line-2);cursor:pointer;transition:border-color var(--t),transform var(--t) var(--ease),box-shadow var(--t)}
+.shot:hover{border-color:var(--acc);transform:translateY(-2px);box-shadow:var(--sh-acc)}
+.shot img{height:100%;width:auto;max-width:none}
+@media(min-width:640px){.shot{height:9rem}}
+.capw{min-width:11rem}.capw.listo{min-width:0}
+
+/* 14. FORMULARIOS Y COMENTARIOS */
+.field{display:block;width:100%;min-height:var(--tap);padding:10px 14px;border-radius:var(--r-md);font-size:.9rem;color:var(--ink);background:rgba(0,0,0,.42);border:1px solid var(--line-2);transition:border-color var(--t),box-shadow var(--t)}
+.field::placeholder{color:var(--ink-3)}
+.field:focus{border-color:var(--acc);box-shadow:0 0 0 4px var(--acc-soft)}
+textarea.field{resize:vertical;min-height:84px;line-height:1.5}
+.form{padding:var(--s4);border-radius:var(--r-lg);background:rgba(0,0,0,.25);border:1px solid var(--line);display:flex;flex-direction:column;gap:var(--s3)}
+.form h4{font-size:.95rem;font-weight:800}
+.form p{font-size:.8rem;color:var(--ink-3)}
+.form .seg-m{display:flex;gap:var(--s2)}
+.msg{font-size:.8rem;min-height:1.1em}
+.msg-err{color:#fca5a5}.msg-ok{color:var(--ok)}
+.aviso{padding:var(--s3);border-radius:var(--r-md);font-size:.8rem;color:#fde68a;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3)}
+.aviso .row-btns{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s2)}
+.coms{display:flex;flex-direction:column;gap:var(--s3)}
+.com{padding:var(--s3) var(--s4);border-radius:var(--r-lg);background:rgba(0,0,0,.25);border:1px solid var(--line)}
+.com.admin{background:rgba(251,191,36,.05);border-color:rgba(251,191,36,.4)}
+.com-h{display:flex;align-items:center;flex-wrap:wrap;gap:var(--s2)}
+.com-av{display:grid;place-items:center;width:30px;height:30px;flex:none;border-radius:50%;font-size:.78rem;font-weight:800;background:var(--acc-soft);color:var(--acc-ink)}
+.com.admin .com-av,.com-av.admin{background:var(--warn);color:#1a1214}
+.com-n{font-size:.86rem;font-weight:700;max-width:16ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.com-t{font-size:.72rem;color:var(--ink-3)}
+.com-x{margin-top:6px;font-size:.88rem;color:var(--ink-2);white-space:pre-wrap;overflow-wrap:anywhere}
+.com-acts{display:flex;flex-wrap:wrap;gap:var(--s1) var(--s4);margin-top:4px}
+.com-acts button{min-height:36px;font-size:.75rem;font-weight:600;color:var(--ink-3);transition:color var(--t)}
+.com-acts button:hover{color:#fff}
+.com-acts .del{color:#fca5a5}.com-acts .ban{color:#fcd34d}
+.com-re{margin:var(--s3) 0 0 var(--s3);padding-left:var(--s3);border-left:2px solid var(--line-2)}
+.com-re.nuevo{border-left-color:var(--acc)}
+.com-re-btns{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);margin-top:var(--s2)}
+.insignia{display:inline-block;font-size:.62rem;font-weight:800;padding:2px 6px;border-radius:6px;background:var(--warn);color:#1a1214;vertical-align:middle}
+.coms-h{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);margin-bottom:var(--s3);font-size:.8rem;color:var(--ink-2)}
+.coms-estado{font-size:.8rem;color:var(--ink-3)}
+
+/* 15. PIE DE PÁGINA */
+.footer{margin-top:var(--s8);background:rgba(18,12,14,.85);border-top:1px solid var(--line)}
+.footer-in{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:var(--s6) var(--s7);padding-block:var(--s7)}
+.footer-brand img{height:44px;width:auto;margin-bottom:var(--s3)}
+.footer-brand p{font-size:.84rem;color:var(--ink-3);max-width:38ch}
+.footer h3{font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:var(--s2)}
+.footer li a{display:inline-flex;align-items:center;min-height:var(--tap);font-size:.88rem;font-weight:600;color:var(--ink-2);transition:color var(--t),transform var(--t)}
+.footer li a:hover{color:var(--acc-ink);transform:translateX(3px)}
+.footer-bar{border-top:1px solid var(--line);padding-block:var(--s4);font-size:.76rem;color:var(--ink-3);display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--s2)}
+@media(max-width:760px){.footer-in{grid-template-columns:1fr 1fr}.footer-brand{grid-column:1/-1}}
+
+/* 16. IMÁGENES +18 Y CARGA PROGRESIVA */
+.skel{background:var(--surface);position:relative;isolation:isolate}
+.skel::before{content:"";position:absolute;inset:0;z-index:-1;background:#34202a;opacity:0;animation:latido 1.4s ease-in-out infinite;will-change:opacity;pointer-events:none}
+.skel.listo{background:none}
+.skel.listo::before{display:none}
+.fx{opacity:0}
+.fx.ok{opacity:1;animation:aparece .45s ease both}
+@keyframes latido{0%,100%{opacity:0}50%{opacity:1}}
+@keyframes aparece{from{opacity:0}to{opacity:1}}
+.blur18{filter:blur(18px);transform:scale(1.15)}
+.vela18{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:rgba(13,11,13,.4);text-align:center;padding:6px;pointer-events:none}
+.vela18 b{background:#dc2626;color:#fff;font-size:13px;padding:2px 10px;border-radius:999px}
+.vela18 span{font-size:11px;font-weight:600;text-shadow:0 1px 3px #000}
+
+/* 17. MOVIMIENTO REDUCIDO */
+@media(prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+ .card:hover,.row:hover,.mini:hover,.btn:hover,.shot:hover{transform:none}
+}
+</style>
+</head>
+<!-- COMIENZA LO QUE SE VE EN PANTALLA -->
+<body>
+<a href="#catalogo" class="skip">Saltar al catálogo</a>
+
+<!-- 1. VERIFICACIÓN DE EDAD: pantalla +18 que tapa el sitio hasta que la persona confirma. Para cambiar el texto, editá el párrafo de abajo. -->
+<div id="gate" class="gate" role="dialog" aria-modal="true" aria-labelledby="gateTit">
+  <div class="gate-box glass">
+    <div class="gate-18" aria-hidden="true">+18</div>
+    <h2 id="gateTit">Contenido para adultos</h2>
+    <p>Este sitio contiene material sexual explícito. Para entrar tenés que ser mayor de 18 años (o la mayoría de edad de tu país).</p>
+    <div class="gate-btns">
+      <button onclick="entrar()" class="btn btn-primary">Tengo 18 años o más</button>
+      <button onclick="location.href='https://www.google.com'" class="btn btn-ghost">Salir</button>
+    </div>
+  </div>
+</div>
+
+<!-- Si la persona ya confirmó que es mayor de 18 (se guarda en el navegador), la pantalla +18 se quita enseguida, sin que se alcance a ver. -->
+<script>try{if(localStorage.getItem("age_ok")==="1")document.getElementById("gate").remove()}catch(e){}</script>
+
+<!-- 2. CABECERA (barra de arriba): logo, buscador, sesión, apoyo y etiqueta +18. Queda fija al bajar. -->
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <!-- Logo del sitio: la imagen está en la carpeta assets/images/logo (junto a index.html). Ojo: en GitHub Pages las mayúsculas y minúsculas importan. -->
+    <a href="./" class="brand" aria-label="Nómada VN, inicio"><img src="assets/images/logo/logo.png" alt="Nómada VN"></a>
+    <!-- Buscador. Debajo hay una caja (id="sugs") donde aparecen las sugerencias mientras se escribe. -->
+    <div class="search" role="search">
+      <svg class="search-ico ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" id="searchInput" autocomplete="off" placeholder="Buscar juegos o novelas..." aria-label="Buscar juegos o novelas">
+      <div id="sugs" class="sugs hidden"></div>
+    </div>
+    <div class="acts">
+      <!-- Botón para iniciar sesión (o ver la cuenta si ya entró). Abre la ventana de acceso (id="loginModal", más abajo). -->
+      <button id="btnSesion" type="button" aria-label="Iniciar sesión" class="btn btn-primary btn-sm"><svg class="ico-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg><span id="btnSesionTxt">Iniciar sesión</span></button>
+      <!-- Botón de donaciones (Ko-fi). El logo es el archivo kofi.webp de la carpeta assets/images/logo. Para cambiar el enlace, editá el href. -->
+      <a href="https://ko-fi.com/nomadavn" rel="noopener" target="_blank" class="btn btn-ghost btn-sm" aria-label="Apoyar en Ko-fi"><img src="assets/images/logo/kofi.webp" alt="" style="height:20px;width:auto"><span class="solo-pc">Apoyar</span></a>
+      <span class="tag18">+18</span>
+    </div>
+  </div>
+</header>
+
+<!-- 3. INTRO + BANNER DESTACADO -->
+<section class="intro" aria-labelledby="introTit">
+  <div class="wrap intro-in">
+    <div class="intro-txt">
+      <span class="kicker">PC y Android · Solo adultos</span>
+      <h1 id="introTit">Novelas visuales +18, <em>en español</em></h1>
+      <p>Traducciones y juegos listos para descargar. Encontrá los últimos lanzamientos, parches de traducción y versiones APK en un solo lugar.</p>
+    </div>
+    <div class="intro-btns">
+      <a href="#catalogo" class="btn btn-primary">Ver lanzamientos</a>
+      <a id="introDiscord" href="#" target="_blank" rel="noopener" class="btn btn-ghost">Unirme a la comunidad</a>
+    </div>
+  </div>
+</section>
+
+<!-- Carrusel de destacados: los juegos marcados como "destacado" en el panel (hasta 6) rotan solos. Título y sinopsis se llenan solos. -->
+<section id="hero" class="hero" style="display:none" aria-label="Juegos destacados">
+  <div class="wrap">
+    <div class="hero-card">
+      <div id="featBg" class="hero-bg" role="presentation"></div>
+      <div id="heroTxt" class="hero-txt">
+        <div class="hero-top">
+          <span class="badge b-new">Destacado del mes</span>
+          <span id="featPc" style="display:none" class="pchip"><svg class="ico-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg> PC</span>
+          <span id="featAn" style="display:none" class="pchip"><svg class="ico-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></svg> Android</span>
+        </div>
+        <h2 id="featTitle" class="hero-title"></h2>
+        <p id="featDesc" class="hero-desc"></p>
+        <button type="button" onclick="openModal(FEATURED)" class="btn btn-primary">Ver detalles</button>
+      </div>
+      <!-- Controles del carrusel (solo se ven si hay 2 o más destacados). -->
+      <div id="heroCtl" class="hero-ctl" style="display:none">
+        <button id="heroPrev" type="button" aria-label="Destacado anterior" class="btn-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+        <div id="heroDots" class="hero-dots"></div>
+        <button id="heroNext" type="button" aria-label="Destacado siguiente" class="btn-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. CONTENIDO PRINCIPAL -->
+<main class="wrap" style="flex:1;padding-top:var(--s5)">
+  <!-- TOP MENSUAL: los juegos a los que les pusiste un puesto en el panel. Si ninguno tiene puesto, esta sección no se ve. -->
+  <section id="topMes" class="hidden" style="margin-bottom:var(--s7)" aria-labelledby="topTit">
+    <div class="sec-head"><h2 id="topTit" class="sec-t no-dot"><svg class="ico" style="width:24px;height:24px" viewBox="0 0 24 24" fill="rgba(249,115,22,.35)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>Top mensual</h2></div>
+    <div id="topLista" class="top-row no-scrollbar"></div>
+  </section>
+
+  <section id="catalogo" aria-labelledby="catTit">
+    <div class="sec-head">
+      <h2 id="catTit" class="sec-t">Últimos lanzamientos</h2>
+      <span id="resCount" class="sec-t no-dot" style="font-size:.8rem;font-weight:600;color:var(--ink-3)" aria-live="polite"></span>
+    </div>
+    <!-- FILTROS: plataforma, listas personales, orden y vista. -->
+    <div class="toolbar">
+      <div class="seg" id="platBtns" role="group" aria-label="Filtrar por plataforma">
+        <button type="button" data-pl="todos" aria-pressed="true">Todos</button>
+        <button type="button" data-pl="pc" aria-pressed="false">PC</button>
+        <button type="button" data-pl="an" aria-pressed="false">Android</button>
+      </div>
+      <div class="tb-group" role="group" aria-label="Mis listas">
+        <!-- Favoritos, "Por jugar" y "Terminados": se marcan desde la ventana de cada juego y se guardan en el navegador y, con sesión, en la cuenta. -->
+        <button id="btnFavs" type="button" class="pill pill-f"></button>
+        <button id="btnPend" type="button" class="pill lp"></button>
+        <button id="btnTerm" type="button" class="pill lt"></button>
+        <!-- Botón "¿No sabés qué jugar?": elige un juego al azar y abre su ventana. -->
+        <button id="btnAzar" type="button" style="display:none" class="pill"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><path d="M16 8h.01M8 8h.01M8 16h.01M16 16h.01M12 12h.01"/></svg> ¿No sabés qué jugar?</button>
+      </div>
+      <div class="tb-group tb-end">
+        <!-- Modo de visualización: tarjetas o lista. Se recuerda en el navegador. -->
+        <div id="vistaBtns" class="seg seg-icons" role="group" aria-label="Modo de visualización"></div>
+        <div class="select">
+          <select id="orden" aria-label="Ordenar">
+            <option value="recientes">Más recientes</option>
+            <option value="az">A-Z</option>
+            <option value="za">Z-A</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <p id="favNota" style="display:none" class="note">Tus favoritos se guardan solo en este navegador. Para sincronizarlos con tu cuenta, iniciá sesión con el botón de arriba.</p>
+    <!-- Categorías: se crean solas a partir de las categorías de tus juegos. Se muestran las 6 más usadas y "Más etiquetas" abre todas con un buscador. -->
+    <div id="catsCaja" class="cats-box hidden">
+      <div id="cats" class="cats"></div>
+      <div id="catsPanel" class="cats-panel hidden">
+        <input type="text" id="catsBuscar" autocomplete="off" placeholder="Buscar etiqueta..." aria-label="Buscar etiqueta" class="field">
+        <div id="catsTodas" class="cats"></div>
+      </div>
+    </div>
+    <!-- Grilla de juegos: se genera sola. -->
+    <div id="grid" class="grid-cards"></div>
+    <p id="empty" class="empty hidden">No hay juegos que coincidan con la búsqueda.</p>
+    <!-- Botones de páginas. Se generan solos. -->
+    <nav id="pager" class="pager" aria-label="Páginas"></nav>
+  </section>
+</main>
+
+<!-- 5. PIE DE PÁGINA: los enlaces de redes se pueden cambiar en el script (LINK_DISCORD, LINK_TELEGRAM...). Reemplazá el correo tu_correo@example.com por el tuyo. -->
+<footer class="footer">
+  <div class="wrap footer-in">
+    <div class="footer-brand">
+      <img src="assets/images/logo/logo.png" alt="Nómada VN" loading="lazy">
+      <p>Novelas visuales +18 en español para PC y Android. Contenido solo para mayores de 18 años.</p>
+    </div>
+    <nav aria-label="Comunidad">
+      <h3>Comunidad</h3>
+      <ul>
+        <li><a id="lnkDiscord" href="https://discord.gg/XdRufVpjZq" target="_blank" rel="noopener">Discord</a></li>
+        <li><a id="lnkTelegram" href="https://t.me/Nomada_VN" target="_blank" rel="noopener">Telegram</a></li>
+        <li><a id="lnkTwitter" href="https://x.com/Nomada_VN" target="_blank" rel="noopener">Twitter/X</a></li>
+        <li><a id="lnkFacebook" href="https://www.facebook.com/nomadavn" target="_blank" rel="noopener">Facebook</a></li>
+        <li><a id="lnkRss" href="#" style="display:none">RSS</a></li>
+      </ul>
+    </nav>
+    <nav aria-label="Contacto">
+      <h3>Contacto</h3>
+      <ul>
+        <li><a href="mailto:tu_correo@example.com">Contacto</a></li>
+        <li><a href="mailto:tu_correo@example.com?subject=Reclamo%20de%20derechos">Reclamos de derechos</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="wrap footer-bar"><span>Nómada VN © 2026</span><span>Solo para mayores de 18 años</span></div>
+</footer>
+
+<!-- VENTANA DE ACCESO: se abre con el botón "Iniciar sesión". Adentro (id="loginCaja") se dibuja el formulario o los datos de la cuenta. -->
+<div id="loginModal" class="ov hidden" style="z-index:70" onclick="if(event.target===this)cerrarLogin()">
+  <div class="mbox sm" role="dialog" aria-modal="true" aria-label="Iniciar sesión">
+    <button type="button" onclick="cerrarLogin()" aria-label="Cerrar" class="m-close">&times;</button>
+    <div class="mscroll" style="padding:clamp(18px,3vw,28px);padding-top:var(--s7)">
+      <div id="loginCaja"></div>
+    </div>
+  </div>
+</div>
+
+<!-- VISOR DE CAPTURAS: pantalla completa. Flechas para pasar de una a otra y X para cerrar. -->
+<div id="lightbox" class="ov lb hidden" role="dialog" aria-modal="true" aria-label="Visor de capturas" onclick="if(event.target===this)cerrarVisor()">
+  <button type="button" onclick="cerrarVisor()" aria-label="Cerrar" class="btn-icon lb-close">&times;</button>
+  <button type="button" onclick="moverVisor(-1)" aria-label="Anterior" class="btn-icon lb-prev"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+  <img id="lbImg" alt="">
+  <button type="button" onclick="moverVisor(1)" aria-label="Siguiente" class="btn-icon lb-next"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+  <span id="lbCount" class="lb-count"></span>
+</div>
+
+<!-- BANNER DE COMUNIDAD: tarjeta flotante que invita a sumarse a Discord o Telegram. Si se cierra no vuelve por 7 días. -->
+<div id="bannerCom" class="banner hidden" role="complementary" aria-label="Comunidad">
+  <button type="button" onclick="cerrarBanner()" aria-label="Cerrar" class="m-x">&times;</button>
+  <b>¡Sumate a la comunidad de Nómada VN!</b>
+  <p>Enterate de los nuevos lanzamientos, pedí traducciones y charlá con otros jugadores.</p>
+  <div class="banner-btns">
+    <a id="banDiscord" href="#" target="_blank" rel="noopener" class="btn btn-sm btn-discord">Discord</a>
+    <a id="banTelegram" href="#" target="_blank" rel="noopener" class="btn btn-sm btn-telegram">Telegram</a>
+  </div>
+</div>
+
+<!-- 6. VENTANA DEL JUEGO: se abre al tocar una tarjeta. Todo su contenido se llena solo con los datos del juego elegido. -->
+<div id="modal" class="ov hidden" onclick="if(event.target===this)closeModal()">
+  <div class="mbox" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <button type="button" onclick="closeModal()" aria-label="Cerrar" class="m-close">&times;</button>
+    <div class="mscroll">
+      <div class="m-cover"><div id="mCover"></div><h2 id="mTitle" class="m-title"></h2></div>
+      <div class="m-body">
+        <div class="m-top">
+          <span id="mMeta" class="m-meta"></span>
+          <div class="m-actions">
+            <button id="btnPendModal" type="button" class="pill pill-sm"></button>
+            <button id="btnTermModal" type="button" class="pill pill-sm"></button>
+            <button id="btnFavModal" type="button" class="pill pill-sm"></button>
+          </div>
+        </div>
+        <!-- Categorías del juego: al tocar una se cierra la ventana y se filtra el catálogo. -->
+        <div id="mCats" class="m-cats"></div>
+
+        <!-- TEMPORADAS: si el juego tiene más de una, acá aparecen los botones para elegir. Cada una muestra sus propios enlaces. -->
+        <div id="mTemps" class="m-temps hidden"></div>
+
+        <!-- DESCARGAS: pestañas PC (Windows) y Android (APK). -->
+        <section aria-label="Descargas">
+          <div class="tabs" role="tablist" aria-label="Plataforma de descarga">
+            <button id="tabPc" type="button" role="tab" aria-selected="true" aria-controls="panPc" class="tab"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg> PC (Windows)</button>
+            <button id="tabAn" type="button" role="tab" aria-selected="false" aria-controls="panAn" tabindex="-1" class="tab"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></svg> Android (APK)</button>
+          </div>
+
+          <div id="panPc" class="tabpanel" role="tabpanel" aria-labelledby="tabPc">
+            <!-- 1) EL JUEGO (completo, en inglés). -->
+            <div class="dl" id="blkPcJuego">
+              <h3 class="msec-h">1 · Descargá el juego <span id="cntPcJuego" class="n"></span></h3>
+              <div id="mPcJuego" class="dl-grid"></div>
+            </div>
+            <hr class="dl-sep">
+            <!-- 2) LA TRADUCCIÓN: se instala sobre el juego. -->
+            <div class="dl" id="blkPcTrad">
+              <h3 class="msec-h">2 · Traducción al español <span id="cntPcTrad" class="n"></span></h3>
+              <div class="warn"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.7 18-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4M12 17h.01"/></svg><span><b>Hacé una copia de seguridad</b> de tu juego antes de instalar la traducción: se reemplazan archivos.</span></div>
+              <details class="acc">
+                <summary>Cómo instalar la traducción</summary>
+                <div class="acc-body"><ol>
+                  <li>Descargá el archivo y extraelo.</li>
+                  <li>Copiá la carpeta <b>game</b> suelta en la carpeta donde tenés tu juego.</li>
+                  <li>Reemplazá los archivos cuando te lo pida.</li>
+                </ol></div>
+              </details>
+              <div id="mPcTrad" class="dl-grid"></div>
+            </div>
+            <p id="pcVacio" class="vacio-note hidden">Todavía no hay enlaces para PC.</p>
+          </div>
+
+          <div id="panAn" class="tabpanel" role="tabpanel" aria-labelledby="tabAn" hidden>
+            <!-- ANDROID: ya viene en español, no necesita traducción. -->
+            <div class="dl" id="blkAndroid">
+              <h3 class="msec-h">Descargá el APK <span id="cntAndroid" class="n"></span></h3>
+              <p class="dl-note">Ya viene en español, no necesitás nada más.</p>
+              <div id="mAndroid" class="dl-grid"></div>
+            </div>
+            <p id="anVacio" class="vacio-note hidden">Todavía no hay enlaces para Android.</p>
+          </div>
+        </section>
+
+        <!-- SINOPSIS con "Leer más". -->
+        <section class="msec" aria-labelledby="sinTit">
+          <h3 id="sinTit" class="msec-h">Sinopsis</h3>
+          <p id="mDesc" class="m-desc clamp"></p>
+          <button id="btnMas" type="button" class="m-more hidden" aria-expanded="false" aria-controls="mDesc"><span>Leer más</span><svg class="ico-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        </section>
+
+        <!-- CAPTURAS DEL JUEGO: si el juego no tiene, esta sección no se ve. -->
+        <section id="mShots" class="msec hidden" aria-labelledby="galTit">
+          <h3 id="galTit" class="msec-h">Capturas</h3>
+          <div id="mShotList" class="gallery no-scrollbar"></div>
+        </section>
+
+        <!-- DETALLES -->
+        <section class="msec" aria-labelledby="detTit">
+          <h3 id="detTit" class="msec-h">Detalles</h3>
+          <table class="tbl"><tbody id="mTabla"></tbody></table>
+        </section>
+
+        <!-- VALORACIÓN CON ESTRELLAS (1 a 5, sin registro). Usa Firebase; si no está disponible, muestra un aviso. -->
+        <section id="rating" style="display:none" class="msec" aria-labelledby="valTit">
+          <h3 id="valTit" class="msec-h">Valoración</h3>
+          <div class="rating flex">
+            <div id="estrellas" class="rating-stars" role="group" aria-label="Valorar el juego de 1 a 5 estrellas"></div>
+            <span id="ratingTexto" class="rating-txt"></span>
+          </div>
+        </section>
+
+        <!-- PEDIDO DE APOYO (Ko-fi). -->
+        <div class="kofi">
+          <b>¿Te gustó esta traducción? ☕</b>
+          <span>Apoyá al equipo invitándonos un café en Ko-fi para seguir trayendo más novelas visuales en español.</span>
+          <a id="btnKofiModal" href="https://ko-fi.com/nomadavn" target="_blank" rel="noopener" class="btn btn-ghost btn-sm"><img src="assets/images/logo/kofi.webp" alt="" loading="lazy" style="height:18px;width:auto"> Apoyar en Ko-fi</a>
+        </div>
+
+        <!-- COMENTARIOS (Firebase): con cuenta de correo o de Google, en hilos. Se cargan solo cuando alguien toca el botón. -->
+        <section class="msec" aria-label="Comentarios">
+          <button id="btnComentarios" type="button" class="btn btn-ghost btn-sm" style="align-self:flex-start">Ver o dejar comentarios</button>
+          <div id="comentarios" class="hidden">
+            <div id="comSesion" style="margin-bottom:var(--s4)"></div>
+            <div id="comLista" class="coms"></div>
+          </div>
+        </section>
+
+        <div class="m-foot">
+          <button id="btnCopiar" type="button" onclick="copiarEnlace()" class="btn btn-ghost btn-sm">Copiar enlace del juego</button>
+          <a id="btnReportar" href="#" class="btn btn-ghost btn-sm btn-danger">Reportar enlace caído</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 7. PROGRAMACIÓN (JavaScript): hace que la página funcione. Los datos de los juegos NO están acá, están en juegos.json. -->
+<script>
+// ===== VARIABLES =====
+// GAMES guarda todos los juegos leídos de juegos.json (empieza vacía y se llena al cargar la página).
+let GAMES=[];
+// Posición del juego destacado en la lista.
+let FEATURED=0,DESTACADOS=[],heroPos=0,heroTimer=null;
+const HERO_SEGUNDOS=6; // cada cuántos segundos cambia solo el destacado
+// Muestra el destacado número "k" de la lista (título, sinopsis, plataformas, fondo y puntitos).
+function mostrarDestacado(k,animar){
+ if(!DESTACADOS.length)return;
+ heroPos=(k+DESTACADOS.length)%DESTACADOS.length;
+ FEATURED=DESTACADOS[heroPos];
+ const g=GAMES[FEATURED];
+ $("featTitle").textContent=g.t;$("featDesc").textContent=g.d;
+ $("featPc").style.display=g.hasPc?"":"none";$("featAn").style.display=g.hasAn?"":"none";
+ $("featBg").style.backgroundImage=g.img?`url(${JSON.stringify(g.img)})`:"";
+ $("featBg").classList.toggle("blur18",velo18(g.adulta));
+ if(animar){const t=$("heroTxt");t.classList.remove("hero-cambia");void t.offsetWidth;t.classList.add("hero-cambia");const bg=$("featBg");bg.classList.remove("hero-bg-cambia");void bg.offsetWidth;bg.classList.add("hero-bg-cambia")}
+ const varios=DESTACADOS.length>1;
+ $("heroCtl").style.display=varios?"flex":"none";
+ $("heroDots").innerHTML=varios?DESTACADOS.map((_,i)=>`<button type="button" data-h="${i}" aria-label="Destacado ${i+1}" class="hero-pto${i===heroPos?" on":""}"></button>`).join(""):"";
+ heroAuto();
+}
+// Cambio automático. Se detiene con el mouse encima, al tocar, si la pestaña está oculta o si la persona pidió menos movimiento.
+function heroAuto(){
+ clearInterval(heroTimer);heroTimer=null;
+ if(DESTACADOS.length<2||(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches))return;
+ heroTimer=setInterval(()=>{if(!document.hidden)mostrarDestacado(heroPos+1,true)},HERO_SEGUNDOS*1000);
+}
+// Conecta los botones del carrusel (se llama más abajo, después de definir $).
+function iniciarHero(){
+$("heroPrev").onclick=()=>mostrarDestacado(heroPos-1,true);
+$("heroNext").onclick=()=>mostrarDestacado(heroPos+1,true);
+$("heroDots").onclick=e=>{const b=e.target.closest("[data-h]");if(b)mostrarDestacado(+b.dataset.h,true)};
+(()=>{
+ const h=$("hero");let x0=null;
+ h.addEventListener("mouseenter",()=>{clearInterval(heroTimer);heroTimer=null});
+ h.addEventListener("mouseleave",heroAuto);
+ // Deslizar con el dedo: izquierda = siguiente, derecha = anterior.
+ h.addEventListener("touchstart",e=>{x0=e.touches[0].clientX;clearInterval(heroTimer);heroTimer=null},{passive:true});
+ h.addEventListener("touchend",e=>{if(x0!==null){const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>50)mostrarDestacado(heroPos+(dx<0?1:-1),true);else heroAuto()}x0=null},{passive:true});
+})();
+}
+// Cuántos juegos se muestran por página. Cambiá el 6 por otro número si querés más o menos.
+const PER=6;
+// Correo donde llegan los reportes de enlaces caídos. Reemplazalo por el tuyo.
+const REPORT_EMAIL="tu_correo@example.com";
+// Título original de la pestaña (se restaura al cerrar la ventana de un juego).
+const TITULO0=document.title;
+// Juego abierto ahora en la ventana (-1 significa que no hay ninguno).
+let actual=-1;
+// Estado actual: texto buscado, página, orden, categoría elegida y si el panel "Más etiquetas" está abierto.
+let q="", page=1, orden="recientes", cat="todos", panelCats=false, plat="todos";
+// ===== FUNCIONES AUXILIARES =====
+// Atajo para encontrar un elemento del HTML por su id.
+const $=id=>document.getElementById(id);
+iniciarHero();
+// Limpia un texto para mostrarlo de forma segura (evita que símbolos raros rompan el HTML).
+const esc=s=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+// Dice si un enlace es válido: los vacíos o con "#" se consideran "sin enlace".
+const ok=u=>u&&u!=="#";
+// Dice si un bloque de descargas (Mega, Mediafire, Drive) tiene al menos un enlace cargado.
+const tiene=o=>!!o&&(ok(o.mega)||ok(o.mf)||ok(o.dr));
+// Quita tildes y mayúsculas, para que la búsqueda encuentre "fantasia" aunque diga "Fantasía".
+const norm=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
+// Íconos de PC y Android (dibujos simples en vez de emojis, para que se vean igual en todos los dispositivos). En las tarjetas aparecen sobre la portada, solo si el juego tiene enlace para esa plataforma.
+const IC={pc:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg>',an:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></svg>'};
+// Etiqueta sobre la portada. "Nuevo" y "Actualizado" duran 14 días desde la fecha del juego en juegos.json ("fecha" y "actualizado").
+// Cambiá el 14 para que duren más o menos.
+const DIAS_ETIQUETA=14;
+const reciente=f=>f&&(Date.now()-new Date(f))/864e5<=DIAS_ETIQUETA;
+function etiqueta(g){
+ if(reciente(g.fecha))return["Nuevo","b-new"];
+ if(reciente(g.act))return["Actualizado","b-upd"];
+ return null;
+}
+
+// ===== VERIFICACIÓN DE EDAD =====
+// Al tocar "Tengo 18 años o más": guarda la respuesta en el navegador y quita la pantalla.
+function entrar(){try{localStorage.setItem("age_ok","1")}catch(e){}$("gate").remove()}
+// Si la persona ya confirmó antes, no se le vuelve a preguntar.
+try{if(localStorage.getItem("age_ok")==="1")$("gate").remove()}catch(e){}
+
+// ===== BÚSQUEDA Y FILTROS =====
+// Un juego coincide si contiene todas las palabras escritas en el buscador.
+const coincide=g=>q.split(/\s+/).every(w=>g.s.includes(w));
+// Devuelve los juegos que coinciden con la categoría elegida y la búsqueda, ya ordenados.
+function list(){
+ const r=GAMES.map((g,i)=>({g,i})).filter(({g})=>(cat==="todos"||g.cn.includes(cat))&&(plat==="todos"||(plat==="pc"?g.hasPc:g.hasAn))&&(!listaSel||enLista(g.slug,listaSel))&&coincide(g));
+ if(orden==="az")r.sort((a,b)=>a.g.t.localeCompare(b.g.t,"es"));
+ if(orden==="za")r.sort((a,b)=>b.g.t.localeCompare(a.g.t,"es"));
+ return r;
+}
+// Muestra el desplegable con hasta 5 sugerencias debajo del buscador.
+function sugerencias(){
+ const box=$("sugs");
+ if(!q){box.classList.add("hidden");return}
+ const r=GAMES.map((g,i)=>({g,i})).filter(({g})=>coincide(g)).slice(0,5);
+ if(!r.length){box.innerHTML='<p class="sug-vacio">Sin resultados para esa búsqueda.</p>';box.classList.remove("hidden");return}
+ box.innerHTML=r.map(({g,i})=>`<button type="button" data-i="${i}" class="sug">
+  ${g.img?`<span class="sug-img skel"><img src="${g.img}" alt="" loading="lazy" decoding="async" class="fx${velo18(g.adulta)?" blur18":""}"></span>`:`<span class="sug-img">${esc(g.t[0])}</span>`}
+  <span class="sug-txt"><b>${esc(g.t)}</b><small>${esc((g.c[0]?g.c[0]+" • ":"")+g.sz)}</small></span></button>`).join("");
+ revisarImgs();
+ box.classList.remove("hidden");
+}
+// Al tocar una sugerencia se abre ese juego y se cierra el desplegable.
+$("sugs").onclick=e=>{const b=e.target.closest("button");if(!b)return;$("sugs").classList.add("hidden");openModal(+b.dataset.i)};
+// Si se toca fuera del buscador, se cierra el desplegable.
+document.addEventListener("click",e=>{if(!e.target.closest("#searchInput,#sugs"))$("sugs").classList.add("hidden")});
+// Al cambiar el selector de orden se vuelve a la página 1 y se redibuja.
+$("orden").onchange=e=>{orden=e.target.value;page=1;render()};
+
+// ===== DIBUJAR LA PÁGINA =====
+
+// Dibuja las tarjetas de la página actual y los botones de paginación.
+// Para cambiar cómo se ve una tarjeta, editá el bloque de HTML de abajo.
+function render(){
+ const all=list(), pages=Math.max(1,Math.ceil(all.length/PER));
+ if(page>pages)page=pages;
+ const items=all.slice((page-1)*PER,page*PER);
+  $("grid").className=vista==="lista"?"list-rows":"grid-cards";
+ $("grid").innerHTML=items.map(({g,i})=>vista==="lista"?fila(g,i):tarjeta(g,i)).join("");
+ revisarImgs();pedirVisitas();
+ $("empty").textContent=listaSel&&!cuentaLista(listaSel)?{f:"Todavía no guardaste ningún favorito. Tocá el corazón de un juego para guardarlo.",p:"Tu lista \"Por jugar\" está vacía. Abrí un juego y tocá \"Por jugar\" para sumarlo.",t:"Todavía no marcaste ningún juego como terminado."}[listaSel]:"No hay juegos que coincidan con la búsqueda.";
+ $("empty").classList.toggle("hidden",all.length>0);
+ {const rc=$("resCount");if(rc)rc.textContent=all.length?all.length+(all.length===1?" juego":" juegos"):""}
+ // Paginador de a 4 números: se ven 1 2 3 4 y, con la flecha ›, pasa a 5 6 7 8 (y así). La flecha ‹ vuelve al grupo anterior. Para cambiar cuántos números se ven a la vez, cambiá el 4 de "POR_GRUPO".
+ const POR_GRUPO=4,grupo=Math.floor((page-1)/POR_GRUPO),desde=grupo*POR_GRUPO+1,hasta=Math.min(desde+POR_GRUPO-1,pages);
+ const btnPag=(p,txt,activo,etq)=>`<button type="button" data-p="${p}" ${etq?`aria-label="${etq}" title="${etq}" `:`aria-label="Página ${p}" `}${activo?'aria-current="page" ':""}class="pg${activo?" on":""}">${txt}</button>`;
+ let hp="";
+ if(pages>1){
+  if(grupo>0)hp+=btnPag(desde-1,"&#8249;",false,"Páginas anteriores");
+  for(let p=desde;p<=hasta;p++)hp+=btnPag(p,p,p===page);
+  if(hasta<pages)hp+=btnPag(hasta+1,"&#8250;",false,"Más páginas");
+ }
+ $("pager").innerHTML=hp;
+}
+
+// ===== IMÁGENES +18 =====
+// Las imágenes marcadas como +18 en el panel se ven borrosas, con una etiqueta, hasta que la persona inicia sesión con una cuenta.
+// Ojo: es un aviso visual y no una protección: la dirección de la imagen sigue siendo pública.
+const verAdulto=()=>esReal(fbUsuario);
+const velo18=marcada=>!!marcada&&!verAdulto();
+const VELO='<span class="vela18"><b>+18</b><span>Iniciá sesión para ver</span></span>';
+// Se vuelve a dibujar todo cuando la persona entra o sale de su cuenta (para mostrar u ocultar las imágenes +18).
+let ultimoVeia=null;
+function refrescarAdultos(){
+ const v=verAdulto();if(v===ultimoVeia)return;ultimoVeia=v;
+ if(!GAMES.length)return;
+ renderTop();render();
+ if(GAMES[FEATURED]&&$("featBg"))$("featBg").classList.toggle("blur18",velo18(GAMES[FEATURED].adulta));
+ if(actual>=0)dibujarCapturas(GAMES[actual]);
+}
+// Si tocan una imagen +18 sin haber iniciado sesión: se abre la sección de comentarios, donde está el formulario para entrar o crear una cuenta.
+let comAviso="";
+function pedirSesion(){
+ comAviso="Para ver las imágenes +18 iniciá sesión o creá una cuenta.";
+ abrirLogin();
+}
+
+// ===== VISTA: TARJETAS O LISTA =====
+// Modo de visualización elegido (se recuerda en el navegador): "grid" = tarjetas, "lista" = una columna compacta.
+let vista=(()=>{try{return localStorage.getItem("nomada_vista")==="lista"?"lista":"grid"}catch(e){return"grid"}})();
+// Iconos de los botones de vista.
+const ICV={grid:'<svg class="ico-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>',lista:'<svg class="ico-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>'};
+// Dibuja los dos botones de vista y marca el elegido.
+function renderVista(){
+ $("vistaBtns").innerHTML=[["grid","Tarjetas"],["lista","Lista"]].map(([k,n])=>`<button type="button" data-v="${k}" aria-label="${n}" aria-pressed="${k===vista}" title="${n}">${ICV[k]}</button>`).join("");
+}
+// Tarjeta de un juego (vista de tarjetas).
+// Plataformas disponibles (chips sobre la portada).
+const plataformas=g=>`${g.hasPc?`<span class="plat plat-pc" title="Disponible para PC">${IC.pc}<span>PC</span></span>`:""}${g.hasAn?`<span class="plat plat-an" title="Disponible para Android">${IC.an}<span>Android</span></span>`:""}`;
+// Imagen de portada (o una letra si el juego no tiene imagen).
+const imgPortada=g=>g.img?`<img src="${esc(g.img)}" alt="" loading="lazy" decoding="async" class="fx${velo18(g.adulta)?" blur18":""}">`:`<div class="cover-ph" aria-hidden="true">${esc(g.t[0])}</div>`;
+const botonFav=g=>{const f=favs.has(g.slug);return `<button type="button" onclick="event.stopPropagation();toggleFav('${g.slug}')" aria-label="${f?"Quitar de favoritos":"Guardar en favoritos"}" aria-pressed="${f}" title="${f?"Quitar de favoritos":"Guardar en favoritos"}" class="fav-btn${f?" on":""}">${ICH(f)}</button>`};
+const chipsCats=(g,n)=>g.c.length?g.c.slice(0,n).map(x=>`<span class="chip">${esc(x)}</span>`).join("")+(g.c.length>n?`<span class="chip chip-more">+${g.c.length-n}</span>`:""):"";
+// Tarjeta de un juego (vista de tarjetas).
+function tarjeta(g,i){const e=etq(g);return `
+  <article class="card" onclick="openModal(${i})">
+   <div class="cover${g.img?" skel":""}">
+    ${imgPortada(g)}
+    ${g.img&&velo18(g.adulta)?VELO:""}
+    <div class="badges">${e?`<span class="badge ${e[1]}">${e[0]}</span>`:""}<span class="badge b-18">+18</span></div>
+    <div class="plats">${plataformas(g)}</div>
+    ${botonFav(g)}
+   </div>
+   <div class="card-body">
+    <div class="card-chips">${chipsCats(g,2)}</div>
+    <h3 class="card-title"><button type="button" class="card-link" title="${esc(g.t)}">${esc(g.t)}</button></h3>
+    <div class="card-meta"><span>${esc(g.sz)}</span>${VIS(g)}</div>
+    ${chipLista(g)}
+   </div>
+  </article>`;}
+// Fila compacta de un juego (vista de lista): portada chica, título, categorías, peso y plataformas.
+function fila(g,i){const e=etq(g);return `
+  <article class="row" onclick="openModal(${i})">
+   <div class="row-cover${g.img?" skel":""}">
+    ${imgPortada(g)}
+    ${g.img&&velo18(g.adulta)?VELO:""}
+    ${e?`<div class="badges"><span class="badge ${e[1]}">${e[0]}</span></div>`:""}
+   </div>
+   <div class="row-body">
+    <h3 class="card-title"><button type="button" class="card-link" title="${esc(g.t)}">${esc(g.t)}</button></h3>
+    <div class="card-chips">${chipsCats(g,2)}</div>
+    <div class="card-meta"><span>${esc(g.sz)}</span>${VIS(g)}</div>
+    ${chipLista(g)}
+   </div>
+   <div class="row-acts">
+    <span class="row-pl">${g.hasPc?`<span class="pc" role="img" aria-label="Disponible para PC" title="Disponible para PC">${IC.pc}</span>`:""}${g.hasAn?`<span class="an" role="img" aria-label="Disponible para Android" title="Disponible para Android">${IC.an}</span>`:""}</span>
+    ${botonFav(g)}
+   </div>
+  </article>`;}
+// Botón de vista: cambia entre tarjetas y lista y recuerda la elección.
+$("vistaBtns").onclick=e=>{const b=e.target.closest("button");if(!b)return;vista=b.dataset.v;try{localStorage.setItem("nomada_vista",vista)}catch(x){}renderVista();render()};
+
+// ===== ¿NO SABÉS QUÉ JUGAR? =====
+// Elige un juego al azar del catálogo (distinto del anterior) y abre su ventana.
+let ultimoAzar=-1;
+$("btnAzar").onclick=()=>{
+ if(!GAMES.length)return;
+ let i;do{i=Math.floor(Math.random()*GAMES.length)}while(GAMES.length>1&&i===ultimoAzar);
+ ultimoAzar=i;evento("juego_azar",{juego:GAMES[i].t});openModal(i);
+};
+
+// ===== COMUNIDAD (Discord / Telegram) =====
+// Pegá acá los enlaces de tu comunidad (por ejemplo https://discord.gg/xxxx). Si dejás uno vacío, ese botón no se muestra.
+const LINK_DISCORD="https://discord.gg/XdRufVpjZq", LINK_TELEGRAM="https://t.me/Nomada_VN", LINK_TWITTER="https://x.com/Nomada_VN", LINK_FACEBOOK="https://www.facebook.com/nomadavn";
+// Dirección del feed RSS (la que te da el Worker de notificaciones, por ejemplo https://tu-worker.workers.dev/rss.xml). Si está vacía, el botón RSS no se muestra.
+const RSS_URL="";
+// Configura los botones del pie de página y del banner flotante, y muestra el banner unos segundos después de confirmar la edad.
+function iniciarComunidad(){
+ [["lnkDiscord","banDiscord",LINK_DISCORD],["introDiscord",null,LINK_DISCORD],["lnkTelegram","banTelegram",LINK_TELEGRAM],["lnkTwitter",null,LINK_TWITTER],["lnkFacebook",null,LINK_FACEBOOK]].forEach(([f,b,u])=>{
+  [f,b].forEach(id=>{const a=id&&$(id);if(!a)return;if(u)a.href=u});
+ });
+ // Feed RSS: si hay una dirección configurada, se muestra el botón y se avisa a los lectores de noticias.
+ if(RSS_URL){
+  $("lnkRss").href=RSS_URL;$("lnkRss").style.display="";
+  const l=document.createElement("link");l.rel="alternate";l.type="application/rss+xml";l.title="Nómada VN";l.href=RSS_URL;document.head.appendChild(l);
+ }
+ if(!LINK_DISCORD&&!LINK_TELEGRAM)return;
+ let hasta=0;try{hasta=+localStorage.getItem("nomada_banner_hasta")||0}catch(e){}
+ if(Date.now()<hasta)return;
+ const t=setInterval(()=>{if(!document.getElementById("gate")){clearInterval(t);setTimeout(()=>$("bannerCom").classList.remove("hidden"),4000)}},1500);
+}
+// Cierra el banner y no lo vuelve a mostrar por 7 días.
+function cerrarBanner(){$("bannerCom").classList.add("hidden");try{localStorage.setItem("nomada_banner_hasta",String(Date.now()+7*864e5))}catch(e){}}
+
+// ===== CARGA PROGRESIVA DE IMÁGENES =====
+// Cuando una imagen del catálogo termina de cargar (o falla) se le quita el esqueleto y aparece con fundido. Un solo oyente sirve para todas las tarjetas, aunque se redibujen.
+function imgLista(im){
+ im.classList.add("ok");
+ const c=im.closest(".skel");if(c)c.classList.add("listo");
+}
+["load","error"].forEach(ev=>document.addEventListener(ev,e=>{const im=e.target;if(im&&im.tagName==="IMG"&&im.classList.contains("fx"))imgLista(im)},true));
+// Marca las que ya estaban cargadas (por ejemplo desde la caché del navegador) y da prioridad a las primeras portadas de la página, que son las que se ven al abrir.
+function revisarImgs(){
+ document.querySelectorAll("img.fx:not(.ok)").forEach(im=>{if(im.complete)imgLista(im)});
+ document.querySelectorAll("#grid img.fx").forEach((im,k)=>{if(k<4&&im.loading==="lazy"&&!im.complete){im.loading="eager";im.setAttribute("fetchpriority","high")}});
+}
+// ===== VALORACIONES CON ESTRELLAS (Firebase) =====
+// Datos de tu proyecto de Firebase. Son públicos por diseño (no son secretos): la seguridad la dan las reglas de Firestore.
+const FIREBASE_CONFIG={apiKey:"AIzaSyDBSieT2aJYXLOIJcInY5S6I9NnSVny29M",authDomain:"nomada-4a182.firebaseapp.com",projectId:"nomada-4a182",storageBucket:"nomada-4a182.firebasestorage.app",messagingSenderId:"475851285073",appId:"1:475851285073:web:b880e427175614daf28e70"};
+const FB="https://www.gstatic.com/firebasejs/10.12.2/";
+let fbPromesa=null;
+// Usuario con la sesión abierta ahora (puede ser anónimo).
+let fbUsuario=null;
+// Carga Firebase solo la primera vez que hace falta (así la página abre rápido) e inicia una sesión anónima: cada navegador recibe un identificador, sin que la persona tenga que registrarse.
+function iniciarFirebase(){
+ if(!fbPromesa)fbPromesa=(async()=>{
+  const [appM,authM,fs]=await Promise.all([import(FB+"firebase-app.js"),import(FB+"firebase-auth.js"),import(FB+"firebase-firestore.js")]);
+  const app=appM.getApps().length?appM.getApp():appM.initializeApp(FIREBASE_CONFIG);
+  const auth=authM.getAuth(app);
+  const F={db:fs.getFirestore(app),auth,authM,fs};
+  // Escucha los cambios de sesión (entrar, salir). Si no hay ninguna sesión, abre una anónima: sirve para votar con estrellas sin registrarse.
+  await new Promise((ok,mal)=>{
+   let listo=false,baja=null;
+   baja=authM.onAuthStateChanged(auth,u=>{
+    if(!u){authM.signInAnonymously(auth).catch(e=>{if(!listo){listo=true;if(baja)baja();mal(e)}});return}
+    fbUsuario=u;alCambiarSesion();
+    if(!listo){listo=true;ok()}
+   });
+  });
+  return F;
+ })();
+ fbPromesa.catch(()=>{fbPromesa=null}); // si falló, se vuelve a intentar la próxima vez
+ return fbPromesa;
+}
+// Versión liviana de Firebase para leer el catálogo: no carga el sistema de cuentas ni abre ninguna sesión (la lectura es pública).
+let fsPromesa=null;
+function iniciarFirestore(){
+ if(!fsPromesa)fsPromesa=(async()=>{
+  const [appM,fs]=await Promise.all([import(FB+"firebase-app.js"),import(FB+"firebase-firestore.js")]);
+  const app=appM.getApps().length?appM.getApp():appM.initializeApp(FIREBASE_CONFIG);
+  return{db:fs.getFirestore(app),fs};
+ })();
+ fsPromesa.catch(()=>{fsPromesa=null});
+ return fsPromesa;
+}
+// Lee el promedio y la cantidad de votos de un juego, y el voto de esta persona (0 si todavía no votó).
+async function leerValoracion(slug){
+ const {db,auth,fs}=await iniciarFirebase();
+ const uid=auth.currentUser.uid;ultimoUidRating=uid;
+ const q=fs.query(fs.collection(db,"valoraciones"),fs.where("juego","==",slug));
+ let promedio=0,cantidad=0;
+ try{
+  const r=(await fs.getAggregateFromServer(q,{promedio:fs.average("estrellas"),cantidad:fs.count()})).data();
+  promedio=r.promedio||0;cantidad=r.cantidad||0;
+ }catch(e){
+  // Respaldo: si el cálculo directo no está disponible, se suman los votos uno por uno.
+  const snap=await fs.getDocs(q);let suma=0;snap.forEach(d=>{suma+=d.data().estrellas||0;cantidad++});promedio=cantidad?suma/cantidad:0;
+ }
+ const mio=await fs.getDoc(fs.doc(db,"valoraciones",slug+"_"+uid));
+ return{promedio,cantidad,mia:mio.exists()?(mio.data().estrellas||0):0};
+}
+// Guarda el voto de esta persona para un juego (si ya había votado, lo reemplaza: un voto por persona y por juego).
+async function guardarValoracion(slug,n){
+ const {db,auth,fs}=await iniciarFirebase();
+ const uid=auth.currentUser.uid;
+ await fs.setDoc(fs.doc(db,"valoraciones",slug+"_"+uid),{juego:slug,uid,estrellas:n,fecha:fs.serverTimestamp()});
+}
+// Traduce un error de Firebase a un mensaje que explica qué falta configurar (y deja el código entre paréntesis).
+function explicarErrorFirebase(e){
+ const c=String((e&&e.code)||""),m=String((e&&e.message)||e||"");
+ let t="Error desconocido.";
+ if(/operation-not-allowed|admin-restricted-operation/.test(c))t="Falta activar el acceso Anónimo en Firebase (Authentication, Método de acceso, Anónimo).";
+ else if(/unauthorized-domain/.test(c))t="Falta autorizar este dominio en Firebase (Authentication, Configuración, Dominios autorizados).";
+ else if(/operation-not-supported/.test(c))t="Probá desde tu sitio publicado o desde un servidor local, no abriendo el archivo con doble clic.";
+ else if(/invalid-api-key|api-key-not-valid/.test(c+m))t="La clave de la configuración de Firebase no es válida.";
+ else if(/permission-denied/.test(c))t="Las reglas de Firestore no están publicadas o no permiten esta operación.";
+ else if(/not-found|unavailable|failed-precondition/.test(c))t="Falta crear la base de datos Firestore, o no hay conexión.";
+ else if(/network-request-failed/.test(c))t="No hay conexión con Firebase.";
+ else if(/dynamically imported module|Failed to fetch|Importing a module script failed|Load failed/i.test(m))t="No se pudo cargar Firebase (revisá la conexión o si un bloqueador lo está bloqueando).";
+ return t+(c?" ("+c+")":"");
+}
+// Estado de la valoración del juego abierto.
+let valo={slug:"",promedio:0,cantidad:0,mia:0};
+// Pinta las estrellas: "hover" es la estrella sobre la que está el mouse (0 = ninguna). Si la persona ya votó, se ve su voto; si no, el promedio redondeado.
+function pintarEstrellas(hover){
+ const lleno=hover||valo.mia||Math.round(valo.promedio);
+ $("estrellas").querySelectorAll("button").forEach(b=>{
+  const n=+b.dataset.n,on=n<=lleno;
+  b.className="star "+(on?(hover||valo.mia?"on":"soft"):"");
+  b.firstChild.setAttribute("fill",on?"currentColor":"none");
+ });
+}
+// Dibuja las 5 estrellas y el texto con el promedio.
+function dibujarEstrellas(){
+ $("estrellas").innerHTML=[1,2,3,4,5].map(n=>`<button type="button" data-n="${n}" aria-label="${n} ${n===1?"estrella":"estrellas"}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>`).join("");
+ pintarEstrellas(0);
+ const t=valo.cantidad?valo.promedio.toFixed(1).replace(".",",")+" de 5 - "+valo.cantidad+(valo.cantidad===1?" voto":" votos"):"Sin valoraciones todavía. ¡Sé el primero!";
+ $("ratingTexto").textContent=t+(valo.mia?" - Tu voto: "+valo.mia:"");
+}
+// Al abrir un juego: muestra el bloque y carga sus valoraciones. Si Firebase no responde, avisa sin romper nada.
+async function cargarValoracion(g){
+ const slug=g.slug;
+ valo={slug,promedio:0,cantidad:0,mia:0};
+ $("rating").style.display="";$("estrellas").innerHTML="";$("ratingTexto").textContent="Cargando valoraciones...";
+ try{
+  const r=await leerValoracion(slug);
+  if(valo.slug!==slug)return; // mientras tanto se abrió otro juego
+  valo={slug,...r};dibujarEstrellas();
+ }catch(e){console.error("Valoraciones:",e);if(valo.slug===slug)$("ratingTexto").textContent="Valoraciones no disponibles: "+explicarErrorFirebase(e)}
+}
+// Votar: actualiza el número en pantalla al instante y guarda el voto; si falla, deja todo como estaba.
+async function votar(n){
+ const slug=valo.slug,antes={...valo};
+ const suma=valo.promedio*valo.cantidad-(valo.mia||0)+n;
+ if(!valo.mia)valo.cantidad++;
+ valo.promedio=suma/valo.cantidad;valo.mia=n;
+ dibujarEstrellas();
+ try{await guardarValoracion(slug,n);evento("valoracion",{juego:(GAMES[actual]||{}).t,estrellas:n})}
+ catch(e){console.error("Valoraciones:",e);if(valo.slug===slug){valo=antes;dibujarEstrellas();$("ratingTexto").textContent="No se pudo guardar tu voto: "+explicarErrorFirebase(e)}}
+}
+$("estrellas").onclick=e=>{const b=e.target.closest("button");if(b&&valo.slug)votar(+b.dataset.n)};
+$("estrellas").onmouseover=e=>{const b=e.target.closest("button");if(b)pintarEstrellas(+b.dataset.n)};
+$("estrellas").onmouseleave=()=>pintarEstrellas(0);
+
+// ===== COMENTARIOS (Firebase: cuentas, hilos y moderación) =====
+// Correos de los administradores: solo estas cuentas (con el correo verificado) ven los botones para eliminar comentarios y bloquear personas.
+// Para sumar otro administrador, agregá su correo acá (entre comillas, en minúsculas y separado por coma) Y también en el archivo firestore.rules.
+// Ojo: lo que realmente protege son las reglas de Firestore, no este código.
+const ADMIN_EMAILS=["braian.diaz.bdm@gmail.com"];
+// Estado de los comentarios del juego abierto.
+let comJuego="",comModo="ingresar",comRespondiendo="",comLista=[],comBloqueados=new Set(),comYoBloqueado=false,ultimoUidRating="";
+const esReal=u=>!!u&&!u.isAnonymous;
+const esAdminUI=u=>esReal(u)&&u.emailVerified&&ADMIN_EMAILS.includes(String(u.email||"").toLowerCase());
+const nombreUsuario=u=>String(u.displayName||(u.email||"Usuario").split("@")[0]).trim().slice(0,40)||"Usuario";
+const INPUT="field";
+const INSIGNIA='<span class="insignia">[Admin]</span>';
+// "hace 5 min", "hace 2 h", "hace 3 d".
+function hace(ms){const t=Math.max(0,(Date.now()-ms)/1000);if(t<60)return"ahora";if(t<3600)return"hace "+Math.floor(t/60)+" min";if(t<86400)return"hace "+Math.floor(t/3600)+" h";return"hace "+Math.floor(t/86400)+" d"}
+// Mensajes de error de las cuentas, en español.
+function errorAuth(e){
+ const c=String((e&&e.code)||"");
+ const m={"auth/invalid-credential":"Correo o contraseña incorrectos.","auth/wrong-password":"Correo o contraseña incorrectos.","auth/user-not-found":"Correo o contraseña incorrectos.","auth/email-already-in-use":"Ya existe una cuenta con ese correo. Probá ingresar.","auth/weak-password":"La contraseña es muy corta (mínimo 6 caracteres).","auth/invalid-email":"El correo no es válido.","auth/missing-password":"Escribí tu contraseña.","auth/popup-closed-by-user":"Cerraste la ventana de Google antes de terminar.","auth/cancelled-popup-request":"Se canceló el inicio de sesión.","auth/popup-blocked":"El navegador bloqueó la ventana de Google. Permitila e intentá de nuevo.","auth/too-many-requests":"Demasiados intentos. Esperá un rato y probá de nuevo.","auth/operation-not-allowed":"Este método de acceso no está activado en Firebase.","permission-denied":"No tenés permiso para hacer esto (tu cuenta puede estar bloqueada o sin verificar)."}[c];
+ return m||explicarErrorFirebase(e);
+}
+// Muestra un mensaje debajo del formulario (rojo = error, verde = todo bien).
+function comMsg(t,ok,raiz){const el=(raiz||document).querySelector("#comError");if(!el){alert(t);return}el.textContent=t;el.className="msg "+(ok?"msg-ok":"msg-err")}
+// Formulario de acceso (Google, correo y contraseña). Se usa en los comentarios y en la ventana "Iniciar sesión".
+function formAcceso(){
+ const crear=comModo==="crear";
+ return `<div class="form">${comAviso?`<p class="aviso">${esc(comAviso)}</p>`:""}
+   <h4>Iniciá sesión para comentar</h4>
+   <p>Entrá con Google en un clic o con tu correo. Con tu cuenta también se sincronizan tus favoritos en todos tus dispositivos. Para leer los comentarios no hace falta cuenta.</p>
+   <button type="button" data-a="google" class="btn btn-ghost btn-block">Continuar con Google</button>
+   <div class="seg-m">
+    <button type="button" data-a="modo" data-m="ingresar" class="pill pill-sm${!crear?" on":""}">Ingresar</button>
+    <button type="button" data-a="modo" data-m="crear" class="pill pill-sm${crear?" on":""}">Crear cuenta</button>
+   </div>
+   ${crear?`<input id="comNombre" type="text" maxlength="40" autocomplete="nickname" placeholder="Tu nombre (se muestra en los comentarios)" aria-label="Tu nombre" class="field">`:""}
+   <input id="comEmail" type="email" autocomplete="email" placeholder="Correo electrónico" aria-label="Correo electrónico" class="field">
+   <input id="comPass" type="password" autocomplete="${crear?"new-password":"current-password"}" placeholder="Contraseña (mínimo 6 caracteres)" aria-label="Contraseña" class="field">
+   <button type="button" data-a="enviar" class="btn btn-primary btn-block">${crear?"Crear cuenta":"Ingresar"}</button>
+   <button type="button" data-a="olvide" class="btn-link" style="align-self:center">Olvidé mi contraseña</button>
+   <p id="comError" class="msg msg-err"></p>
+  </div>`;
+}
+// Dibuja la parte de arriba: formulario de acceso (si no hay sesión) o el cuadro para escribir (si hay sesión).
+function dibujarSesion(){
+ const caja=$("comSesion"),u=fbUsuario;
+ if(!esReal(u)){
+  caja.innerHTML=formAcceso();
+  return;
+ }
+ let h=`<div class="coms-h"><span>Comentás como <b>${esc(nombreUsuario(u))}</b> ${esAdminUI(u)?INSIGNIA:""}</span><button type="button" data-a="salir" class="btn-link">Cerrar sesión</button></div>`;
+ if(!u.emailVerified)h+=`<div class="aviso">Te enviamos un correo para verificar tu cuenta. Cuando lo hayas confirmado, tocá "Ya verifiqué" para poder comentar.<div class="row-btns"><button type="button" data-a="verificado" class="btn btn-ghost btn-sm">Ya verifiqué</button><button type="button" data-a="reenviar" class="btn btn-ghost btn-sm">Reenviar correo</button></div><p id="comError" class="msg" style="margin-top:8px"></p></div>`;
+ else if(comYoBloqueado)h+=`<p class="msg msg-err">Tu cuenta no puede comentar.</p>`;
+ else h+=`<textarea id="comTexto" maxlength="1000" rows="3" placeholder="Escribí tu comentario o tu duda..." aria-label="Tu comentario" class="field"></textarea><div class="com-re-btns"><span id="comError" class="msg msg-err"></span><button type="button" data-a="publicar" class="btn btn-primary btn-sm">Publicar</button></div>`;
+ caja.innerHTML=h;
+}
+// ¿Esta persona puede escribir ahora? (con cuenta, correo verificado y sin bloqueo)
+const puedeComentar=()=>esReal(fbUsuario)&&fbUsuario.emailVerified&&!comYoBloqueado;
+// Cabecera de un comentario: inicial, nombre, etiqueta [Admin] y hace cuánto se escribió.
+function cabeceraCom(c){return `<div class="com-h"><span class="com-av${c.esAdmin?" admin":""}">${esc((c.nombre||"?")[0].toUpperCase())}</span><span class="com-n">${esc(c.nombre)}</span>${c.esAdmin?INSIGNIA:""}<span class="com-t">${hace(c.t)}</span></div>`}
+// Botones de un comentario: Responder (con sesión) y, solo para el administrador, Eliminar y Bloquear/Desbloquear.
+function accionesCom(c,raiz){
+ const admin=esAdminUI(fbUsuario),mio=fbUsuario&&c.uid===fbUsuario.uid;
+ let h="";
+ if(puedeComentar())h+=`<button type="button" data-a="resp" data-id="${esc(raiz)}">Responder</button>`;
+ if(admin){
+  h+=`<button type="button" data-a="del" data-id="${esc(c.id)}" class="del">Eliminar</button>`;
+  if(!mio&&!c.esAdmin)h+=`<button type="button" data-a="ban" data-id="${esc(c.uid)}" data-n="${esc(c.nombre)}" class="ban">${comBloqueados.has(c.uid)?"Desbloquear":"Bloquear"}</button>`;
+ }
+ return h?`<div class="com-acts">${h}</div>`:"";
+}
+// Dibuja la lista: comentarios principales (los más nuevos primero) y, debajo de cada uno, sus respuestas en orden.
+function dibujarLista(){
+ const raices=comLista.filter(c=>!c.padre).sort((a,b)=>b.t-a.t);
+ if(!raices.length){$("comLista").innerHTML='<p class="coms-estado">Todavía no hay comentarios. ¡Escribí el primero!</p>';return}
+ $("comLista").innerHTML=raices.map(c=>{
+  const hijos=comLista.filter(x=>x.padre===c.id).sort((a,b)=>a.t-b.t);
+  return `<div class="com${c.esAdmin?" admin":""}">
+   ${cabeceraCom(c)}
+   <p class="com-x">${esc(c.texto)}</p>
+   ${accionesCom(c,c.id)}
+   ${hijos.map(h=>`<div class="com-re">${cabeceraCom(h)}<p class="com-x">${esc(h.texto)}</p>${accionesCom(h,c.id)}</div>`).join("")}
+   ${comRespondiendo===c.id?`<div class="com-re nuevo"><textarea id="comRespTexto" maxlength="1000" rows="2" placeholder="Escribí tu respuesta..." aria-label="Tu respuesta" class="field"></textarea><div class="com-re-btns"><button type="button" data-a="cancelarresp" class="btn-link">Cancelar</button><button type="button" data-a="publicarresp" data-id="${esc(c.id)}" class="btn btn-primary btn-sm">Responder</button></div></div>`:""}
+  </div>`}).join("");
+}
+// Lee los comentarios del juego abierto desde Firestore.
+async function cargarComentarios(){
+ const F=await iniciarFirebase(),marca=comJuego;
+ const snap=await F.fs.getDocs(F.fs.query(F.fs.collection(F.db,"comentarios"),F.fs.where("juego","==",comJuego)));
+ if(marca!==comJuego)return; // mientras tanto se abrió otro juego
+ comLista=snap.docs.map(d=>{const x=d.data();return{id:d.id,texto:x.texto||"",uid:x.uid,nombre:x.nombre||"Usuario",padre:x.padre||"",esAdmin:!!x.esAdmin,t:x.fecha&&x.fecha.toMillis?x.fecha.toMillis():Date.now()}});
+ dibujarLista();
+}
+// Prepara la sección: ve si esta persona está bloqueada (o, si es el administrador, quiénes lo están), dibuja el acceso y, si se pide, carga los comentarios.
+async function prepararComentarios(cargar){
+ const F=await iniciarFirebase(),u=F.auth.currentUser;
+ fbUsuario=u;comYoBloqueado=false;comBloqueados=new Set();
+ if(esReal(u)){
+  try{comYoBloqueado=(await F.fs.getDoc(F.fs.doc(F.db,"bloqueados",u.uid))).exists()}catch(e){}
+  if(esAdminUI(u)){try{(await F.fs.getDocs(F.fs.collection(F.db,"bloqueados"))).forEach(d=>comBloqueados.add(d.id))}catch(e){}}
+ }
+ dibujarSesion();
+ if(cargar)await cargarComentarios();else dibujarLista();
+}
+// Se llama cuando alguien entra o sale de su cuenta: actualiza los comentarios y las estrellas (el voto es por cuenta).
+function alCambiarSesion(){
+ if($("comentarios")&&!$("comentarios").classList.contains("hidden")&&comJuego)prepararComentarios(false).catch(()=>{});
+ if(actual>=0&&valo.slug&&ultimoUidRating&&fbUsuario&&fbUsuario.uid!==ultimoUidRating)cargarValoracion(GAMES[actual]);
+ sesionFavs();
+ actualizarBtnSesion();
+ if(loginAbierto){const entro=esReal(fbUsuario);dibujarLogin();if(entro&&!$("loginCaja").querySelector("#comError")){setTimeout(()=>{if(loginAbierto&&esReal(fbUsuario))cerrarLogin()},1200)}}
+}
+// Publica un comentario (padre vacío) o una respuesta (padre = id del comentario principal).
+async function publicarComentario(texto,padre){
+ texto=String(texto||"").trim();
+ if(!texto){comMsg("Escribí algo antes de publicar.");return false}
+ const F=await iniciarFirebase(),u=F.auth.currentUser;
+ await F.fs.addDoc(F.fs.collection(F.db,"comentarios"),{juego:comJuego,texto,uid:u.uid,nombre:nombreUsuario(u),padre:padre||"",esAdmin:esAdminUI(u),fecha:F.fs.serverTimestamp()});
+ evento("comentario",{juego:(GAMES[actual]||{}).t,respuesta:!!padre});
+ await cargarComentarios();
+ return true;
+}
+// Botones de la sección de comentarios (acceso, publicar, responder, eliminar, bloquear).
+async function accesoClick(e){
+ const raiz=e.currentTarget,q=x=>raiz.querySelector(x);
+ const b=e.target.closest("[data-a]");if(!b)return;
+ const a=b.dataset.a,id=b.dataset.id;
+ try{
+  if(a==="modo"){comModo=b.dataset.m;dibujarSesion();dibujarLogin();return}
+  if(a==="resp"){comRespondiendo=id;dibujarLista();return}
+  if(a==="cancelarresp"){comRespondiendo="";dibujarLista();return}
+  const F=await iniciarFirebase(),u=F.auth.currentUser;
+  if(a==="google"){await F.authM.signInWithPopup(F.auth,new F.authM.GoogleAuthProvider())}
+  else if(a==="enviar"){
+   const email=(q("#comEmail").value||"").trim(),pass=q("#comPass").value||"";
+   if(comModo==="crear"){
+    const nombre=(q("#comNombre").value||"").trim();
+    if(!nombre){comMsg("Escribí tu nombre.",false,raiz);return}
+    const cred=await F.authM.createUserWithEmailAndPassword(F.auth,email,pass);
+    await F.authM.updateProfile(cred.user,{displayName:nombre.slice(0,40)});
+    await F.authM.sendEmailVerification(cred.user);
+    fbUsuario=F.auth.currentUser;dibujarSesion();dibujarLista();dibujarLogin();actualizarBtnSesion();
+    comMsg("Te enviamos un correo para verificar tu cuenta.",true,raiz);
+  }else await F.authM.signInWithEmailAndPassword(F.auth,email,pass);
+  }
+  else if(a==="olvide"){
+   const email=(q("#comEmail").value||"").trim();
+   if(!email){comMsg("Escribí tu correo arriba y tocá de nuevo.",false,raiz);return}
+   await F.authM.sendPasswordResetEmail(F.auth,email);comMsg("Te enviamos un correo para restablecer la contraseña.",true,raiz);
+  }
+  else if(a==="salir"){await F.authM.signOut(F.auth);comRespondiendo="";limpiarFavsLocales();if(raiz.id==="loginCaja")cerrarLogin()}
+  else if(a==="verificado"){await u.reload();await u.getIdToken(true);await prepararComentarios(false);dibujarLogin();actualizarBtnSesion()}
+  else if(a==="reenviar"){await F.authM.sendEmailVerification(u);comMsg("Correo reenviado. Revisá también la carpeta de spam.",true,raiz)}
+  else if(a==="publicar"){const ta=$("comTexto");if(await publicarComentario(ta.value,"")){ta.value=""}}
+  else if(a==="publicarresp"){if(await publicarComentario(($("comRespTexto")||{}).value,id)){comRespondiendo="";dibujarLista()}}
+  else if(a==="del"){
+   const hijos=comLista.filter(c=>c.padre===id);
+   if(!confirm("¿Eliminar este comentario"+(hijos.length?" y sus "+hijos.length+" respuestas":"")+"?"))return;
+   const lote=F.fs.writeBatch(F.db);
+   [id,...hijos.map(h=>h.id)].forEach(x=>lote.delete(F.fs.doc(F.db,"comentarios",x)));
+   await lote.commit();await cargarComentarios();
+  }
+  else if(a==="ban"){
+   const quitar=comBloqueados.has(id);
+   if(!confirm((quitar?"¿Desbloquear a ":"¿Bloquear a ")+(b.dataset.n||"esta persona")+"?"+(quitar?"":" No va a poder comentar más."))) return;
+   if(quitar){await F.fs.deleteDoc(F.fs.doc(F.db,"bloqueados",id));comBloqueados.delete(id)}
+   else{await F.fs.setDoc(F.fs.doc(F.db,"bloqueados",id),{uid:id,nombre:String(b.dataset.n||"").slice(0,40),fecha:F.fs.serverTimestamp()});comBloqueados.add(id)}
+   dibujarLista();
+  }
+ }catch(err){console.error("Comentarios:",err);comMsg(errorAuth(err),false,raiz)}
+}
+$("comentarios").addEventListener("click",accesoClick);
+$("loginCaja").addEventListener("click",accesoClick);
+// Con Enter en el campo de contraseña se envía el formulario de acceso.
+[$("comentarios"),$("loginCaja")].forEach(c=>c.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.id==="comPass"){e.preventDefault();const b=c.querySelector('[data-a="enviar"]');if(b)b.click()}}));
+// Vacía la sección de comentarios (se usa al abrir otro juego).
+function resetComentarios(){$("comentarios").classList.add("hidden");$("comLista").innerHTML="";$("comSesion").innerHTML="";$("btnComentarios").style.display="";comRespondiendo="";comJuego=""}
+// Botón "Ver o dejar comentarios": muestra la sección y carga los comentarios del juego abierto.
+$("btnComentarios").onclick=async()=>{
+ if(actual<0)return;
+ comJuego=GAMES[actual].slug;comRespondiendo="";comLista=[];
+ $("btnComentarios").style.display="none";
+ $("comentarios").classList.remove("hidden");
+ $("comLista").innerHTML='<p class="coms-estado">Cargando comentarios...</p>';
+ evento("ver_comentarios",{juego:GAMES[actual].t});
+ try{await prepararComentarios(true)}catch(e){console.error("Comentarios:",e);$("comLista").innerHTML='<p class="msg msg-err">No se pudieron cargar los comentarios: '+esc(explicarErrorFirebase(e))+'</p>'}
+};
+
+// Registra en Analytics cuando alguien toca el botón de Ko-fi dentro de la ventana de un juego.
+$("btnKofiModal").addEventListener("click",()=>evento("apoyo",{destino:"ko-fi modal"}));
+
+// ===== CAPTURAS DEL JUEGO =====
+// Dibuja las miniaturas de las capturas dentro de la ventana del juego. Si el juego no tiene capturas, oculta la sección.
+function dibujarCapturas(g){
+ const caja=$("mShots"),lista=$("mShotList");
+ if(!g.shots.length){caja.classList.add("hidden");lista.innerHTML="";return}
+ lista.innerHTML=g.shots.map((o,k)=>{const v=velo18(o.a);return `<button type="button" data-k="${k}" aria-label="Ver captura ${k+1} de ${esc(g.t)}" class="skel capw shot"><img src="${esc(o.u)}" alt="" loading="lazy" decoding="async" class="fx${v?" blur18":""}">${v?VELO:""}</button>`}).join("");revisarImgs();
+ caja.classList.remove("hidden");
+}
+// Al tocar una miniatura se abre el visor de pantalla completa en esa imagen.
+// Al tocar una miniatura se abre el visor de pantalla completa (si es +18 y no hay sesión, se pide iniciar sesión).
+$("mShotList").onclick=e=>{const d=e.target.closest("[data-k]");if(!d)return;const k=+d.dataset.k;if(velo18(GAMES[actual].shots[k].a)){pedirSesion();return}abrirVisor(k)};
+// Qué imágenes se están viendo (lista) y cuál está en pantalla (pos).
+let visor={lista:[],pos:0};
+function abrirVisor(k){const ok=GAMES[actual].shots.map((o,i)=>({o,i})).filter(x=>!velo18(x.o.a));visor.lista=ok.map(x=>x.o.u);visor.pos=Math.max(0,ok.findIndex(x=>x.i===k));mostrarVisor();$("lightbox").classList.remove("hidden");$("lightbox").classList.add("flex")}
+// Muestra la imagen actual del visor y el contador (por ejemplo "2 / 5").
+function mostrarVisor(){$("lbImg").src=visor.lista[visor.pos];$("lbCount").textContent=(visor.pos+1)+" / "+visor.lista.length}
+// Pasa a la imagen anterior (-1) o siguiente (1); después de la última vuelve a la primera.
+function moverVisor(d){const n=visor.lista.length;if(!n)return;visor.pos=(visor.pos+d+n)%n;mostrarVisor()}
+// Cierra el visor de pantalla completa.
+function cerrarVisor(){$("lightbox").classList.add("hidden");$("lightbox").classList.remove("flex");$("lbImg").removeAttribute("src")}
+
+// ===== FAVORITOS =====
+// Juegos que la persona guardó con el corazón. Se guardan en su navegador (no hace falta cuenta). Si inicia sesión (la misma cuenta de los comentarios), también se guardan en su cuenta y se sincronizan entre sus dispositivos.
+let favs=new Set();
+try{favs=new Set(JSON.parse(localStorage.getItem("nomada_favs")||"[]"))}catch(e){}
+// Lista que se está mirando en el catálogo: "" = todos, "f" = favoritos, "p" = por jugar, "t" = terminados.
+let listaSel="";
+// LISTAS PERSONALES: para cada juego, "p" (por jugar) o "t" (terminado). Un juego puede ser favorito y estar además en una de las dos.
+let listas={};
+try{listas=JSON.parse(localStorage.getItem("nomada_listas")||"{}")||{}}catch(e){listas={}}
+// AVISO DE NUEVA TEMPORADA: para cada juego guardado (favorito o en una lista) se recuerda cuántas temporadas tenía la última vez que lo viste. Si el juego suma una, la tarjeta lo marca hasta que lo abras.
+let vistas={};
+try{vistas=JSON.parse(localStorage.getItem("nomada_vistas")||"{}")||{}}catch(e){vistas={}}
+const guardarListas=()=>{try{localStorage.setItem("nomada_listas",JSON.stringify(listas));localStorage.setItem("nomada_vistas",JSON.stringify(vistas))}catch(e){}};
+const enLista=(slug,sel)=>sel==="f"?favs.has(slug):listas[slug]===sel;
+const cuentaLista=sel=>GAMES.filter(g=>enLista(g.slug,sel)).length;
+const guardado=slug=>favs.has(slug)||!!listas[slug];
+// ¿Este juego guardado tiene una temporada que todavía no viste?
+const nuevaTemporada=g=>!!g&&guardado(g.slug)&&vistas[g.slug]!==undefined&&g.temps.length>vistas[g.slug];
+// Etiqueta de la tarjeta: "Nueva temporada" (si corresponde) o la de siempre (Nuevo / Actualizado).
+const etq=g=>nuevaTemporada(g)?["Nueva temporada","b-season"]:g.tag;
+// Pastilla "Por jugar" / "Terminado" de las tarjetas.
+const chipLista=g=>listas[g.slug]==="p"?'<span class="chip-l chip-p">Por jugar</span> ':listas[g.slug]==="t"?'<span class="chip-l chip-t">Terminado</span> ':"";
+// Para los juegos guardados que todavía no tienen número de temporadas recordado, se anota el actual (así no hay avisos falsos al empezar).
+function anotarVistas(){
+ let cambio=false;
+ GAMES.forEach(g=>{if(guardado(g.slug)&&vistas[g.slug]===undefined){vistas[g.slug]=g.temps.length;cambio=true}});
+ if(cambio){guardarListas();subirListas()}
+}
+// Marca un juego como visto con sus temporadas actuales (al abrir su ventana). Devuelve true si había un aviso.
+function reconocerTemporadas(g){
+ if(!nuevaTemporada(g))return false;
+ vistas[g.slug]=g.temps.length;guardarListas();subirListas();return true;
+}
+// Pone o saca un juego de "Por jugar" ("p") o "Terminados" ("t").
+function toggleLista(slug,v){
+ if(listas[slug]===v)delete listas[slug];else listas[slug]=v;
+ const g=GAMES.find(x=>x.slug===slug);if(g&&guardado(slug)&&vistas[slug]===undefined)vistas[slug]=g.temps.length;
+ guardarListas();subirListas();evento("lista",{juego:slug,lista:listas[slug]||"ninguna"});
+ renderFavBtn();render();actualizarFavModal();
+}
+// Cuenta con la que ya se sincronizaron los favoritos en esta visita.
+let ultimoUidFavs="";
+// Dibujo del corazón (lleno si es favorito, vacío si no).
+const ICH=on=>`<svg class="ico" viewBox="0 0 24 24" fill="${on?"currentColor":"none"}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>`;
+const ICO_MARCA=on=>`<svg class="ico" viewBox="0 0 24 24" fill="${on?"currentColor":"none"}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`;
+const ICO_OK=on=>`<svg class="ico" viewBox="0 0 24 24" fill="${on?"currentColor":"none"}" stroke="${on?"#16a34a":"currentColor"}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5" stroke="${on?"#fff":"currentColor"}"/></svg>`;
+function guardarFavs(){try{localStorage.setItem("nomada_favs",JSON.stringify([...favs]))}catch(e){}}
+// Cantidad de favoritos que todavía existen en el catálogo.
+const cuentaFavs=()=>GAMES.filter(g=>favs.has(g.slug)).length;
+// Actualiza el botón "Favoritos" de la barra del catálogo (con el número y si está activado el filtro).
+function renderFavBtn(){
+ const defs=[["f","btnFavs","Favoritos",ICH(listaSel==="f"),"pill pill-f","pill pill-f on"],["p","btnPend","Por jugar",ICO_MARCA(listaSel==="p"),"pill lp","pill lp on"],["t","btnTerm","Terminados",ICO_OK(listaSel==="t"),"pill lt","pill lt on"]];
+ defs.forEach(([k,id,txt,ico,off,on])=>{
+  const b=$(id),act=listaSel===k;
+  b.innerHTML=ico+" "+txt+' <span class="n">'+cuentaLista(k)+'</span>';
+  b.className=act?on:off;
+  b.setAttribute("aria-pressed",String(act));
+ });
+ // Aviso para quien mira sus listas sin haber iniciado sesión.
+ const nota=$("favNota");if(nota)nota.style.display=(listaSel&&!esReal(fbUsuario))?"":"none";
+}
+// Actualiza el botón de corazón de la ventana del juego abierto.
+function actualizarFavModal(){
+ if(actual<0)return;
+ const sl=GAMES[actual].slug,f=favs.has(sl),p=listas[sl]==="p",t=listas[sl]==="t";
+ const base="pill pill-sm ";
+ $("btnFavModal").innerHTML=ICH(f)+" "+(f?"Favorito":"Favoritos");
+ $("btnFavModal").className=base+"pill-f"+(f?" on":"");$("btnFavModal").setAttribute("aria-pressed",String(f));
+ $("btnPendModal").innerHTML=ICO_MARCA(p)+" Por jugar";
+ $("btnPendModal").className=base+"lp"+(p?" on":"");$("btnPendModal").setAttribute("aria-pressed",String(p));
+ $("btnTermModal").innerHTML=ICO_OK(t)+" Terminado";
+ $("btnTermModal").className=base+"lt"+(t?" on":"");$("btnTermModal").setAttribute("aria-pressed",String(t));
+}
+// Agrega o quita un juego de favoritos y actualiza todo lo que se ve.
+function toggleFav(slug){
+ if(favs.has(slug))favs.delete(slug);else favs.add(slug);
+ {const g=GAMES.find(x=>x.slug===slug);if(g&&guardado(slug)&&vistas[slug]===undefined){vistas[slug]=g.temps.length;guardarListas();subirListas()}}
+ guardarFavs();subirFavs();evento("favorito",{juego:slug,guardado:favs.has(slug)});
+ renderFavBtn();render();actualizarFavModal();
+}
+// Sube los favoritos a la cuenta (solo si hay una cuenta abierta). Espera un momento por si se tocan varios corazones seguidos.
+let favTimer=null;
+function subirFavs(){
+ if(!esReal(fbUsuario))return;
+ clearTimeout(favTimer);
+ favTimer=setTimeout(async()=>{
+  try{const F=await iniciarFirebase();await F.fs.setDoc(F.fs.doc(F.db,"favoritos",F.auth.currentUser.uid),{juegos:[...favs].slice(0,500),fecha:F.fs.serverTimestamp()})}
+  catch(e){console.error("Favoritos:",e)}
+ },600);
+}
+// Sube "Por jugar", "Terminados" y las temporadas vistas a la cuenta (documento "listas/<tu cuenta>"). Si todavía no publicaste las reglas nuevas de Firestore, esto falla en silencio y las listas siguen guardándose en el navegador.
+let listasTimer=null;
+function subirListas(){
+ if(!esReal(fbUsuario))return;
+ clearTimeout(listasTimer);
+ listasTimer=setTimeout(async()=>{
+  try{
+   const F=await iniciarFirebase(),sl=Object.keys(listas);
+   await F.fs.setDoc(F.fs.doc(F.db,"listas",F.auth.currentUser.uid),{pendientes:sl.filter(k=>listas[k]==="p").slice(0,500),terminados:sl.filter(k=>listas[k]==="t").slice(0,500),vistas:vistas,fecha:F.fs.serverTimestamp()});
+  }catch(e){console.error("Listas:",e)}
+ },800);
+}
+// Al iniciar sesión: igual que con los favoritos, la primera vez se juntan las listas de este navegador con las de la cuenta; después manda la cuenta.
+async function sincronizarListas(){
+ const u=fbUsuario;if(!esReal(u))return;
+ try{
+  const F=await iniciarFirebase(),ref=F.fs.doc(F.db,"listas",u.uid);
+  const snap=await F.fs.getDoc(ref),d=snap.exists()?snap.data():{};
+  const nube={};(d.pendientes||[]).forEach(k=>nube[k]="p");(d.terminados||[]).forEach(k=>nube[k]="t");
+  let previo="";try{previo=localStorage.getItem("nomada_listas_uid")||""}catch(e){}
+  const mezcla=previo===u.uid?nube:{...listas,...nube};
+  const nv=previo===u.uid?{...(d.vistas||{})}:{...vistas,...(d.vistas||{})};
+  try{localStorage.setItem("nomada_listas_uid",u.uid)}catch(e){}
+  listas=mezcla;vistas=nv;guardarListas();anotarVistas();renderFavBtn();if(GAMES.length)render();actualizarFavModal();
+  const igual=JSON.stringify(Object.keys(nube).sort())===JSON.stringify(Object.keys(listas).sort());
+  if(!snap.exists()||!igual)subirListas();
+ }catch(e){console.error("Listas:",e)}
+}
+// Al iniciar sesión: la primera vez que esta cuenta se usa en este navegador se juntan los favoritos de acá con los de la cuenta; después manda la cuenta (así también se propagan los que se quitan).
+async function sincronizarFavs(){
+ const u=fbUsuario;if(!esReal(u))return;
+ try{
+  const F=await iniciarFirebase(),ref=F.fs.doc(F.db,"favoritos",u.uid);
+  const snap=await F.fs.getDoc(ref);
+  const nube=snap.exists()?(snap.data().juegos||[]):[];
+  let previo="";try{previo=localStorage.getItem("nomada_favs_uid")||""}catch(e){}
+  const nuevo=previo===u.uid?new Set(nube):new Set([...favs,...nube]);
+  try{localStorage.setItem("nomada_favs_uid",u.uid)}catch(e){}
+  const igual=nuevo.size===nube.length&&nube.every(x=>nuevo.has(x));
+  favs=nuevo;guardarFavs();renderFavBtn();if(GAMES.length)render();actualizarFavModal();
+  if(!igual)await F.fs.setDoc(ref,{juegos:[...nuevo].slice(0,500),fecha:F.fs.serverTimestamp()});
+ }catch(e){console.error("Favoritos:",e)}
+}
+// Al cerrar sesión, los favoritos de la cuenta se quitan de este navegador (siguen guardados en la cuenta).
+function limpiarFavsLocales(){listas={};vistas={};guardarListas();try{localStorage.removeItem("nomada_listas_uid")}catch(e){}favs=new Set();guardarFavs();try{localStorage.removeItem("nomada_favs_uid")}catch(e){}ultimoUidFavs="";renderFavBtn();if(GAMES.length)render();actualizarFavModal()}
+// Cuando cambia la sesión: recuerda si hay una cuenta abierta (para restaurarla en segundo plano en la próxima visita) y sincroniza los favoritos.
+function sesionFavs(){
+ try{if(esReal(fbUsuario))localStorage.setItem("nomada_sesion","1");else localStorage.removeItem("nomada_sesion")}catch(e){}
+ if(esReal(fbUsuario)&&fbUsuario.uid!==ultimoUidFavs){ultimoUidFavs=fbUsuario.uid;sincronizarFavs();sincronizarListas()}
+ if(!esReal(fbUsuario))ultimoUidFavs="";
+ if(esReal(fbUsuario))comAviso="";
+ renderFavBtn();
+ refrescarAdultos();
+}
+// ===== BOTÓN "INICIAR SESIÓN" DEL ENCABEZADO =====
+// Muestra "Iniciar sesión" o, si la persona ya entró, su nombre. Al tocarlo abre la ventana de acceso (loginModal).
+let loginAbierto=false;
+function actualizarBtnSesion(){
+ const b=$("btnSesion"),t=$("btnSesionTxt");if(!b)return;
+ let txt="Iniciar sesión";
+ if(esReal(fbUsuario))txt=nombreUsuario(fbUsuario).split(" ")[0].slice(0,14);
+ else if(!fbUsuario){try{if(localStorage.getItem("nomada_sesion")==="1")txt="Mi cuenta"}catch(e){}}
+ t.textContent=txt;b.setAttribute("aria-label",esReal(fbUsuario)?"Mi cuenta":"Iniciar sesión");
+}
+// Dibuja el contenido de la ventana: formulario si no hay sesión, o los datos de la cuenta si ya entró.
+function dibujarLogin(){
+ const caja=$("loginCaja");if(!caja)return;
+ const u=fbUsuario;
+ if(!esReal(u)){caja.innerHTML=formAcceso().replace("Iniciá sesión para comentar","Iniciá sesión").replace(" Para leer los comentarios no hace falta cuenta.","");return}
+ let h=`<div class="form"><h4>Sesión iniciada</h4><p style="color:var(--ink-2)">Entraste como <b>${esc(nombreUsuario(u))}</b> ${esAdminUI(u)?INSIGNIA:""}<br><span style="color:var(--ink-3)">${esc(u.email||"")}</span></p><p>Ya podés ver las imágenes +18, comentar y tener tus favoritos sincronizados.</p>`;
+ if(!u.emailVerified)h+=`<div class="aviso">Falta verificar tu correo para poder comentar. Revisá tu bandeja (y el spam) y tocá "Ya verifiqué".<div class="row-btns"><button type="button" data-a="verificado" class="btn btn-ghost btn-sm">Ya verifiqué</button><button type="button" data-a="reenviar" class="btn btn-ghost btn-sm">Reenviar correo</button></div><p id="comError" class="msg" style="margin-top:8px"></p></div>`;
+ h+=`<button type="button" data-a="salir" class="btn btn-ghost btn-block">Cerrar sesión</button></div>`;
+ caja.innerHTML=h;
+}
+function abrirLogin(){
+ loginAbierto=true;dibujarLogin();
+ const m=$("loginModal");m.classList.remove("hidden");m.classList.add("flex");
+ iniciarFirebase().then(()=>{if(loginAbierto)dibujarLogin()}).catch(()=>{});
+ evento("abrir_login",{});
+}
+function cerrarLogin(){loginAbierto=false;comAviso="";const m=$("loginModal");m.classList.add("hidden");m.classList.remove("flex")}
+$("btnSesion").onclick=abrirLogin;
+actualizarBtnSesion();
+// Si la persona ya había iniciado sesión antes, se restaura la sesión en segundo plano poco después de abrir la página (así sus favoritos se sincronizan sin que haga nada).
+function iniciarSesionSilenciosa(){try{if(localStorage.getItem("nomada_sesion")==="1")setTimeout(()=>iniciarFirebase().catch(()=>{}),1500)}catch(e){}}
+// Botón corazón de la ventana del juego y botón "Favoritos" de la barra.
+$("btnFavModal").onclick=()=>{if(actual>=0)toggleFav(GAMES[actual].slug)};
+[["f","btnFavs"],["p","btnPend"],["t","btnTerm"]].forEach(([k,id])=>{$(id).onclick=()=>{listaSel=listaSel===k?"":k;page=1;renderFavBtn();render()}});
+$("btnPendModal").onclick=()=>{if(actual>=0)toggleLista(GAMES[actual].slug,"p")};
+$("btnTermModal").onclick=()=>{if(actual>=0)toggleLista(GAMES[actual].slug,"t")};
+
+// ===== TOP MENSUAL =====
+// Dibuja el Top mensual: los juegos que tienen "top" (puesto) en juegos.json, ordenados por puesto (máximo 10). El número que se ve (#1, #2...) es el orden final.
+function renderTop(){
+ const lista=GAMES.map((g,i)=>({g,i})).filter(({g})=>g.top>0).sort((a,b)=>a.g.top-b.g.top).slice(0,10);
+ $("topMes").classList.toggle("hidden",!lista.length);
+ $("topLista").innerHTML=lista.map(({g,i},k)=>`<article class="mini" onclick="openModal(${i})">
+  <div class="cover${g.img?" skel":""}">
+   ${imgPortada(g)}
+   ${velo18(g.adulta)&&g.img?VELO:""}
+   <span class="rank${k<3?" rank-"+(k+1):""}">#${k+1}</span>
+  </div>
+  <div class="mini-body"><h3 class="card-title"><button type="button" class="card-link" title="${esc(g.t)}">${esc(g.t)}</button></h3>${VIS(g)}</div>
+ </article>`).join("");
+ revisarImgs();pedirVisitas();
+}
+
+// ===== CATEGORÍAS (se crean solas) =====
+// Cuántas categorías se muestran como acceso directo; el resto queda en "Más etiquetas".
+const CATS_VISIBLES=6;
+// Categorías que usan los juegos, con cuántos juegos tiene cada una: [{k:clave, n:nombre, c:cantidad}], las más usadas primero.
+function categorias(){
+ const m=new Map();
+ GAMES.forEach(g=>g.c.forEach((n,i)=>{const k=g.cn[i];const x=m.get(k)||{k,n,c:0};x.c++;m.set(k,x)}));
+ return [...m.values()].sort((a,b)=>b.c-a.c||a.n.localeCompare(b.n,"es"));
+}
+// Dibuja la barra de categorías y el panel "Más etiquetas". Si ningún juego tiene categorías, no muestra nada.
+function renderCats(){
+ const todas=categorias();
+ $("catsCaja").classList.toggle("hidden",!todas.length);
+ if(!todas.some(x=>x.k===cat))cat="todos";
+ const top=todas.slice(0,CATS_VISIBLES);
+ const extra=todas.find(x=>x.k===cat&&!top.includes(x));
+ const b=(k,n,c)=>`<button type="button" data-c="${esc(k)}" aria-pressed="${k===cat}" class="pill pill-sm${k===cat?" on":""}">${esc(n)}${c!==undefined?` <span class="n">${c}</span>`:""}</button>`;
+ const mas=todas.length>top.length?`<button type="button" data-mas="1" aria-expanded="${panelCats}" class="pill pill-sm cats-more">${panelCats?"Menos etiquetas (-)":"Más etiquetas (+)"}</button>`:"";
+ $("cats").innerHTML=b("todos","Todos")+top.map(x=>b(x.k,x.n)).join("")+(extra?b(extra.k,extra.n):"")+mas;
+ $("catsPanel").classList.toggle("hidden",!(panelCats&&mas));
+ const f=norm($("catsBuscar").value);
+ $("catsTodas").innerHTML=todas.filter(x=>norm(x.n).includes(f)).map(x=>b(x.k,x.n,x.c)).join("")||'<p class="coms-estado">No hay etiquetas con ese nombre.</p>';
+}
+
+// ===== EVENTOS (qué pasa al tocar o escribir) =====
+// Tocar una categoría la elige ("Todos" quita el filtro). "Más etiquetas" abre o cierra el panel con todas.
+$("cats").onclick=e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.mas){panelCats=!panelCats;renderCats();return}cat=b.dataset.c;page=1;renderCats();render()};
+$("catsTodas").onclick=e=>{const b=e.target.closest("button");if(!b)return;cat=b.dataset.c;page=1;panelCats=false;renderCats();render()};
+// Tocar una categoría dentro de la ventana de un juego: cierra la ventana y filtra los juegos por esa categoría.
+$("mCats").onclick=e=>{const b=e.target.closest("button");if(!b)return;cat=b.dataset.c;page=1;panelCats=false;closeModal();renderCats();render();window.scrollTo({top:$("grid").offsetTop-160,behavior:"smooth"})};
+// Al escribir en el buscador del panel, se filtran las etiquetas.
+$("catsBuscar").oninput=renderCats;
+// Tocar un número de página: cambia de página y sube suavemente a la lista.
+$("pager").onclick=e=>{const b=e.target.closest("button");if(!b)return;page=+b.dataset.p;render();window.scrollTo({top:$("grid").offsetTop-160,behavior:"smooth"})};
+// Al escribir en el buscador: filtra los juegos y muestra sugerencias.
+$("searchInput").oninput=e=>{q=norm(e.target.value);page=1;render();sugerencias()};
+// Al hacer clic en el buscador: vuelve a mostrar las sugerencias.
+$("searchInput").onfocus=sugerencias;
+// Enter o Escape cierran el desplegable de sugerencias.
+$("searchInput").onkeydown=e=>{if(e.key==="Enter"||e.key==="Escape")$("sugs").classList.add("hidden")};
+
+// ===== VENTANA DEL JUEGO =====
+// Abre la ventana con los datos del juego número "i": título, sinopsis, botones de descarga y enlace propio.
+let focoPrevio=null;
+function openModal(i){
+ const g=GAMES[i];
+ actual=i; // se fija desde el principio: lo usan los botones de favoritos/listas y los contadores de esta ventana
+ focoPrevio=document.activeElement;
+ $("mTitle").textContent=g.t;
+ $("mCats").innerHTML=g.c.map((n,i)=>`<button type="button" data-c="${esc(g.cn[i])}" class="chip">${esc(n)}</button>`).join("");
+ $("mMeta").textContent=`${g.sz}`;
+ $("mDesc").textContent=g.d;
+ dibujarPortadaModal(g);dibujarTabla(g);elegirTab("pc");
+ {const hayNueva=nuevaTemporada(g);pintarTemp(g,hayNueva?g.temps.length-1:0);if(reconocerTemporadas(g))modalConAviso=true}
+ contarVisita(g);cargarValoracion(g);resetComentarios();dibujarCapturas(g);actualizarFavModal();
+ evento("ver_juego",{juego:g.t});
+ $("btnReportar").href="mailto:"+REPORT_EMAIL+"?subject="+encodeURIComponent("Enlace caído: "+g.t)+"&body="+encodeURIComponent("Juego: "+g.t+"\nPlataforma (PC o Android):\nEnlace que falla (Mega, Mediafire o Drive):\n");
+ $("btnCopiar").textContent="Copiar enlace del juego";
+ try{history.replaceState(null,"","?juego="+g.slug)}catch(e){}
+ document.title=g.t+" - Nómada VN";
+ $("modal").classList.remove("hidden");$("modal").classList.add("flex");
+ {const sc=$("modal").querySelector(".mscroll");if(sc)sc.scrollTop=0}
+ ajustarSinopsis();
+ setTimeout(()=>{const c=$("modal").querySelector(".m-close");if(c&&actual>=0)c.focus({preventScroll:true})},60);
+}
+// Dibuja los botones de descarga de un bloque (juego de PC, traducción de PC o juego de Android). Si el bloque no tiene ningún enlace, se oculta completo (título, texto y botones).
+// Temporada que se está viendo en la ventana del juego (0 = la primera).
+let tempSel=0;
+// Muestra los botones de la temporada elegida (PC, traducción y Android) y sus contadores; y dibuja los botones para cambiar de temporada si hay más de una.
+function pintarTemp(g,k){
+ tempSel=k;const t=g.temps[k]||g.temps[0],caja=$("mTemps");
+ patch("mPcJuego",t.pcJ);patch("mPcTrad",t.pcT);patch("mAndroid",t.an);mostrarContadores(g);actualizarTabs(g);
+ if(g.temps.length>1){
+  caja.innerHTML='<b>Temporada:</b>'+g.temps.map((x,i)=>`<button type="button" data-t="${i}" aria-pressed="${i===k}" class="pill pill-sm${i===k?" on":""}">${esc(x.n)}</button>`).join("");
+  caja.classList.remove("hidden");caja.classList.add("flex");
+ }else{caja.innerHTML="";caja.classList.add("hidden");caja.classList.remove("flex")}
+}
+$("mTemps").addEventListener("click",e=>{const b=e.target.closest("[data-t]");if(b&&actual>=0)pintarTemp(GAMES[actual],+b.dataset.t)});
+const ICO_DESC='<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 20h16"/></svg>';
+function patch(id,o){
+ const links=[["Mega",o&&o.mega],["Mediafire",o&&o.mf],["Drive",o&&o.dr]].filter(l=>ok(l[1]));
+ // Junto con los botones se ocultan el bloque completo (título, aviso y texto), para que no quede una sección vacía.
+ const caja=$(id),hay=links.length>0,arriba=[];
+ let x=caja.previousElementSibling;
+ while(x&&["P","H3"].includes(x.tagName)&&arriba.length<2){arriba.push(x);x=x.previousElementSibling}
+ [caja,...arriba].forEach(el=>{el.style.display=hay?"":"none"});
+ const blk=caja.closest(".dl");if(blk)blk.style.display=hay?"":"none";
+ caja.innerHTML=hay?links.map(l=>`<a href="${esc(l[1])}" target="_blank" rel="noopener" class="dl-btn">${ICO_DESC}${l[0]}</a>`).join(""):"";
+}
+// Cierra la ventana y devuelve la dirección y el título de la pestaña a la normalidad.
+// Si al abrir un juego se "leyó" un aviso de nueva temporada, al cerrar se redibuja el catálogo para quitar la etiqueta.
+let modalConAviso=false;
+function closeModal(){
+ if(modalConAviso){modalConAviso=false;setTimeout(render,0)}
+ $("modal").classList.add("hidden");$("modal").classList.remove("flex");
+ try{history.replaceState(null,"",location.pathname)}catch(e){}
+ cerrarVisor();
+ document.title=TITULO0;actual=-1;
+ if(focoPrevio&&focoPrevio.isConnected&&focoPrevio.focus){try{focoPrevio.focus({preventScroll:true})}catch(e){}}focoPrevio=null;
+}
+// Dirección del Worker que arma la vista previa (portada y título) al compartir un juego en WhatsApp, Telegram, Discord, etc. Si la dejás vacía, se copia el enlace normal del sitio.
+const WORKER_COMPARTIR="https://workers-playground-long-sound-95a6.nomadavn.workers.dev";
+const URL_COMPARTIR=WORKER_COMPARTIR?WORKER_COMPARTIR+"/j/":location.href.split(/[?#]/)[0]+"?juego=";
+// Copia al portapapeles el enlace directo al juego abierto.
+async function copiarEnlace(){
+ if(actual<0)return;
+ const url=URL_COMPARTIR+encodeURIComponent(GAMES[actual].slug);
+ try{await navigator.clipboard.writeText(url);$("btnCopiar").textContent="Enlace copiado"}
+ catch(e){$("btnCopiar").textContent="No se pudo copiar"}
+}
+// La tecla Escape también cierra la ventana.
+document.addEventListener("keydown",e=>{
+ const visorAbierto=!$("lightbox").classList.contains("hidden");
+ if(visorAbierto){
+  if(e.key==="Escape")cerrarVisor();
+  if(e.key==="ArrowLeft")moverVisor(-1);
+  if(e.key==="ArrowRight")moverVisor(1);
+ }else if(e.key==="Escape"){if(loginAbierto)cerrarLogin();else closeModal()}
+});
+
+
+// ===== ESTADÍSTICAS (Google Analytics) =====
+// Envía un evento a Analytics. Si Analytics está bloqueado (por ejemplo por un bloqueador de anuncios), no pasa nada.
+function evento(nombre,datos){try{if(window.gtag)gtag("event",nombre,datos)}catch(e){}}
+// ===== CONTADOR DE DESCARGAS (CountAPI) =====
+// Servicio gratuito y público, sin registro. Cada contador se llama nomadavn_<juego>_<plataforma> (plataforma: pc, traduccion o android).
+// Los números son públicos y cualquiera podría sumarles, así que sirven como referencia y no como dato exacto. Si el servicio no responde, el número simplemente no se muestra.
+const CONTADOR="https://countapi.mileshilliard.com/api/v1";
+const claveContador=(g,plat)=>"nomadavn_"+g.slug.replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"").slice(0,40)+"_"+plat+(tempSel>0?"_t"+(tempSel+1):""); // la temporada 1 conserva la clave original; las demás suman "_t2", "_t3"...
+const CONTADORES={pc:"cntPcJuego",traduccion:"cntPcTrad",android:"cntAndroid"};
+const textoDescargas=n=>new Intl.NumberFormat("es-AR").format(n)+(n===1?" descarga":" descargas");
+// Al abrir la ventana de un juego: pide a CountAPI cuántas descargas lleva cada bloque que tenga enlaces y las muestra.
+function mostrarContadores(g){
+ const marca=actual;
+const t=g.temps[tempSel]||g.temps[0];
+ [["pc",tiene(t.pcJ)],["traduccion",tiene(t.pcT)],["android",tiene(t.an)]].forEach(async([plat,hay])=>{
+  const el=$(CONTADORES[plat]);el.textContent="";
+  if(!hay)return;
+  try{
+   const r=await fetch(CONTADOR+"/get/"+claveContador(g,plat),{cache:"no-store"});
+   let n=0;
+   if(r.ok){const d=await r.json();n=Number(d.value!==undefined?d.value:d.count!==undefined?d.count:d.data&&d.data.value)||0}
+   else if(r.status!==404)return; // el contador todavía no existe: se muestra 0
+   if(actual===marca)el.textContent=textoDescargas(n);
+  }catch(e){}
+ });
+}
+// Cuenta una descarga: avisa a CountAPI en segundo plano (el enlace se abre aparte, en otra pestaña) y suma 1 al número que se ve.
+function contarDescarga(g,plat){
+ try{fetch(CONTADOR+"/hit/"+claveContador(g,plat),{mode:"no-cors",keepalive:true}).catch(()=>{})}catch(e){}
+ const el=$(CONTADORES[plat]);
+ if(el)el.textContent=textoDescargas((parseInt((el.textContent||"0").replace(/\D/g,""),10)||0)+1);
+}
+// Cuando alguien toca un botón de descarga dentro de la ventana de un juego: se registra en Google Analytics (qué juego, plataforma y servidor) y en el contador de descargas.
+$("modal").addEventListener("click",e=>{
+ const a=e.target.closest("a[href]");if(!a||actual<0)return;
+ const caja=a.parentElement&&a.parentElement.id;
+ const plat={mPcJuego:"PC juego",mPcTrad:"PC traducción",mAndroid:"Android"}[caja];
+ if(!plat)return;
+ evento("descarga",{juego:GAMES[actual].t,temporada:(GAMES[actual].temps[tempSel]||{}).n||"",plataforma:plat,servidor:a.textContent.trim()});
+ contarDescarga(GAMES[actual],{mPcJuego:"pc",mPcTrad:"traduccion",mAndroid:"android"}[caja]);
+});
+// Registra cuando alguien toca el botón de apoyo (Ko-fi).
+const botonApoyo=document.querySelector('a[href^="https://ko-fi.com"]');
+if(botonApoyo)botonApoyo.addEventListener("click",()=>evento("apoyo",{destino:"ko-fi"}));
+
+// ===== CONTADOR DE VISITAS (CountAPI) =====
+// Cuenta cuántas veces se abrió la ventana de cada juego (una vez por persona y por sesión del navegador, para que recargar no infle el número). Se muestra en las tarjetas, la lista, el Top mensual y la ventana del juego.
+// Igual que las descargas, es un servicio público: sirve como referencia, no como dato exacto. Si no responde, el número simplemente no aparece.
+const VIS_CACHE="nomada_vis",VIS_MIN=15; // la copia guardada vale 15 minutos
+let visMem={};
+try{visMem=JSON.parse(localStorage.getItem(VIS_CACHE)||"{}")||{}}catch(e){visMem={}}
+const guardarVis=()=>{try{localStorage.setItem(VIS_CACHE,JSON.stringify(visMem))}catch(e){}};
+const claveVis=slug=>"nomadavn_"+String(slug).replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"").slice(0,40)+"_visitas";
+const textoVis=n=>n>=1000?(Math.round(n/100)/10).toString().replace(".",",")+" mil":String(n);
+const ICO_OJO='<svg class="ico-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>';
+// Línea de visitas de una tarjeta. Tiene una altura fija para que, al llegar el número, nada se mueva.
+const VIS=g=>`<p data-vis="${esc(g.slug)}" class="vis"></p>`;
+function pintarVis(slug){
+ const v=visMem[slug];if(!v)return;
+ document.querySelectorAll("[data-vis]").forEach(el=>{if(el.dataset.vis===slug)el.innerHTML=ICO_OJO+"<span>"+textoVis(v.n)+" visitas</span>"});
+}
+async function leerVis(slug){
+ try{
+  const r=await fetch(CONTADOR+"/get/"+claveVis(slug),{cache:"no-store"});
+  let n=0;
+  if(r.ok){const d=await r.json();n=Number(d.value!==undefined?d.value:d.count!==undefined?d.count:d.data&&d.data.value)||0}
+  else if(r.status!==404)return null; // el contador todavía no existe: 0
+  visMem[slug]={n,t:Date.now()};guardarVis();return n;
+ }catch(e){return null}
+}
+// Pide los números de las tarjetas que hay en pantalla (de a pocas a la vez, y solo las que no tienen una copia reciente).
+let visPidiendo=false,visOtra=false;
+async function pedirVisitas(){
+ const slugs=[...new Set([...document.querySelectorAll("[data-vis]")].map(e=>e.dataset.vis))];
+ slugs.forEach(pintarVis);
+ const faltan=slugs.filter(sl=>!visMem[sl]||Date.now()-visMem[sl].t>VIS_MIN*60000);
+ if(!faltan.length)return;
+ if(visPidiendo){visOtra=true;return} // ya hay un pedido en curso: cuando termine, se vuelve a revisar
+ visPidiendo=true;
+ try{
+  for(let i=0;i<faltan.length;i+=4){
+   await Promise.all(faltan.slice(i,i+4).map(async sl=>{if(await leerVis(sl)!==null)pintarVis(sl)}));
+  }
+ }finally{visPidiendo=false;if(visOtra){visOtra=false;pedirVisitas()}}
+}
+// Al abrir un juego: lo cuenta (una vez por sesión) y muestra el número en la ventana.
+async function contarVisita(g){
+ const marca=g.slug;let n=await leerVis(g.slug);
+ let ya=false;try{ya=sessionStorage.getItem("nomada_vis_"+g.slug)==="1"}catch(e){}
+ if(!ya){
+  try{fetch(CONTADOR+"/hit/"+claveVis(g.slug),{mode:"no-cors",keepalive:true}).catch(()=>{});sessionStorage.setItem("nomada_vis_"+g.slug,"1")}catch(e){}
+  if(n!==null){n++;visMem[g.slug]={n,t:Date.now()};guardarVis()}
+ }
+ if(n!==null){pintarVis(g.slug);if(actual>=0&&GAMES[actual]&&GAMES[actual].slug===marca)$("mMeta").textContent=[g.sz,textoVis(n)+" visitas"].filter(Boolean).join(" · ")}
+}
+// ===== CARGA DE JUEGOS (Firestore, con copia guardada) =====
+// Cómo se leen los juegos para gastar pocas lecturas de Firestore:
+// 1) Si el navegador ya tiene una copia del catálogo, se muestra al instante.
+// 2) Se lee UN solo documento ("meta/catalogo") que tiene el número de versión del catálogo.
+// 3) Solo si la versión cambió (porque publicaste, editaste o borraste algo), se vuelven a leer todos los juegos y se guarda la copia nueva.
+// Los juegos se leen solo de Firestore (juegos.json ya no se usa en la página).
+const CATALOGO_CACHE="nomada_catalogo_v2";
+// Para abrir el juego de la dirección (?juego=nombre) solo la primera vez.
+let primerCarga=true;
+// Convierte un documento de la colección "juegos" de Firestore al formato que usa el resto del sitio (el mismo que tenía juegos.json).
+function juegoDesdeDoc(id,d){
+ const fecha=ts=>ts&&ts.toDate?ts.toDate().toISOString().slice(0,10):"";
+ const L=d.links||{};
+ return{slug:d.slug||id,titulo:d.titulo,sinopsis:d.sinopsis,peso:d.peso,categorias:d.categorias,imagen:d.portadaUrl,imagenAdulta:!!d.portadaAdulta,capturas:d.capturas,capturasAdultas:Array.isArray(d.capturasAdultas)?d.capturasAdultas:[],pc:{juego:L.pc||{},traduccion:L.traduccion||{}},android:L.android||{},temporadas:Array.isArray(d.temporadas)?d.temporadas:[],destacado:!!d.destacado,top:d.top||0,fecha:fecha(d.fechaCreacion),actualizado:fecha(d.actualizadoEn)};
+}
+function leerCache(){try{const c=JSON.parse(localStorage.getItem(CATALOGO_CACHE)||"null");return c&&Array.isArray(c.juegos)&&c.juegos.length?c:null}catch(e){return null}}
+// Devuelve null si la copia guardada sigue al día; si no, los juegos nuevos (y guarda la copia).
+async function catalogoNuevo(cache){
+ const F=await iniciarFirestore();
+ const meta=await F.fs.getDoc(F.fs.doc(F.db,"meta","catalogo"));
+ const v=meta.exists()?String(meta.data().version):"";
+ if(cache&&v&&cache.v===v)return null;
+ const snap=await F.fs.getDocs(F.fs.query(F.fs.collection(F.db,"juegos"),F.fs.orderBy("fechaCreacion","desc")));
+ const datos=snap.docs.map(d=>juegoDesdeDoc(d.id,d.data()));
+ // Si Firestore respondió bien pero no hay juegos, se borra la copia guardada: el catálogo realmente está vacío.
+ try{if(datos.length)localStorage.setItem(CATALOGO_CACHE,JSON.stringify({v,juegos:datos}));else localStorage.removeItem(CATALOGO_CACHE)}catch(e){}
+ return datos;
+}
+// Arma la lista de juegos del sitio con los datos recibidos y dibuja todo.
+function aplicarJuegos(data){
+  // Arma los tres botones (Mega, Mediafire, Drive) de un bloque de descargas de juegos.json.
+  const cv=o=>({mega:o&&o.mega,mf:o&&o.mediafire,dr:o&&o.drive});
+  // Traduce los nombres de los datos (titulo, peso, sinopsis...) a los nombres cortos que usa el código.
+  GAMES=data.map(j=>({
+   t:j.titulo||"Sin título",sz:j.peso||"",d:j.sinopsis||"",img:j.imagen||"",dest:!!j.destacado,top:parseInt(j.top,10)||0,adulta:!!j.imagenAdulta,shots:(Array.isArray(j.capturas)?j.capturas:[]).map((u,i)=>({u:String(u).trim(),a:(Array.isArray(j.capturasAdultas)?j.capturasAdultas:[]).includes(i)})).filter(o=>/^(https:\/\/|assets\/|\/)/i.test(o.u)).slice(0,5),fecha:j.fecha||"",act:j.actualizado||"",slugFix:j.slug||"",c:(Array.isArray(j.categorias)?j.categorias:[]).map(x=>String(x).trim()).filter(Boolean),
+   pcJ:cv(j.pc&&j.pc.juego), pcT:cv(j.pc&&j.pc.traduccion), an:cv(j.android),
+   // Temporadas (solo si el juego tiene más de una): cada una con sus propios enlaces.
+   temps:(Array.isArray(j.temporadas)&&j.temporadas.length>1)?j.temporadas.map((x,i)=>{const L=x.links||{};return{n:String(x.nombre||("Temporada "+(i+1))).slice(0,40),pcJ:cv(L.pc),pcT:cv(L.traduccion),an:cv(L.android)}}):null
+  }));
+  // Crea para cada juego su "slug" (nombre para la dirección, sin tildes ni espacios) y un texto interno para buscar.
+  // Unifica las categorías: "fantasia" y "Fantasía" cuentan como la misma (se usa el nombre de la primera que aparece) y se quitan repetidas dentro de un juego.
+  const nombresCat={};
+  GAMES.forEach(g=>{const vistos=new Set(),cc=[],kk=[];g.c.forEach(n=>{const k=norm(n);if(!k||vistos.has(k))return;vistos.add(k);cc.push(nombresCat[k]||(nombresCat[k]=n));kk.push(k)});g.c=cc;g.cn=kk});
+  GAMES.forEach(g=>{g.tag=etiqueta(g);if(!g.temps)g.temps=[{n:"Temporada 1",pcJ:g.pcJ,pcT:g.pcT,an:g.an}];g.hasPc=g.temps.some(t=>tiene(t.pcJ));g.hasAn=g.temps.some(t=>tiene(t.an));g.slug=g.slugFix||norm(g.t).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");g.s=norm(g.t+" "+g.d+" "+g.c.join(" "))});
+  // CARRUSEL DE DESTACADOS: los juegos marcados como "destacado" en el panel (hasta 6) rotan solos cada 6 segundos, con flechas y puntitos. Si ninguno está marcado, se muestra el primer juego.
+  DESTACADOS=GAMES.map((g,i)=>g.dest?i:-1).filter(i=>i>=0).slice(0,6);
+  if(!DESTACADOS.length&&GAMES.length)DESTACADOS=[0];
+  $("hero").style.display=GAMES.length?"":"none"; // sin juegos, no se muestra el banner
+  if(GAMES.length)mostrarDestacado(0,false);
+  renderCats();
+  renderTop();
+  $("btnAzar").style.display=GAMES.length?"":"none";
+  anotarVistas();
+  renderFavBtn();
+  render();
+  // Si la dirección trae ?juego=nombre, abre ese juego automáticamente.
+  if(primerCarga){primerCarga=false;const sl=new URLSearchParams(location.search).get("juego");if(sl){const k=GAMES.findIndex(g=>g.slug===sl);if(k>=0)openModal(k)}}
+}
+// Arranque: copia guardada, chequeo de versión y, si hace falta, lectura completa (con juegos.json como respaldo).
+async function cargar(){
+ const cache=leerCache();
+ if(cache)aplicarJuegos(cache.juegos);
+ try{
+  const nuevos=await catalogoNuevo(cache);
+  if(nuevos===null)return;                         // sin cambios: ya está en pantalla
+  // Los juegos se leen SOLO de Firestore. Si no hay ninguno, el catálogo queda vacío (no se usa juegos.json).
+  aplicarJuegos(nuevos);
+  if(!nuevos.length){$("empty").textContent="Todavía no hay juegos publicados. ¡Volvé pronto!";$("empty").classList.remove("hidden")}
+ }catch(e){
+  console.error("Catálogo (Firestore):",e);
+  if(cache)return; // si falla la conexión pero hay una copia guardada, se sigue mostrando esa
+  $("empty").textContent="No se pudo cargar el catálogo. Revisá tu conexión e intentá de nuevo.";
+  $("empty").classList.remove("hidden");
+ }
+}
+
+// ===== COMPONENTES NUEVOS DEL DISEÑO (pestañas, sinopsis, tabla de detalles, filtro de plataforma, foco) =====
+// Portada grande de la ventana del juego (con el mismo velo +18 de las tarjetas).
+function dibujarPortadaModal(g){
+ const v=velo18(g.adulta);
+ $("mCover").innerHTML=g.img?`<div class="skel"><img src="${esc(g.img)}" alt="" class="fx${v?" blur18":""}"></div>${v?VELO:""}`:"";
+ revisarImgs();
+}
+// Tabla de detalles del juego.
+function dibujarTabla(g){
+ const fmt=f=>{if(!f)return"";const d=new Date(f+"T00:00:00");return isNaN(d)?f:d.toLocaleDateString("es-AR",{day:"numeric",month:"long",year:"numeric"})};
+ const filas=[["Peso",g.sz],["Plataformas",[g.hasPc?"PC (Windows)":"",g.hasAn?"Android (APK)":""].filter(Boolean).join(" · ")],["Idioma","Español"],["Temporadas",g.temps.length>1?String(g.temps.length):""],["Publicado",fmt(g.fecha)],["Última actualización",g.act&&g.act!==g.fecha?fmt(g.act):""],["Categorías",g.c.join(", ")]].filter(r=>r[1]);
+ $("mTabla").innerHTML=filas.map(r=>`<tr><th scope="row">${r[0]}</th><td>${esc(r[1])}</td></tr>`).join("");
+}
+// Sinopsis: se recorta a unas líneas y aparece "Leer más" solo si hace falta.
+function ajustarSinopsis(){
+ const d=$("mDesc"),b=$("btnMas");
+ d.classList.add("clamp");b.setAttribute("aria-expanded","false");b.querySelector("span").textContent="Leer más";
+ const largo=d.scrollHeight>d.clientHeight+2;
+ b.classList.toggle("hidden",!largo);
+ if(!largo)d.classList.remove("clamp");
+}
+$("btnMas").onclick=()=>{const d=$("mDesc"),on=d.classList.toggle("clamp");$("btnMas").setAttribute("aria-expanded",String(!on));$("btnMas").querySelector("span").textContent=on?"Leer más":"Leer menos"};
+// Pestañas PC (Windows) / Android (APK).
+function elegirTab(k,foco){
+ [["pc","tabPc","panPc"],["an","tabAn","panAn"]].forEach(([n,t,p])=>{const on=n===k,b=$(t);b.setAttribute("aria-selected",String(on));b.tabIndex=on?0:-1;$(p).hidden=!on});
+ if(foco)$(k==="pc"?"tabPc":"tabAn").focus();
+}
+// Marca como "vacía" la pestaña sin enlaces y pasa a la otra si la elegida no tiene nada.
+function actualizarTabs(g){
+ const t=g.temps[tempSel]||g.temps[0];
+ const hayPc=tiene(t.pcJ)||tiene(t.pcT),hayAn=tiene(t.an);
+ $("tabPc").classList.toggle("vacio",!hayPc);$("tabAn").classList.toggle("vacio",!hayAn);
+ $("pcVacio").classList.toggle("hidden",hayPc);$("anVacio").classList.toggle("hidden",hayAn);
+ const sep=$("panPc").querySelector(".dl-sep");if(sep)sep.style.display=(tiene(t.pcJ)&&tiene(t.pcT))?"":"none";
+ const enPc=$("tabPc").getAttribute("aria-selected")==="true";
+ if(enPc&&!hayPc&&hayAn)elegirTab("an");else if(!enPc&&!hayAn&&hayPc)elegirTab("pc");
+}
+$("tabPc").onclick=()=>elegirTab("pc");
+$("tabAn").onclick=()=>elegirTab("an");
+$("tabPc").parentElement.addEventListener("keydown",e=>{if(e.key==="ArrowRight"||e.key==="ArrowLeft"||e.key==="Home"||e.key==="End"){e.preventDefault();elegirTab($("tabPc").getAttribute("aria-selected")==="true"?"an":"pc",true)}});
+// Filtro por plataforma (Todos / PC / Android).
+function renderPlat(){document.querySelectorAll("#platBtns [data-pl]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.pl===plat)))}
+$("platBtns").onclick=e=>{const b=e.target.closest("[data-pl]");if(!b)return;plat=b.dataset.pl;page=1;renderPlat();render()};
+// Mientras hay una ventana abierta, la página de atrás no se desplaza; y el teclado (Tab) se queda dentro de la ventana.
+(()=>{
+ const ids=["modal","loginModal","lightbox"];
+ const abierta=()=>ids.map($).find(m=>m&&!m.classList.contains("hidden"));
+ const bloquear=()=>{document.documentElement.style.overflow=abierta()?"hidden":""};
+ const mo=new MutationObserver(bloquear);ids.forEach(id=>{const m=$(id);if(m)mo.observe(m,{attributes:true,attributeFilter:["class"]})});
+ document.addEventListener("keydown",e=>{
+  if(e.key!=="Tab")return;
+  const m=abierta();if(!m)return;
+  const f=[...m.querySelectorAll('a[href],button:not([disabled]),input,select,textarea,summary,[tabindex]:not([tabindex="-1"])')].filter(x=>x.offsetParent!==null&&!x.hidden);
+  if(!f.length)return;
+  const a=f[0],z=f[f.length-1];
+  if(!m.contains(document.activeElement)){e.preventDefault();a.focus()}
+  else if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}
+  else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}
+ });
+ const g=$("gate");if(g){const b=g.querySelector(".btn-primary");if(b)b.focus({preventScroll:true})}
+})();
+
+renderVista();
+iniciarComunidad();
+iniciarSesionSilenciosa();
+// Arranca todo cuando la página termina de cargar.
+cargar();
+</script>
+</body>
+</html>
