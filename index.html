@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nómada VN | Novelas visuales en español</title>
+<meta name="description" content="Explorá novelas visuales en español para PC y Android. Lanzamientos, traducciones y temporadas en Nómada VN. Exclusivo para mayores de 18 años.">
+<meta name="robots" content="index, follow">
+<meta name="rating" content="RTA-5042-1996-1400-1577-RTA">
+<meta name="theme-color" content="#100d12">
+<meta name="color-scheme" content="dark">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nomadavn.github.io/">
+<meta property="og:title" content="Nómada VN | Novelas visuales en español">
+<meta property="og:description" content="Tu próxima historia empieza acá. PC y Android. Solo mayores de 18 años.">
+<meta property="og:image" content="https://nomadavn.github.io/assets/images/logo/vista-previa.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@Nomada_VN">
+<meta name="twitter:image" content="https://nomadavn.github.io/assets/images/logo/vista-previa.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23ee4564'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Arial' font-size='38' font-weight='bold' fill='white'%3EN%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* Todo el diseño está acá. No requiere Tailwind ni styles.css. */
+:root{
+  --bg:#100d12;
+  --surface:#19151c;
+  --surface2:#211b25;
+  --surface3:#2b2330;
+  --text:#f6f0f4;
+  --muted:#b6aab9;
+  --dim:#928497;
+  --accent:#f05a77;
+  --accent2:#d73357;
+  --soft:rgba(240,90,119,.12);
+  --line:rgba(255,255,255,.09);
+  --green:#a2e6bc;
+  --gold:#f5cd7c;
+  --radius:22px;
+  --shadow:0 24px 70px rgba(0,0,0,.32);
+  --max:1280px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:110px}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:"Plus Jakarta Sans",system-ui,sans-serif;
+  line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";position:absolute;inset:0 0 auto;height:750px;
+  pointer-events:none;z-index:-1;
+  background:radial-gradient(ellipse at 15% 5%,#51203555,transparent 58%),
+             radial-gradient(ellipse at 90% 20%,#35305a33,transparent 52%);
+}
+h1,h2,h3,p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}
+button{cursor:pointer}
+button{border:0}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+button:disabled{cursor:wait;opacity:.55}
+::selection{background:var(--accent2);color:white}
+:focus-visible{outline:3px solid #ffb6c5;outline-offset:4px}
+[hidden]{display:none!important}
+.wrap{width:min(var(--max),calc(100% - 48px));margin-inline:auto}
+.sr{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.skip{position:fixed;top:-80px;left:20px;z-index:200;padding:12px 20px;background:var(--accent2);border-radius:12px}
+.skip:focus{top:16px}
+.icon{width:20px;height:20px;flex:none;display:inline-block;vertical-align:middle}
+.btn{
+  min-height:46px;display:inline-flex;align-items:center;justify-content:center;
+  gap:9px;padding:11px 20px;border-radius:13px;
+  font-size:.85rem;font-weight:800;border:1px solid var(--line);
+  background:rgba(255,255,255,.04);color:var(--text);
+  transition:background .2s,transform .2s,border-color .2s;
+}
+.btn:hover{background:var(--surface3);border-color:#ffffff30}
+.btn:active{transform:scale(.98)}
+.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;color:white;box-shadow:0 8px 28px #d7335728}
+.primary:hover{background:linear-gradient(135deg,#ff718c,#e33c62)}
+.small{min-height:40px;padding:8px 14px;font-size:.76rem}
+.iconbtn{padding:0;width:44px;height:44px;min-height:44px;border-radius:50%}
+.tag{
+  display:inline-flex;align-items:center;gap:6px;padding:4px 10px;
+  font-size:.67rem;font-weight:800;letter-spacing:.025em;
+  background:#100d12cf;border:1px solid #ffffff20;border-radius:8px;
+}
+.tag.accent{color:#ffb7c5;background:#512034;border-color:#f05a7744}
+.tag.green{color:var(--green)}
+.tag.gold{color:var(--gold)}
+.header{
+  position:sticky;top:0;z-index:20;
+  background:rgba(16,13,18,.88);border-bottom:1px solid var(--line);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+}
+.header-inner{min-height:84px;display:flex;align-items:center;gap:28px}
+.brand{display:flex;align-items:center;gap:10px;flex:none}
+.brand img{width:auto;height:42px;max-width:180px;object-fit:contain}
+.brand-fallback{font-weight:800;letter-spacing:-1px;font-size:1.35rem}
+.brand-fallback span{color:var(--accent)}
+.search{position:relative;flex:1;max-width:480px;margin-left:auto}
+.search>.icon{position:absolute;left:16px;top:15px;color:var(--dim);pointer-events:none}
+.search input{
+  width:100%;height:48px;border-radius:14px;border:1px solid var(--line);
+  padding:0 44px;background:#09070b66;outline:none;font-size:.85rem;
+}
+.search input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--soft)}
+.search input::placeholder{color:var(--dim)}
+.header-actions{display:flex;align-items:center;gap:10px}
+.intro{padding:52px 0 30px;display:flex;align-items:end;justify-content:space-between;gap:24px}
+.eyebrow{color:var(--accent);font-size:.7rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+.eyebrow::before{content:"";display:inline-block;width:18px;height:2px;background:currentColor;vertical-align:middle;margin-right:9px}
+.intro h1{font-size:clamp(2rem,4.3vw,3.6rem);line-height:1.12;letter-spacing:-.055em;margin:13px 0}
+.intro h1 span{color:#f692a7}
+.intro p{color:var(--muted);max-width:620px;font-size:.92rem}
+.intro-note{font-size:.75rem;white-space:nowrap;color:var(--dim);padding-bottom:5px}
+.hero{
+  position:relative;isolation:isolate;overflow:hidden;border-radius:28px;
+  min-height:420px;display:flex;align-items:end;background:var(--surface);
+  border:1px solid var(--line);box-shadow:var(--shadow);
+}
+.hero-bg{position:absolute;inset:0;z-index:-3;width:100%;height:100%;object-fit:cover;object-position:center 30%;opacity:.68}
+.hero::after{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(90deg,#100d12f5 0%,#100d12c9 40%,#100d1230 100%),
+             linear-gradient(0deg,#100d12 0%,transparent 80%);
+}
+.hero-copy{padding:44px;max-width:690px;width:100%}
+.hero-tags{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.hero h2{font-size:clamp(1.8rem,3.8vw,3rem);line-height:1.14;letter-spacing:-.04em}
+.hero p{
+  color:#d1c6d4;margin:16px 0 24px;font-size:.91rem;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;
+}
+.hero-bottom{display:flex;align-items:center;gap:12px}
+.hero-nav{position:absolute;right:24px;bottom:24px;display:flex;gap:8px}
+.hero-nav .btn{background:#100d12aa;backdrop-filter:blur(8px)}
+.hero-index{position:absolute;right:28px;top:26px;color:#ffffffaa;font-size:.75rem;font-weight:700}
+.section{margin-top:44px}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
+.section-head h2{font-size:1.3rem;letter-spacing:-.035em}
+.section-head p{font-size:.79rem;color:var(--dim);margin-top:3px}
+.section-head .count{font-size:.75rem;color:var(--muted)}
+.rail{display:grid;grid-auto-flow:column;grid-auto-columns:230px;gap:16px;overflow-x:auto;padding:3px 3px 16px;scroll-snap-type:x proximity}
+.rail>.card{scroll-snap-align:start}
+.rail .card-title{font-size:.87rem}
+.rail .card-body{padding:14px}
+.rail .card-meta{font-size:.68rem}
+.rail .genres{display:none}
+.filters{
+  border:1px solid var(--line);border-radius:20px;background:#19151ca6;
+  padding:16px;margin-bottom:24px;
+}
+.filter-main{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.segment{display:flex;gap:3px;padding:4px;border-radius:12px;background:#09070b75}
+.segment button{min-height:40px;padding:0 15px;border-radius:9px;background:transparent;color:var(--muted);font-size:.77rem;font-weight:800}
+.segment button[aria-pressed="true"]{background:var(--surface3);color:white;box-shadow:0 3px 8px #0003}
+.segment button:hover{color:white}
+.filter-end{display:flex;align-items:center;gap:10px;margin-left:auto}
+select{
+  max-width:100%;min-height:44px;padding:0 12px;
+  border:1px solid var(--line);border-radius:11px;background:var(--surface);
+  font-size:.77rem;cursor:pointer;
+}
+.categories{display:flex;gap:8px;overflow-x:auto;padding-top:15px;margin-top:14px;border-top:1px solid var(--line)}
+.chip{
+  flex:none;display:inline-flex;align-items:center;min-height:36px;
+  padding:6px 13px;border-radius:999px;background:transparent;
+  color:var(--muted);border:1px solid var(--line);font-size:.72rem;font-weight:700;
+}
+.chip:hover{border-color:#f05a7766;color:white}
+.chip[aria-pressed="true"]{color:#ffc3d0;background:var(--soft);border-color:#f05a7777}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:23px}
+.card{
+  min-width:0;overflow:hidden;border-radius:19px;background:var(--surface);
+  border:1px solid var(--line);position:relative;
+  transition:transform .22s,border-color .22s,box-shadow .22s;
+}
+.card:hover,.card:focus-within{transform:translateY(-5px);border-color:#f05a7766;box-shadow:0 18px 38px #0004}
+.cover{position:relative;aspect-ratio:4/3;overflow:hidden;background:linear-gradient(135deg,#462231,#241b34)}
+.cover>img{width:100%;height:100%;object-fit:cover;transition:transform .45s}
+.card:hover .cover>img{transform:scale(1.045)}
+.cover::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,#100d12c9,transparent 55%)}
+.cover-placeholder{height:100%;display:grid;place-items:center;font-size:3.5rem;font-weight:800;color:#ffffff26}
+.card-tags{position:absolute;top:12px;left:12px;right:12px;z-index:2;display:flex;gap:6px;justify-content:space-between}
+.platforms{position:absolute;bottom:12px;left:12px;z-index:2;display:flex;gap:6px}
+.card-body{padding:18px}
+.genres{display:flex;gap:7px;margin-bottom:10px;min-height:18px;overflow:hidden}
+.genres span{color:#df9eae;font-size:.65rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-title{font-size:.95rem;line-height:1.5;font-weight:800;letter-spacing:-.02em}
+.card-title button{
+  background:none;color:inherit;padding:0;text-align:left;max-width:100%;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;
+}
+.card-title button::after{content:"";position:absolute;inset:0;z-index:1}
+.card-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--dim);font-size:.72rem;margin-top:10px}
+.fav{
+  position:absolute;right:9px;bottom:8px;z-index:3;
+  width:42px;height:42px;border-radius:50%;background:#100d12bd;color:white;
+  display:grid;place-items:center;border:1px solid #ffffff24;
+}
+.fav[aria-pressed="true"]{color:#ff88a1;background:#522237}
+.fav:hover{background:var(--accent2);color:white}
+.blur{filter:blur(18px)}
+.cover>img.blur{transform:scale(1.15)}
+.cover-label{position:absolute;inset:0;z-index:1;display:grid;place-content:center;text-align:center;pointer-events:none}
+.cover-label span{font-size:.64rem;background:#100d12bb;padding:5px 10px;border-radius:8px;color:#f1d7df}
+.grid.list{grid-template-columns:1fr 1fr}
+.grid.list .card{display:grid;grid-template-columns:145px 1fr}
+.grid.list .cover{height:100%;min-height:150px;aspect-ratio:auto}
+.grid.list .genres{display:none}
+.grid.list .card-body{align-self:center}
+.grid.list .platforms{display:none}
+.empty{padding:70px 20px;text-align:center;border:1px dashed var(--line);border-radius:20px;color:var(--muted)}
+.empty h3{color:var(--text);margin-bottom:8px}
+.pager{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:30px;flex-wrap:wrap}
+.pager button{min-width:44px}
+.pager button[aria-current="page"]{background:var(--accent2);border-color:transparent;color:white}
+.community{
+  margin-top:56px;padding:30px;border-radius:22px;border:1px solid #f05a772b;
+  background:linear-gradient(110deg,#39202e,#1a1724);
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+}
+.community h2{font-size:1.2rem;letter-spacing:-.03em}
+.community p{font-size:.84rem;color:var(--muted);margin-top:5px}
+.community-actions{display:flex;gap:10px;flex-wrap:wrap;flex:none}
+footer{margin-top:64px;border-top:1px solid var(--line);background:#0c0a0f}
+.footer-grid{padding:38px 0;display:flex;justify-content:space-between;gap:30px;align-items:start}
+.footer-grid p{color:var(--dim);font-size:.77rem;max-width:420px;margin-top:12px}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;font-size:.8rem;color:var(--muted)}
+.footer-links a:hover{color:var(--accent)}
+.footer-bottom{padding:18px 0;border-top:1px solid var(--line);font-size:.7rem;color:var(--dim);display:flex;justify-content:space-between;gap:16px}
+dialog{
+  border:1px solid var(--line);padding:0;border-radius:25px;
+  background:var(--surface);color:var(--text);box-shadow:var(--shadow);
+  width:min(900px,calc(100% - 32px));max-height:90vh;max-height:90dvh;
+  overflow:auto;overscroll-behavior:contain;
+}
+dialog::backdrop{background:#070509cf;backdrop-filter:blur(8px)}
+dialog[open]{animation:enter .2s ease}
+@keyframes enter{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.dialog-close{position:sticky;float:right;top:14px;margin:14px 14px -58px 0;z-index:6;background:#100d12ce;backdrop-filter:blur(8px)}
+.modal-cover{height:270px;position:relative;background:linear-gradient(135deg,#472334,#1c1826);overflow:hidden}
+.modal-cover img{width:100%;height:100%;object-fit:cover;object-position:center 28%}
+.modal-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,var(--surface),transparent)}
+.modal-heading{position:relative;margin-top:-70px;padding:0 30px;z-index:2}
+.modal-heading h2{font-size:clamp(1.65rem,4vw,2.4rem);line-height:1.2;letter-spacing:-.04em;text-shadow:0 2px 16px #000}
+.modal-heading p{color:var(--muted);font-size:.78rem;margin-top:10px}
+.modal-body{padding:24px 30px 32px}
+.modal-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.modal-layout{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:28px}
+.subsection+.subsection{margin-top:26px}
+.subsection h3{font-size:.95rem;margin-bottom:13px}
+.synopsis{color:var(--muted);font-size:.87rem;line-height:1.9;overflow-wrap:anywhere}
+.synopsis p+p{margin-top:14px}
+.synopsis.collapsed{
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:12;overflow:hidden;
+}
+.read-more{margin-top:10px;background:none;color:#ff9cb2;font-size:.79rem;font-weight:800;min-height:44px;padding:0}
+.details{border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:0}
+.details div{padding:12px 15px}
+.details div+div{border-top:1px solid var(--line)}
+.details dt{font-size:.65rem;text-transform:uppercase;letter-spacing:.09em;color:var(--dim)}
+.details dd{margin:4px 0 0;font-size:.78rem;font-weight:700}
+.downloads{margin-top:26px;padding:20px;border:1px solid var(--line);border-radius:18px;background:#100d1280}
+.downloads h3{font-size:1rem}
+.download-head{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px}
+.download-section+.download-section{margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+.download-section h4{font-size:.8rem;margin:0 0 10px}
+.download-section p{font-size:.75rem;color:var(--muted);margin:0 0 12px}
+.download-buttons{display:flex;gap:10px;flex-wrap:wrap}
+.download-buttons .btn{flex:1;min-width:130px}
+.install{font-size:.78rem;color:var(--muted);margin-top:14px}
+.install summary{cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--text)}
+.install ol{padding-left:20px}
+.gallery{display:flex;gap:10px;overflow-x:auto;padding:3px 0 12px}
+.shot{flex:none;width:190px;aspect-ratio:16/10;padding:0;background:var(--surface2);border:1px solid var(--line);border-radius:12px;overflow:hidden;position:relative}
+.shot img{width:100%;height:100%;object-fit:cover}
+.shot:hover{border-color:var(--accent)}
+.support{margin-top:26px;padding:18px;border:1px solid #f05a772b;border-radius:16px;display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--soft)}
+.support strong{font-size:.84rem}
+.support p{font-size:.75rem;color:var(--muted);margin-top:3px}
+.stars{display:flex;gap:4px}
+.stars button{background:none;color:#766779;font-size:1.7rem;width:44px;height:44px;padding:0}
+.stars button.on{color:var(--gold)}
+.status{font-size:.76rem;color:var(--muted);margin-top:8px;overflow-wrap:anywhere}
+.comments{margin-top:26px;padding-top:24px;border-top:1px solid var(--line)}
+.comment{padding:15px;border:1px solid var(--line);border-radius:13px;margin-top:12px;background:#100d1266}
+.comment strong{font-size:.78rem}
+.comment small{font-size:.66rem;color:var(--dim);margin-left:8px}
+.comment p{font-size:.82rem;color:var(--muted);white-space:pre-wrap;overflow-wrap:anywhere;margin-top:6px}
+.comment.reply{margin-left:24px;border-left:2px solid #f05a7755}
+.field{width:100%;padding:12px 14px;border:1px solid var(--line);background:#0c090f;border-radius:12px;min-height:46px;outline:none;font-size:.85rem}
+.field:focus{border-color:var(--accent)}
+textarea.field{resize:vertical;min-height:100px}
+.auth{width:min(440px,calc(100% - 32px))}
+.auth-body{padding:34px 28px}
+.auth-body h2{font-size:1.4rem;letter-spacing:-.04em;margin-bottom:8px}
+.auth-body>p{font-size:.82rem;color:var(--muted);margin-bottom:20px}
+.auth-form{display:grid;gap:12px}
+.auth-form .btn{width:100%}
+.auth-switch{background:none;color:#ffa4ba;font-size:.79rem;padding:10px;min-height:44px}
+.gate{width:min(490px,calc(100% - 32px));text-align:center}
+.gate .auth-body{padding:40px 28px}
+.gate-symbol{display:grid;place-items:center;width:76px;height:76px;margin:0 auto 24px;border-radius:24px;background:var(--soft);color:var(--accent);font-size:1.6rem;font-weight:800;border:1px solid #f05a7755}
+.gate-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.viewer{width:min(1200px,calc(100% - 24px));background:#0c090f}
+.viewer img{width:100%;height:75vh;object-fit:contain}
+.viewer-controls{display:flex;align-items:center;justify-content:center;gap:20px;padding:12px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:150;max-width:calc(100% - 32px);padding:12px 20px;background:#f5eaf1;color:#231822;border-radius:13px;font-size:.8rem;font-weight:700;box-shadow:var(--shadow)}
+.skeleton{min-height:290px;border-radius:19px;border:1px solid var(--line);background:linear-gradient(100deg,#19151c 25%,#29212e 45%,#19151c 65%);background-size:250% 100%;animation:shimmer 1.7s infinite}
+@keyframes shimmer{to{background-position:-160% 0}}
+@media(hover:none){.card:hover{transform:none}}
+@media(min-width:1500px){.hero{min-height:460px}}
+@media(max-width:1050px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .header-inner{gap:18px}.intro-note{display:none}
+  .modal-layout{grid-template-columns:minmax(0,1fr) 210px}
+}
+@media(max-width:760px){
+  .wrap{width:calc(100% - 32px)}
+  .header-inner{flex-wrap:wrap;gap:12px;padding:14px 0}
+  .brand img{height:34px;max-width:150px}
+  .header-actions{margin-left:auto}.header-actions .support-header{display:none}
+  .search{order:3;flex-basis:100%;max-width:none}
+  .search input{height:44px}.search>.icon{top:12px}
+  .intro{padding-top:30px}.intro h1{font-size:2.3rem}
+  .hero{min-height:370px;border-radius:22px}
+  .hero-copy{padding:26px 24px 78px}
+  .hero p{-webkit-line-clamp:2}
+  .hero-nav{right:18px;bottom:18px}
+  .hero-index{right:20px;top:18px}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .grid.list{grid-template-columns:1fr}
+  .card-body{padding:14px}.card-title{font-size:.86rem}
+  .card-tags{top:8px;left:8px;right:8px}.tag{font-size:.59rem;padding:3px 7px}
+  .platforms{bottom:10px;left:8px}
+  .filter-end{margin-left:0;flex:1;justify-content:space-between}
+  .filters{padding:12px}
+  .community{flex-direction:column;align-items:start;padding:24px}
+  .footer-grid{flex-direction:column}
+  .modal-layout{grid-template-columns:1fr}
+  .details{display:grid;grid-template-columns:1fr 1fr}
+  .details div+div{border-top:0}.details div{border-bottom:1px solid var(--line)}
+  .modal-cover{height:220px}
+  .modal-heading{padding-inline:22px}
+  .modal-body{padding:22px}
+  .section{margin-top:32px}.rail{grid-auto-columns:200px}
+  .support{align-items:start;flex-direction:column}
+}
+@media(max-width:420px){
+  .intro h1{font-size:2rem}
+  .header-actions .btn{padding-inline:12px;font-size:.73rem}
+  .card-meta{font-size:.64rem;gap:4px}
+  .genres span{font-size:.6rem}
+  .card-tags .age{display:none}
+  .segment button{padding-inline:12px}
+  .modal-body{padding:18px}.modal-heading{padding-inline:18px}
+  .download-buttons{flex-direction:column}
+  .footer-bottom{flex-direction:column;gap:5px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+
+<body>
+<a class="skip" href="#catalogo">Saltar al catálogo</a>
+
+<header class="header">
+  <div class="wrap header-inner">
+    <a href="./" class="brand" aria-label="Nómada VN, inicio">
+      <img src="assets/images/logo/logo.png" alt="Nómada VN" id="brandLogo">
+      <span class="brand-fallback" id="brandFallback" hidden>Nómada<span>VN</span></span>
+    </a>
+    <div class="search" role="search">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="m16 16 5 5"/></svg>
+      <input id="search" type="search" placeholder="Buscá tu próxima historia..." autocomplete="off" aria-label="Buscar juegos por título, sinopsis o categoría">
+    </div>
+    <div class="header-actions">
+      <a href="https://ko-fi.com/nomadavn" target="_blank" rel="noopener noreferrer" class="btn support-header">Apoyar</a>
+      <button class="btn primary" id="accountButton" type="button">Iniciar sesión</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="intro" aria-labelledby="introTitle">
+    <div>
+      <div class="eyebrow">Historias que vos elegís</div>
+      <h1 id="introTitle">Tu próxima aventura,<br><span>en español.</span></h1>
+      <p>Descubrí novelas visuales, encontrá tu próxima historia y llevátela a PC o Android.</p>
+    </div>
+    <span class="intro-note">Traducciones y juegos · Exclusivo +18</span>
+  </section>
+
+  <section class="hero" id="hero" aria-label="Juego destacado" hidden>
+    <img id="heroImage" class="hero-bg" alt="">
+    <span id="heroIndex" class="hero-index"></span>
+    <div class="hero-copy">
+      <div class="hero-tags" id="heroTags"></div>
+      <h2 id="heroTitle"></h2>
+      <p id="heroDescription"></p>
+      <div class="hero-bottom">
+        <button class="btn primary" id="heroOpen" type="button">Explorar historia <span aria-hidden="true">↗</span></button>
+      </div>
+    </div>
+    <div class="hero-nav">
+      <button class="btn iconbtn" id="heroPrev" type="button" aria-label="Destacado anterior">←</button>
+      <button class="btn iconbtn" id="heroNext" type="button" aria-label="Destacado siguiente">→</button>
+    </div>
+  </section>
+
+  <section class="section" id="popularSection" hidden aria-labelledby="popularTitle">
+    <div class="section-head">
+      <div><h2 id="popularTitle">Para empezar a explorar</h2><p>Una selección de historias del catálogo.</p></div>
+      <a class="btn small" href="#catalogo">Ver catálogo</a>
+    </div>
+    <div class="rail" id="popular"></div>
+  </section>
+
+  <section class="section" id="catalogo" aria-labelledby="catalogTitle">
+    <div class="section-head">
+      <div><div class="eyebrow">Encontrá tu próxima historia</div><h2 id="catalogTitle" style="margin-top:5px">Explorá el catálogo</h2></div>
+      <span id="resultCount" class="count" aria-live="polite"></span>
+    </div>
+
+    <div class="filters">
+      <div class="filter-main">
+        <div class="segment" id="platforms" role="group" aria-label="Filtrar por plataforma">
+          <button type="button" data-platform="all" aria-pressed="true">Todos</button>
+          <button type="button" data-platform="pc" aria-pressed="false">PC</button>
+          <button type="button" data-platform="android" aria-pressed="false">Android</button>
+        </div>
+        <button class="btn small" id="favoritesFilter" type="button" aria-pressed="false">♡ Favoritos <span id="favoriteCount">0</span></button>
+        <div class="filter-end">
+          <label class="sr" for="sort">Orden del catálogo</label>
+          <select id="sort">
+            <option value="recent">Más recientes</option>
+            <option value="updated">Actualizados</option>
+            <option value="az">Nombre: A-Z</option>
+            <option value="za">Nombre: Z-A</option>
+          </select>
+          <div class="segment" role="group" aria-label="Vista del catálogo">
+            <button id="gridView" type="button" aria-label="Vista de tarjetas" aria-pressed="true">▦</button>
+            <button id="listView" type="button" aria-label="Vista de lista" aria-pressed="false">☰</button>
+          </div>
+          <button class="btn small" id="random" type="button" title="Abrir un juego al azar">Al azar</button>
+        </div>
+      </div>
+      <div class="categories" id="categories" role="group" aria-label="Filtrar por categoría"></div>
+    </div>
+
+    <div class="grid" id="grid" aria-busy="true">
+      <div class="skeleton" aria-hidden="true"></div>
+      <div class="skeleton" aria-hidden="true"></div>
+      <div class="skeleton" aria-hidden="true"></div>
+      <div class="skeleton" aria-hidden="true"></div>
+    </div>
+    <div id="empty" class="empty" hidden>
+      <h3 id="emptyTitle">No encontramos coincidencias</h3>
+      <p id="emptyText">Probá con otro título o ajustá los filtros.</p>
+      <button id="resetFilters" class="btn small" type="button" style="margin-top:18px">Limpiar filtros</button>
+    </div>
+    <nav id="pager" class="pager" aria-label="Páginas del catálogo"></nav>
+    <p id="catalogStatus" class="status" role="status"></p>
+  </section>
+
+  <section class="community">
+    <div>
+      <div class="eyebrow">La historia sigue afuera</div>
+      <h2 style="margin-top:8px">Tu comunidad, tu próximo descubrimiento.</h2>
+      <p>Novedades, traducciones y un lugar para compartir lo que estás jugando.</p>
+    </div>
+    <div class="community-actions">
+      <a class="btn primary" href="https://discord.gg/XdRufVpjZq" target="_blank" rel="noopener noreferrer">Unirme a Discord</a>
+      <a class="btn" href="https://t.me/Nomada_VN" target="_blank" rel="noopener noreferrer">Telegram</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <span class="brand-fallback">Nómada<span>VN</span></span>
+        <p>Novelas visuales y traducciones al español para PC y Android. Contenido exclusivo para mayores de 18 años.</p>
+      </div>
+      <nav class="footer-links" aria-label="Redes y apoyo">
+        <a href="https://discord.gg/XdRufVpjZq" target="_blank" rel="noopener noreferrer">Discord</a>
+        <a href="https://t.me/Nomada_VN" target="_blank" rel="noopener noreferrer">Telegram</a>
+        <a href="https://x.com/Nomada_VN" target="_blank" rel="noopener noreferrer">Twitter/X</a>
+        <a href="https://www.facebook.com/nomadavn" target="_blank" rel="noopener noreferrer">Facebook</a>
+        <a href="https://ko-fi.com/nomadavn" target="_blank" rel="noopener noreferrer">Ko-fi</a>
+      </nav>
+    </div>
+    <div class="footer-bottom"><span>Nómada VN © <span id="year"></span></span><span>PC y Android · Solo mayores de 18 años</span></div>
+  </div>
+</footer>
+
+<dialog id="gameDialog" aria-labelledby="gameTitle">
+  <button class="btn iconbtn dialog-close" type="button" data-close="gameDialog" aria-label="Cerrar juego">✕</button>
+  <div class="modal-cover" id="gameCover"></div>
+  <div class="modal-heading">
+    <h2 id="gameTitle"></h2>
+    <p id="gameMeta"></p>
+  </div>
+  <div class="modal-body">
+    <div class="modal-toolbar">
+      <button class="btn small" id="modalFavorite" type="button"></button>
+      <button class="btn small" id="copyLink" type="button">Copiar enlace</button>
+      <div id="gameCategories" style="display:flex;gap:7px;flex-wrap:wrap"></div>
+    </div>
+
+    <div class="modal-layout">
+      <div>
+        <section class="subsection" aria-labelledby="synopsisTitle">
+          <h3 id="synopsisTitle">Una historia por descubrir</h3>
+          <div class="synopsis collapsed" id="synopsis"></div>
+          <button class="read-more" id="readMore" type="button" aria-expanded="false" aria-controls="synopsis" hidden>Ver más +</button>
+        </section>
+        <section class="subsection" id="gallerySection" hidden aria-labelledby="galleryTitle">
+          <h3 id="galleryTitle">Un vistazo al juego</h3>
+          <div class="gallery" id="gallery"></div>
+        </section>
+      </div>
+      <aside aria-label="Ficha del juego"><dl class="details" id="gameDetails"></dl></aside>
+    </div>
+
+    <section class="downloads" aria-labelledby="downloadTitle">
+      <div class="download-head">
+        <h3 id="downloadTitle">Descargas</h3>
+        <label id="seasonLabel" hidden><span class="sr">Temporada</span><select id="season"></select></label>
+      </div>
+      <div class="segment" role="group" aria-label="Plataforma de descarga" style="width:fit-content;margin-bottom:18px">
+        <button id="downloadPC" type="button" aria-pressed="true">PC (Windows)</button>
+        <button id="downloadAndroid" type="button" aria-pressed="false">Android (APK)</button>
+      </div>
+      <div id="downloadContent"></div>
+    </section>
+
+    <section class="subsection" style="margin-top:26px" aria-labelledby="ratingTitle">
+      <h3 id="ratingTitle">Tu opinión cuenta</h3>
+      <div class="stars" id="stars" role="group" aria-label="Valorar de 1 a 5 estrellas"></div>
+      <p class="status" id="ratingStatus" role="status"></p>
+    </section>
+
+    <div class="support">
+      <div><strong>Detrás de cada traducción hay muchas horas.</strong><p>Tu apoyo ayuda a seguir compartiendo nuevas historias.</p></div>
+      <a class="btn small" href="https://ko-fi.com/nomadavn" target="_blank" rel="noopener noreferrer">Apoyar en Ko-fi ↗</a>
+    </div>
+
+    <section class="comments" aria-labelledby="commentsTitle">
+      <h3 id="commentsTitle" style="font-size:.95rem">Conversación de la comunidad</h3>
+      <button class="btn small" id="loadComments" type="button" style="margin-top:14px">Ver comentarios</button>
+      <div id="commentArea" hidden>
+        <div id="commentAccount" style="margin:16px 0"></div>
+        <form id="commentForm" hidden>
+          <label class="sr" for="commentText">Tu comentario</label>
+          <textarea id="commentText" class="field" maxlength="1000" required placeholder="Compartí tu opinión o dejá una consulta..."></textarea>
+          <button class="btn primary small" type="submit" style="margin-top:10px">Publicar comentario</button>
+        </form>
+        <p class="status" id="commentStatus" role="status"></p>
+        <div id="commentList"></div>
+      </div>
+    </section>
+  </div>
+</dialog>
+
+<dialog id="authDialog" class="auth" aria-labelledby="authTitle">
+  <button class="btn iconbtn dialog-close" type="button" data-close="authDialog" aria-label="Cerrar acceso">✕</button>
+  <div class="auth-body">
+    <h2 id="authTitle">Bienvenido a Nómada</h2>
+    <p id="authDescription">Entrá con tu cuenta para comentar y participar.</p>
+    <div id="authLogged" hidden></div>
+    <form class="auth-form" id="authForm">
+      <button class="btn" id="googleLogin" type="button">Continuar con Google</button>
+      <label id="nameLabel" hidden><span class="sr">Tu nombre</span><input id="authName" class="field" maxlength="40" autocomplete="nickname" placeholder="Tu nombre"></label>
+      <label><span class="sr">Correo electrónico</span><input id="authEmail" class="field" type="email" autocomplete="email" required placeholder="Correo electrónico"></label>
+      <label><span class="sr">Contraseña</span><input id="authPassword" class="field" type="password" autocomplete="current-password" minlength="6" required placeholder="Contraseña"></label>
+      <button class="btn primary" id="authSubmit" type="submit">Ingresar</button>
+      <button class="auth-switch" id="authMode" type="button">No tengo cuenta: registrarme</button>
+      <button class="auth-switch" id="resetPassword" type="button">Olvidé mi contraseña</button>
+    </form>
+    <p class="status" id="authStatus" role="status"></p>
+  </div>
+</dialog>
+
+<dialog id="imageDialog" class="viewer" aria-label="Visor de capturas">
+  <button class="btn iconbtn dialog-close" type="button" data-close="imageDialog" aria-label="Cerrar captura">✕</button>
+  <img id="viewerImage" alt="Captura del juego">
+  <div class="viewer-controls">
+    <button class="btn iconbtn" id="imagePrev" type="button" aria-label="Captura anterior">←</button>
+    <span class="status" id="imageCount"></span>
+    <button class="btn iconbtn" id="imageNext" type="button" aria-label="Captura siguiente">→</button>
+  </div>
+</dialog>
+
+<dialog id="ageDialog" class="gate" aria-labelledby="ageTitle">
+  <div class="auth-body">
+    <div class="gate-symbol">18+</div>
+    <h2 id="ageTitle">Un espacio para adultos</h2>
+    <p>Este sitio contiene material para adultos. Para entrar tenés que tener al menos 18 años y cumplir la mayoría de edad exigida en tu país.</p>
+    <div class="gate-actions">
+      <button class="btn primary" id="acceptAge" type="button">Tengo 18 años o más</button>
+      <a class="btn" href="https://www.google.com">Salir</a>
+    </div>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script type="module">
+/* ================= CONFIGURACIÓN ================= */
+const FIREBASE_CONFIG = {
+  apiKey:"AIzaSyDBSieT2aJYXLOIJcInY5S6I9NnSVny29M",
+  authDomain:"nomada-4a182.firebaseapp.com",
+  projectId:"nomada-4a182",
+  storageBucket:"nomada-4a182.firebasestorage.app",
+  messagingSenderId:"475851285073",
+  appId:"1:475851285073:web:b880e427175614daf28e70"
+};
+const SDK="https://www.gstatic.com/firebasejs/10.12.2/";
+const SHARE_BASE="https://workers-playground-long-sound-95a6.nomadavn.workers.dev/j/";
+const PAGE_SIZE=12;
+const CACHE_KEY="nomada_catalogo_pro_v1";
+const TITLE=document.title;
+const $=id=>document.getElementById(id);
+const esc=value=>String(value??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[c]));
+const norm=value=>String(value??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
+const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}};
+const save=(key,value)=>{try{localStorage.setItem(key,JSON.stringify(value))}catch{}};
+const plainDate=value=>{
+  if(value?.toDate)return value.toDate().toISOString();
+  return typeof value==="string"?value:"";
+};
+const safeURL=(value,image=false)=>{
+  if(typeof value!=="string"||!value.trim()||value==="#")return "";
+  try{
+    const url=new URL(value,location.href);
+    if(!["https:","http:"].includes(url.protocol))return "";
+    if(!image&&url.protocol!=="https:")return "";
+    return url.href;
+  }catch{return ""}
+};
+const dateText=value=>{
+  if(!value)return "";
+  const d=new Date(value);
+  return Number.isNaN(d.getTime())?"":d.toLocaleDateString("es-AR",{day:"numeric",month:"short",year:"numeric"});
+};
+const heart=active=>`<svg class="icon" viewBox="0 0 24 24" fill="${active?"currentColor":"none"}" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg>`;
+let games=[],filtered=[],featured=[],heroPosition=0,active=null;
+let currentUser=null,authCreating=false,seasonIndex=0,downloadPlatform="pc";
+let page=1,platform="all",category="",favoritesOnly=false,query="",sort="recent";
+let listMode=read("nomada_pro_list",false);
+let favorites=new Set(Array.isArray(read("nomada_favs",[]))?read("nomada_favs",[]):[]);
+let ratingToken=0,commentToken=0,ratingBusy=false;
+let imageList=[],imagePosition=0;
+let synopsisExpanded=false,synopsisParagraphs=[];
+let authPromise=null,dbPromise=null,initialLinkHandled=false;
+let toastTimer;
+
+function toast(text){
+  clearTimeout(toastTimer);
+  $("toast").textContent=text;$("toast").hidden=false;
+  toastTimer=setTimeout(()=>$("toast").hidden=true,3200);
+}
+function isMember(){return !!currentUser&&!currentUser.isAnonymous}
+function concealed(marked){return !!marked&&!isMember()}
+function openDialog(id){
+  const d=$(id);
+  if(!d.open)d.showModal();
+  document.documentElement.style.overflow="hidden";
+}
+function closeDialog(id){$(id).close()}
+document.querySelectorAll("dialog").forEach(d=>{
+  d.addEventListener("close",()=>{
+    if(!document.querySelector("dialog[open]"))document.documentElement.style.overflow="";
+  });
+  if(d.id!=="ageDialog")d.addEventListener("click",e=>{
+    if(e.target!==d)return;
+    const r=d.getBoundingClientRect();
+    if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();
+  });
+});
+document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>closeDialog(b.dataset.close));
+$("brandLogo").onerror=()=>{$("brandLogo").hidden=true;$("brandFallback").hidden=false};
+$("year").textContent=new Date().getFullYear();
+
+/* ================= FIREBASE ================= */
+async function database(){
+  if(!dbPromise)dbPromise=(async()=>{
+    const [a,fs]=await Promise.all([import(SDK+"firebase-app.js"),import(SDK+"firebase-firestore.js")]);
+    const app=a.getApps().length?a.getApp():a.initializeApp(FIREBASE_CONFIG);
+    return {app,fs,db:fs.getFirestore(app)};
+  })().catch(e=>{dbPromise=null;throw e});
+  return dbPromise;
+}
+async function authentication(){
+  if(!authPromise)authPromise=(async()=>{
+    const F=await database(),am=await import(SDK+"firebase-auth.js");
+    const auth=am.getAuth(F.app);
+    await new Promise((resolve,reject)=>{
+      let first=true;
+      am.onAuthStateChanged(auth,u=>{
+        currentUser=u;
+        updateAccount();
+        if(first){first=false;resolve()}
+      },reject);
+    });
+    return {...F,am,auth};
+  })().catch(e=>{authPromise=null;throw e});
+  return authPromise;
+}
+async function votingAuth(){
+  const F=await authentication();
+  if(!F.auth.currentUser)await F.am.signInAnonymously(F.auth);
+  return F;
+}
+function friendlyError(e){
+  const messages={
+    "auth/invalid-credential":"El correo o la contraseña no son correctos.",
+    "auth/email-already-in-use":"Ese correo ya tiene una cuenta.",
+    "auth/weak-password":"Elegí una contraseña de al menos 6 caracteres.",
+    "auth/invalid-email":"Revisá el correo electrónico.",
+    "auth/popup-closed-by-user":"La ventana de Google se cerró antes de terminar.",
+    "auth/popup-blocked":"El navegador bloqueó la ventana de Google.",
+    "auth/unauthorized-domain":"Este dominio no está autorizado en Firebase.",
+    "auth/operation-not-allowed":"Este método de acceso no está habilitado.",
+    "auth/network-request-failed":"No se pudo conectar. Revisá tu conexión.",
+    "auth/too-many-requests":"Demasiados intentos. Probá nuevamente más tarde.",
+    "permission-denied":"No tenés permiso para esta operación. Revisá la verificación de tu cuenta y las reglas de Firestore."
+  };
+  return messages[e?.code]||"No se pudo completar la operación. Intentá nuevamente.";
+}
+
+/* ================= CATÁLOGO ================= */
+function links(block){
+  return [
+    ["Mega",safeURL(block?.mega)],
+    ["Mediafire",safeURL(block?.mediafire||block?.mf)],
+    ["Drive",safeURL(block?.drive||block?.dr)]
+  ].filter(([,u])=>u);
+}
+function normalizeGame(id,d){
+  const base=d.links||{};
+  const rawSeasons=Array.isArray(d.temporadas)&&d.temporadas.length?d.temporadas:[{nombre:"Temporada 1",links:base}];
+  const seasons=rawSeasons.map((s,i)=>({
+    name:String(s.nombre||`Temporada ${i+1}`),
+    pc:links(s.links?.pc),translation:links(s.links?.traduccion),android:links(s.links?.android)
+  }));
+  const title=String(d.titulo||"Sin título");
+  const categories=[...new Map((Array.isArray(d.categorias)?d.categorias:[]).map(v=>[norm(v),String(v).trim()])).values()].filter(Boolean);
+  const g={
+    id,slug:String(d.slug||id),title,description:String(d.sinopsis||"Sin sinopsis disponible."),
+    size:String(d.peso||""),image:safeURL(d.portadaUrl,true),adult:!!d.portadaAdulta,
+    categories,seasons,created:plainDate(d.fechaCreacion),updated:plainDate(d.actualizadoEn),
+    featured:!!d.destacado,
+    shots:(Array.isArray(d.capturas)?d.capturas:[]).map((u,i)=>({
+      url:safeURL(u,true),adult:(d.capturasAdultas||[]).includes(i)
+    })).filter(s=>s.url).slice(0,12)
+  };
+  g.pc=seasons.some(s=>s.pc.length||s.translation.length);
+  g.android=seasons.some(s=>s.android.length);
+  g.search=norm([title,g.description,...categories].join(" "));
+  return g;
+}
+function categoryButtons(){
+  const map=new Map();
+  games.forEach(g=>g.categories.forEach(c=>{
+    const k=norm(c),item=map.get(k)||{name:c,count:0};
+    item.count++;map.set(k,item);
+  }));
+  const all=[...map].sort((a,b)=>b[1].count-a[1].count);
+  if(category&&!map.has(category))category="";
+  $("categories").innerHTML=`<button class="chip" type="button" data-category="" aria-pressed="${!category}">Todas las etiquetas</button>`+
+    all.map(([k,v])=>`<button class="chip" type="button" data-category="${esc(k)}" aria-pressed="${category===k}">${esc(v.name)} <span style="opacity:.5;margin-left:6px">${v.count}</span></button>`).join("");
+}
+function freshness(g){
+  const now=Date.now(),created=Date.parse(g.created),updated=Date.parse(g.updated);
+  if(created<=now&&now-created<14*864e5)return '<span class="tag accent">Nuevo</span>';
+  if(updated<=now&&now-updated<14*864e5)return '<span class="tag gold">Actualizado</span>';
+  return "";
+}
+function card(g){
+  const fav=favorites.has(g.slug),blur=concealed(g.adult);
+  return `<article class="card">
+    <div class="cover">
+      ${g.image?`<img src="${esc(g.image)}" loading="lazy" decoding="async" alt="" class="${blur?"blur":""}">`:`<div class="cover-placeholder" aria-hidden="true">${esc(g.title[0])}</div>`}
+      ${blur?'<div class="cover-label"><span>+18 · Iniciá sesión para ver</span></div>':""}
+      <div class="card-tags"><span>${freshness(g)}</span><span class="tag age">+18</span></div>
+      <div class="platforms">${g.pc?'<span class="tag">PC</span>':""}${g.android?'<span class="tag green">Android</span>':""}</div>
+      <button class="fav" type="button" data-favorite="${esc(g.slug)}" aria-label="${fav?"Quitar de":"Agregar a"} favoritos: ${esc(g.title)}" aria-pressed="${fav}">${heart(fav)}</button>
+    </div>
+    <div class="card-body">
+      <div class="genres">${g.categories.slice(0,2).map(c=>`<span>${esc(c)}</span>`).join('<span aria-hidden="true">/</span>')}</div>
+      <h3 class="card-title"><button type="button" data-game="${esc(g.slug)}">${esc(g.title)}</button></h3>
+      <div class="card-meta"><span>${esc(g.size||"Novela visual")}</span><span>${g.seasons.length>1?`${g.seasons.length} temporadas`:"Español"}</span></div>
+    </div>
+  </article>`;
+}
+function render(){
+  const terms=norm(query).split(/\s+/).filter(Boolean);
+  filtered=games.filter(g=>
+    terms.every(t=>g.search.includes(t))&&
+    (!category||g.categories.some(c=>norm(c)===category))&&
+    (platform==="all"||g[platform])&&
+    (!favoritesOnly||favorites.has(g.slug))
+  );
+  filtered.sort((a,b)=>{
+    if(sort==="az")return a.title.localeCompare(b.title,"es");
+    if(sort==="za")return b.title.localeCompare(a.title,"es");
+    const time=g=>Date.parse(sort==="updated"?(g.updated||g.created):g.created)||0;
+    return time(b)-time(a)||a.title.localeCompare(b.title,"es");
+  });
+  const pages=Math.max(1,Math.ceil(filtered.length/PAGE_SIZE));
+  page=Math.min(page,pages);
+  $("grid").className="grid"+(listMode?" list":"");
+  $("grid").innerHTML=filtered.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE).map(card).join("");
+  $("grid").setAttribute("aria-busy","false");
+  $("empty").hidden=filtered.length>0;
+  $("emptyTitle").textContent=favoritesOnly&&!filtered.length?"Todavía no hay favoritos en esta selección":"No encontramos coincidencias";
+  $("emptyText").textContent=favoritesOnly?"Guardá juegos con el corazón o probá quitar los otros filtros.":"Probá con otro título o ajustá los filtros.";
+  $("resultCount").textContent=`${filtered.length} ${filtered.length===1?"historia":"historias"}`;
+  $("favoriteCount").textContent=games.filter(g=>favorites.has(g.slug)).length;
+  $("favoritesFilter").setAttribute("aria-pressed",String(favoritesOnly));
+  $("favoritesFilter").classList.toggle("primary",favoritesOnly);
+  $("gridView").setAttribute("aria-pressed",String(!listMode));
+  $("listView").setAttribute("aria-pressed",String(listMode));
+  let html="";
+  const btn=(n,label,current=false)=>`<button class="btn small" type="button" data-page="${n}" aria-label="Página ${n}" ${current?'aria-current="page"':""}>${label}</button>`;
+  if(pages>1){
+    if(page>1)html+=btn(page-1,"←");
+    const nums=[...new Set([1,page-1,page,page+1,pages])].filter(n=>n>=1&&n<=pages).sort((a,b)=>a-b);
+    nums.forEach((n,i)=>{if(i&&n-nums[i-1]>1)html+='<span aria-hidden="true">...</span>';html+=btn(n,n,n===page)});
+    if(page<pages)html+=btn(page+1,"→");
+  }
+  $("pager").innerHTML=html;
+}
+function renderFeatured(){
+  featured=[...games].sort((a,b)=>Number(b.featured)-Number(a.featured)||(Date.parse(b.updated||b.created)||0)-(Date.parse(a.updated||a.created)||0)).slice(0,6);
+  heroPosition=Math.min(heroPosition,Math.max(0,featured.length-1));
+  $("hero").hidden=!featured.length;
+  $("popularSection").hidden=games.length<2;
+  $("popular").innerHTML=featured.map(card).join("");
+  updateHero();
+}
+function updateHero(){
+  const g=featured[heroPosition];if(!g)return;
+  $("heroImage").hidden=!g.image;
+  if(g.image)$("heroImage").src=g.image;else $("heroImage").removeAttribute("src");
+  $("heroImage").classList.toggle("blur",concealed(g.adult));
+  $("heroTitle").textContent=g.title;
+  $("heroDescription").textContent=g.description;
+  $("heroTags").innerHTML='<span class="tag accent">Para descubrir</span>'+
+    (g.pc?'<span class="tag">PC</span>':"")+(g.android?'<span class="tag green">Android</span>':"");
+  $("heroIndex").textContent=`${String(heroPosition+1).padStart(2,"0")} / ${String(featured.length).padStart(2,"0")}`;
+  $("heroPrev").hidden=$("heroNext").hidden=featured.length<2;
+}
+function applyGames(next){
+  const activeSlug=active?.slug;
+  games=next;
+  categoryButtons();render();renderFeatured();
+  if(activeSlug){
+    const updated=games.find(g=>g.slug===activeSlug);
+    if(updated){active=updated;fillGame(false)}
+    else closeDialog("gameDialog");
+  }
+  openInitialLink();
+}
+function openInitialLink(){
+  if(initialLinkHandled||$("ageDialog").open)return;
+  const slug=new URLSearchParams(location.search).get("juego");
+  const g=games.find(g=>g.slug===slug);
+  if(g){initialLinkHandled=true;openGame(g.slug)}
+}
+async function loadCatalog(){
+  const cache=read(CACHE_KEY,null);
+  if(cache&&Array.isArray(cache.games))applyGames(cache.games);
+  try{
+    const F=await database();
+    const meta=await F.fs.getDoc(F.fs.doc(F.db,"meta","catalogo"));
+    const version=meta.exists()?String(meta.data().version??""):"";
+    if(cache&&version&&version===cache.version){$("catalogStatus").textContent="";return}
+    const snap=await F.fs.getDocs(F.fs.collection(F.db,"juegos"));
+    const next=snap.docs.map(d=>normalizeGame(d.id,d.data()));
+    save(CACHE_KEY,{version,games:next});
+    applyGames(next);
+    $("catalogStatus").textContent=next.length?"":"Todavía no hay juegos publicados.";
+  }catch(e){
+    console.error(e);
+    if(!cache){games=[];render();$("emptyTitle").textContent="No pudimos cargar el catálogo";$("emptyText").textContent="Revisá tu conexión y volvé a cargar la página."}
+    $("catalogStatus").textContent=cache?"Estás viendo una copia guardada. No se pudo comprobar si hay novedades.":"El catálogo no está disponible en este momento.";
+  }
+}
+
+/* ================= FILTROS Y FAVORITOS ================= */
+$("search").oninput=e=>{query=e.target.value;page=1;render()};
+$("sort").onchange=e=>{sort=e.target.value;page=1;render()};
+$("platforms").onclick=e=>{
+  const b=e.target.closest("[data-platform]");if(!b)return;
+  platform=b.dataset.platform;page=1;
+  $("platforms").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+  render();
+};
+$("categories").onclick=e=>{
+  const b=e.target.closest("[data-category]");if(!b)return;
+  category=b.dataset.category;page=1;categoryButtons();render();
+};
+$("favoritesFilter").onclick=()=>{favoritesOnly=!favoritesOnly;page=1;render()};
+$("gridView").onclick=()=>{listMode=false;save("nomada_pro_list",false);render()};
+$("listView").onclick=()=>{listMode=true;save("nomada_pro_list",true);render()};
+$("resetFilters").onclick=()=>{
+  query="";category="";platform="all";favoritesOnly=false;page=1;
+  $("search").value="";
+  $("platforms").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.platform==="all")));
+  categoryButtons();render();
+};
+$("pager").onclick=e=>{
+  const b=e.target.closest("[data-page]");if(!b)return;
+  page=Number(b.dataset.page);render();
+  $("catalogo").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"instant":"smooth"});
+};
+$("random").onclick=()=>{
+  const pool=filtered.length?filtered:games;
+  if(pool.length)openGame(pool[Math.floor(Math.random()*pool.length)].slug);
+  else toast("No hay juegos disponibles.");
+};
+function toggleFavorite(slug){
+  const added=!favorites.has(slug);
+  if(added)favorites.add(slug);else favorites.delete(slug);
+  save("nomada_favs",[...favorites]);
+  render();renderFeatured();updateFavoriteButton();
+  toast(added?"Guardado en tus favoritos de este navegador.":"Juego eliminado de favoritos.");
+}
+document.addEventListener("click",e=>{
+  const fav=e.target.closest("[data-favorite]");
+  if(fav){toggleFavorite(fav.dataset.favorite);return}
+  const game=e.target.closest("[data-game]");
+  if(game)openGame(game.dataset.game);
+});
+$("heroPrev").onclick=()=>{heroPosition=(heroPosition-1+featured.length)%featured.length;updateHero()};
+$("heroNext").onclick=()=>{heroPosition=(heroPosition+1)%featured.length;updateHero()};
+$("heroOpen").onclick=()=>{if(featured[heroPosition])openGame(featured[heroPosition].slug)};
+
+/* ================= FICHA Y SINOPSIS ================= */
+function openGame(slug){
+  const g=games.find(g=>g.slug===slug);if(!g)return;
+  active=g;seasonIndex=0;downloadPlatform=g.pc?"pc":"android";synopsisExpanded=false;
+  ratingToken++;commentToken++;
+  $("commentArea").hidden=true;$("loadComments").hidden=false;
+  $("commentList").innerHTML="";$("commentStatus").textContent="";
+  $("commentText").value="";
+  fillGame(true);
+  openDialog("gameDialog");
+  $("gameDialog").scrollTop=0;
+  document.title=`${g.title} | Nómada VN`;
+  const url=new URL(location.href);url.searchParams.set("juego",g.slug);
+  history.replaceState(null,"",url);
+  requestAnimationFrame(checkSynopsis);
+  loadRating();
+}
+function fillGame(reset){
+  if(!active)return;
+  const g=active;
+  seasonIndex=Math.min(seasonIndex,g.seasons.length-1);
+  $("gameTitle").textContent=g.title;
+  $("gameMeta").textContent=[g.size,g.pc?"PC":"",g.android?"Android":"","Español"].filter(Boolean).join(" · ");
+  $("gameCover").innerHTML=g.image?`<img src="${esc(g.image)}" alt="" class="${concealed(g.adult)?"blur":""}">`:"";
+  $("gameCategories").innerHTML=g.categories.map(c=>`<span class="chip">${esc(c)}</span>`).join("");
+  const details=[
+    ["Plataformas",[g.pc?"PC (Windows)":"",g.android?"Android (APK)":""].filter(Boolean).join(" / ")],
+    ["Peso",g.size],["Idioma","Traducción al español"],["Publicado",dateText(g.created)],
+    ["Actualizado",dateText(g.updated)],["Temporadas",String(g.seasons.length)]
+  ].filter(([,v])=>v);
+  $("gameDetails").innerHTML=details.map(([k,v])=>`<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("");
+  synopsisParagraphs=g.description.replace(/\r\n?/g,"\n").split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean);
+  if(!synopsisParagraphs.length)synopsisParagraphs=["Sin sinopsis disponible."];
+  if(reset)synopsisExpanded=false;
+  drawSynopsis();
+  $("season").innerHTML=g.seasons.map((s,i)=>`<option value="${i}">${esc(s.name)}</option>`).join("");
+  $("season").value=seasonIndex;
+  $("seasonLabel").hidden=g.seasons.length<2;
+  updateFavoriteButton();drawDownloads();drawGallery();
+}
+function drawSynopsis(){
+  const visible=synopsisExpanded?synopsisParagraphs:synopsisParagraphs.slice(0,3);
+  $("synopsis").innerHTML=visible.map(p=>`<p>${esc(p).replace(/\n/g,"<br>")}</p>`).join("");
+  $("synopsis").classList.toggle("collapsed",!synopsisExpanded);
+  $("readMore").setAttribute("aria-expanded",String(synopsisExpanded));
+  $("readMore").textContent=synopsisExpanded?"Ver menos -":"Ver más +";
+  requestAnimationFrame(checkSynopsis);
+}
+function checkSynopsis(){
+  if(!$("gameDialog").open)return;
+  const el=$("synopsis");
+  $("readMore").hidden=!(synopsisExpanded||synopsisParagraphs.length>3||el.scrollHeight>el.clientHeight+2);
+}
+$("readMore").onclick=()=>{synopsisExpanded=!synopsisExpanded;drawSynopsis()};
+new ResizeObserver(()=>{if(!synopsisExpanded)checkSynopsis()}).observe($("synopsis"));
+function updateFavoriteButton(){
+  if(!active)return;
+  const on=favorites.has(active.slug);
+  $("modalFavorite").innerHTML=heart(on)+(on?" Guardado":" Guardar favorito");
+  $("modalFavorite").setAttribute("aria-pressed",String(on));
+}
+$("modalFavorite").onclick=()=>{if(active)toggleFavorite(active.slug)};
+$("gameDialog").addEventListener("close",()=>{
+  active=null;ratingToken++;commentToken++;
+  document.title=TITLE;
+  const url=new URL(location.href);url.searchParams.delete("juego");
+  history.replaceState(null,"",url);
+});
+$("copyLink").onclick=async()=>{
+  if(!active)return;
+  const url=SHARE_BASE+encodeURIComponent(active.slug);
+  try{await navigator.clipboard.writeText(url);toast("Enlace copiado.")}
+  catch{prompt("Copiá el enlace del juego:",url)}
+};
+
+/* ================= DESCARGAS Y TEMPORADAS ================= */
+function downloadBlock(title,items,note="",primary=false){
+  if(!items.length)return "";
+  return `<div class="download-section"><h4>${title}</h4>${note?`<p>${note}</p>`:""}
+    <div class="download-buttons">${items.map(([name,url])=>`<a class="btn ${primary?"primary":""}" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(name)} <span aria-hidden="true">↗</span></a>`).join("")}</div></div>`;
+}
+function drawDownloads(){
+  if(!active)return;
+  const s=active.seasons[seasonIndex];
+  $("downloadPC").setAttribute("aria-pressed",String(downloadPlatform==="pc"));
+  $("downloadAndroid").setAttribute("aria-pressed",String(downloadPlatform==="android"));
+  let html="";
+  if(downloadPlatform==="pc"){
+    html=downloadBlock("Juego para PC",s.pc,"Descargá la versión compatible con esta traducción.",true)+
+      downloadBlock("Traducción al español",s.translation,"Antes de reemplazar archivos, hacé una copia de seguridad.");
+    if(s.translation.length)html+=`<details class="install"><summary>Cómo instalar la traducción</summary><ol><li>Descargá y extraé el archivo.</li><li>Copiá la carpeta <strong>game</strong> dentro de la carpeta del juego.</li><li>Reemplazá los archivos cuando lo solicite.</li></ol><p>Si el archivo incluye instrucciones propias, seguí las indicaciones de esa versión.</p></details>`;
+  }else html=downloadBlock("Android (APK)",s.android,"Versión en español. Revisá que tu dispositivo sea compatible.",true);
+  $("downloadContent").innerHTML=html||'<p class="status">Todavía no hay enlaces para esta plataforma y temporada.</p>';
+}
+$("season").onchange=e=>{seasonIndex=Number(e.target.value);drawDownloads()};
+$("downloadPC").onclick=()=>{downloadPlatform="pc";drawDownloads()};
+$("downloadAndroid").onclick=()=>{downloadPlatform="android";drawDownloads()};
+
+/* ================= GALERÍA ================= */
+function drawGallery(){
+  if(!active)return;
+  $("gallerySection").hidden=!active.shots.length;
+  $("gallery").innerHTML=active.shots.map((s,i)=>`<button class="shot" type="button" data-shot="${i}" aria-label="${concealed(s.adult)?"Iniciar sesión para ver":"Ver"} captura ${i+1}">
+    <img src="${esc(s.url)}" alt="" loading="lazy" class="${concealed(s.adult)?"blur":""}">
+    ${concealed(s.adult)?'<span class="cover-label"><span>+18 · Iniciá sesión</span></span>':""}</button>`).join("");
+}
+$("gallery").onclick=e=>{
+  const b=e.target.closest("[data-shot]");if(!b||!active)return;
+  const shot=active.shots[Number(b.dataset.shot)];
+  if(concealed(shot.adult)){openAuth();return}
+  imageList=active.shots.filter(s=>!concealed(s.adult));
+  imagePosition=imageList.indexOf(shot);
+  showImage();openDialog("imageDialog");
+};
+function showImage(){
+  if(!imageList.length)return;
+  $("viewerImage").src=imageList[imagePosition].url;
+  $("imageCount").textContent=`${imagePosition+1} / ${imageList.length}`;
+  $("imagePrev").disabled=$("imageNext").disabled=imageList.length<2;
+}
+function moveImage(delta){
+  if(!imageList.length)return;
+  imagePosition=(imagePosition+delta+imageList.length)%imageList.length;showImage();
+}
+$("imagePrev").onclick=()=>moveImage(-1);
+$("imageNext").onclick=()=>moveImage(1);
+$("imageDialog").onkeydown=e=>{
+  if(e.key==="ArrowLeft"){e.preventDefault();moveImage(-1)}
+  if(e.key==="ArrowRight"){e.preventDefault();moveImage(1)}
+};
+$("imageDialog").addEventListener("close",()=>$("viewerImage").removeAttribute("src"));
+
+/* ================= ACCESO ================= */
+function updateAccount(){
+  $("accountButton").textContent=isMember()?(currentUser.displayName?.split(" ")[0]||"Mi cuenta"):"Iniciar sesión";
+  save("nomada_sesion",isMember()?1:0);
+  $("authForm").hidden=isMember();
+  $("authLogged").hidden=!isMember();
+  if(isMember()){
+    $("authTitle").textContent="Tu cuenta";
+    $("authDescription").textContent=currentUser.email||"Sesión iniciada";
+    $("authLogged").innerHTML=`
+      <p class="status">${currentUser.emailVerified?"Tu cuenta está verificada.":"Verificá tu correo para publicar comentarios."}</p>
+      ${!currentUser.emailVerified?'<button class="btn small" id="sendVerification" type="button" style="margin-top:14px">Reenviar verificación</button><button class="btn small" id="checkVerification" type="button" style="margin-top:10px">Ya verifiqué</button>':""}
+      <button class="btn" id="signOut" type="button" style="width:100%;margin-top:18px">Cerrar sesión</button>`;
+    $("signOut").onclick=async()=>{
+      try{const F=await authentication();await F.am.signOut(F.auth);toast("Sesión cerrada.")}
+      catch(e){$("authStatus").textContent=friendlyError(e)}
+    };
+    if($("sendVerification"))$("sendVerification").onclick=async()=>{
+      try{const F=await authentication();await F.am.sendEmailVerification(F.auth.currentUser);$("authStatus").textContent="Correo enviado. Revisá también el spam."}
+      catch(e){$("authStatus").textContent=friendlyError(e)}
+    };
+    if($("checkVerification"))$("checkVerification").onclick=async()=>{
+      try{await currentUser.reload();await currentUser.getIdToken(true);updateAccount();$("authStatus").textContent=currentUser.emailVerified?"Correo verificado.":"La verificación todavía no aparece."}
+      catch(e){$("authStatus").textContent=friendlyError(e)}
+    };
+  }else{
+    $("authTitle").textContent=authCreating?"Creá tu cuenta":"Bienvenido a Nómada";
+    $("authDescription").textContent="Entrá para comentar y participar en la comunidad.";
+  }
+  if(games.length){render();renderFeatured()}
+  if(active){
+    fillGame(false);
+    if(!$("commentArea").hidden)drawCommentAccount();
+  }
+  if(!isMember()&&$("imageDialog").open)closeDialog("imageDialog");
+}
+function openAuth(){
+  $("authStatus").textContent="";
+  openDialog("authDialog");
+  authentication().then(updateAccount).catch(e=>$("authStatus").textContent=friendlyError(e));
+}
+$("accountButton").onclick=openAuth;
+$("authMode").onclick=()=>{
+  authCreating=!authCreating;
+  $("nameLabel").hidden=!authCreating;$("authName").required=authCreating;
+  $("authPassword").autocomplete=authCreating?"new-password":"current-password";
+  $("authSubmit").textContent=authCreating?"Crear cuenta":"Ingresar";
+  $("authMode").textContent=authCreating?"Ya tengo cuenta: ingresar":"No tengo cuenta: registrarme";
+  $("authStatus").textContent="";updateAccount();
+};
+$("googleLogin").onclick=async()=>{
+  const b=$("googleLogin");b.disabled=true;$("authStatus").textContent="";
+  try{
+    const F=await authentication();
+    await F.am.signInWithPopup(F.auth,new F.am.GoogleAuthProvider());
+    if(active)loadRating();
+    closeDialog("authDialog");toast("Sesión iniciada.");
+  }catch(e){$("authStatus").textContent=friendlyError(e)}
+  finally{b.disabled=false}
+};
+$("authForm").onsubmit=async e=>{
+  e.preventDefault();
+  const creating=authCreating,email=$("authEmail").value.trim(),password=$("authPassword").value,name=$("authName").value.trim();
+  const b=$("authSubmit");b.disabled=true;$("authStatus").textContent="";
+  try{
+    const F=await authentication();
+    if(creating){
+      if(!name)throw new Error("name");
+      const cred=await F.am.createUserWithEmailAndPassword(F.auth,email,password);
+      await F.am.updateProfile(cred.user,{displayName:name.slice(0,40)});
+      await F.am.sendEmailVerification(cred.user);
+      currentUser=cred.user;updateAccount();
+      $("authStatus").textContent="Cuenta creada. Te enviamos un correo de verificación.";
+    }else{
+      await F.am.signInWithEmailAndPassword(F.auth,email,password);
+      closeDialog("authDialog");toast("Sesión iniciada.");
+    }
+    $("authPassword").value="";
+    if(active)loadRating();
+  }catch(e){$("authStatus").textContent=e.message==="name"?"Escribí tu nombre.":friendlyError(e)}
+  finally{b.disabled=false}
+};
+$("resetPassword").onclick=async()=>{
+  const email=$("authEmail").value.trim();
+  if(!email){$("authStatus").textContent="Escribí tu correo electrónico primero.";return}
+  try{
+    const F=await authentication();await F.am.sendPasswordResetEmail(F.auth,email);
+    $("authStatus").textContent="Si existe una cuenta asociada, recibirás instrucciones para restablecer la contraseña.";
+  }catch(e){$("authStatus").textContent=friendlyError(e)}
+};
+
+/* ================= VALORACIONES ================= */
+let myRating=0;
+function drawStars(){
+  $("stars").innerHTML=[1,2,3,4,5].map(n=>`<button type="button" data-rating="${n}" class="${n<=myRating?"on":""}" aria-label="${n} ${n===1?"estrella":"estrellas"}" aria-pressed="${myRating===n}" ${ratingBusy?"disabled":""}>★</button>`).join("");
+}
+async function loadRating(){
+  if(!active)return;
+  const slug=active.slug,token=++ratingToken;
+  myRating=0;drawStars();$("ratingStatus").textContent="Cargando valoraciones...";
+  try{
+    const F=await authentication();
+    const q=F.fs.query(F.fs.collection(F.db,"valoraciones"),F.fs.where("juego","==",slug));
+    const aggregate=await F.fs.getAggregateFromServer(q,{average:F.fs.average("estrellas"),count:F.fs.count()});
+    let mine=0;
+    if(F.auth.currentUser){
+      const d=await F.fs.getDoc(F.fs.doc(F.db,"valoraciones",slug+"_"+F.auth.currentUser.uid));
+      if(d.exists())mine=Number(d.data().estrellas)||0;
+    }
+    if(token!==ratingToken||active?.slug!==slug)return;
+    myRating=mine;drawStars();
+    const data=aggregate.data();
+    $("ratingStatus").textContent=data.count?
+      `${Number(data.average||0).toFixed(1).replace(".",",")} de 5 · ${data.count} ${data.count===1?"voto":"votos"}${mine?` · Tu voto: ${mine}`:""}`:
+      "Todavía no hay valoraciones. Podés dejar la primera.";
+  }catch(e){
+    if(token===ratingToken)$("ratingStatus").textContent="Las valoraciones no están disponibles en este momento.";
+  }
+}
+$("stars").onclick=async e=>{
+  const b=e.target.closest("[data-rating]");if(!b||!active||ratingBusy)return;
+  const slug=active.slug,n=Number(b.dataset.rating);
+  ratingBusy=true;drawStars();
+  try{
+    const F=await votingAuth(),uid=F.auth.currentUser.uid;
+    await F.fs.setDoc(F.fs.doc(F.db,"valoraciones",slug+"_"+uid),{
+      juego:slug,uid,estrellas:n,fecha:F.fs.serverTimestamp()
+    });
+    if(active?.slug===slug){myRating=n;toast("Tu valoración se guardó.");await loadRating()}
+  }catch(e){if(active?.slug===slug)$("ratingStatus").textContent=friendlyError(e)}
+  finally{ratingBusy=false;drawStars()}
+};
+
+/* ================= COMENTARIOS ================= */
+function drawCommentAccount(){
+  const allowed=isMember()&&currentUser.emailVerified;
+  $("commentForm").hidden=!allowed;
+  $("commentAccount").innerHTML=allowed?
+    `<p class="status">Comentás como <strong>${esc(currentUser.displayName||"Usuario")}</strong>.</p>`:
+    `<button class="btn small" id="commentLogin" type="button">${isMember()?"Verificar mi cuenta":"Iniciar sesión para comentar"}</button>`;
+  if($("commentLogin"))$("commentLogin").onclick=openAuth;
+}
+async function loadComments(){
+  if(!active)return;
+  const slug=active.slug,token=++commentToken;
+  $("loadComments").hidden=true;$("commentArea").hidden=false;
+  $("commentStatus").textContent="Cargando comentarios...";
+  try{
+    const F=await authentication();drawCommentAccount();
+    const snap=await F.fs.getDocs(F.fs.query(F.fs.collection(F.db,"comentarios"),F.fs.where("juego","==",slug)));
+    if(token!==commentToken||active?.slug!==slug)return;
+    const all=snap.docs.map(d=>({id:d.id,...d.data()}));
+    const time=c=>c.fecha?.toMillis?.()||0;
+    const roots=all.filter(c=>!c.padre).sort((a,b)=>time(b)-time(a));
+    const item=(c,reply=false)=>`<article class="comment${reply?" reply":""}"><strong>${esc(c.nombre||"Usuario")}</strong><small>${esc(dateText(plainDate(c.fecha)))}</small><p>${esc(c.texto||"")}</p></article>`;
+    $("commentList").innerHTML=roots.map(c=>item(c)+all.filter(x=>x.padre===c.id).sort((a,b)=>time(a)-time(b)).map(x=>item(x,true)).join("")).join("");
+    $("commentStatus").textContent=roots.length?"":"Todavía no hay comentarios. Empezá la conversación.";
+  }catch(e){
+    if(token===commentToken){$("commentStatus").textContent=friendlyError(e);$("loadComments").hidden=false}
+  }
+}
+$("loadComments").onclick=loadComments;
+$("commentForm").onsubmit=async e=>{
+  e.preventDefault();
+  if(!active||!isMember()||!currentUser.emailVerified)return;
+  const text=$("commentText").value.trim(),slug=active.slug;
+  if(!text)return;
+  const b=$("commentForm").querySelector("button");b.disabled=true;
+  try{
+    const F=await authentication(),u=F.auth.currentUser;
+    if(!u||u.isAnonymous||!u.emailVerified)throw new Error("account");
+    const blocked=await F.fs.getDoc(F.fs.doc(F.db,"bloqueados",u.uid));
+    if(blocked.exists()){
+      $("commentStatus").textContent="Esta cuenta no tiene permiso para publicar comentarios.";return;
+    }
+    await F.fs.addDoc(F.fs.collection(F.db,"comentarios"),{
+      juego:slug,texto:text.slice(0,1000),uid:u.uid,
+      nombre:(u.displayName||"Usuario").slice(0,40),padre:"",
+      esAdmin:false,fecha:F.fs.serverTimestamp()
+    });
+    if(active?.slug===slug){$("commentText").value="";await loadComments()}
+    toast("Comentario publicado.");
+  }catch(e){if(active?.slug===slug)$("commentStatus").textContent=friendlyError(e)}
+  finally{b.disabled=false}
+};
+
+/* ================= EDAD Y ARRANQUE ================= */
+$("ageDialog").addEventListener("cancel",e=>e.preventDefault());
+$("acceptAge").onclick=()=>{
+  try{localStorage.setItem("age_ok","1")}catch{}
+  closeDialog("ageDialog");openInitialLink();
+};
+let ageConfirmed=false;
+try{ageConfirmed=localStorage.getItem("age_ok")==="1"}catch{}
+if(!ageConfirmed)openDialog("ageDialog");
+loadCatalog();
+
+/* Restaura la sesión existente sin crear usuarios anónimos al visitar. */
+authentication().catch(()=>{});
+</script>
+</body>
+</html>
