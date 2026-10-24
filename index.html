@@ -278,7 +278,7 @@ dialog[open]{animation:enter .2s ease}
 .subsection h3{font-size:.95rem;margin-bottom:13px}
 .synopsis{color:var(--muted);font-size:.87rem;line-height:1.9;overflow-wrap:anywhere}
 .synopsis p+p{margin-top:14px}
-.synopsis.collapsed{overflow:hidden}
+.synopsis.collapsed{max-height:10.5rem;overflow:hidden;-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent)}
 .read-more{margin-top:10px;background:none;color:#ff9cb2;font-size:.79rem;font-weight:800;min-height:44px;padding:0}
 .details{border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:0}
 .details div{padding:12px 15px}
@@ -1944,7 +1944,7 @@ function drawModalCats(){
 }
 $("gameCategories").onclick=e=>{if(e.target.closest("[data-modalcats]")){modalCatsOpen=!modalCatsOpen;drawModalCats()}};
 function drawSynopsis(){
-  const visible=synopsisExpanded?synopsisParagraphs:synopsisParagraphs.slice(0,3);
+  const visible=synopsisParagraphs; // se muestra todo; cuando está cerrada, el CSS la corta a unas 6 líneas con un degradé
   $("synopsis").innerHTML=visible.map(p=>`<p>${esc(p).replace(/\n/g,"<br>")}</p>`).join("");
   $("synopsis").classList.toggle("collapsed",!synopsisExpanded);
   $("readMore").setAttribute("aria-expanded",String(synopsisExpanded));
@@ -1954,7 +1954,7 @@ function drawSynopsis(){
 function checkSynopsis(){
   if(!$("gameDialog").open)return;
   const el=$("synopsis");
-  $("readMore").hidden=!(synopsisExpanded||synopsisParagraphs.length>3||el.scrollHeight>el.clientHeight+2);
+  $("readMore").hidden=!(synopsisExpanded||el.scrollHeight>el.clientHeight+2);
 }
 $("readMore").onclick=()=>{synopsisExpanded=!synopsisExpanded;drawSynopsis()};
 new ResizeObserver(()=>{if(!synopsisExpanded)checkSynopsis()}).observe($("synopsis"));
