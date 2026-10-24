@@ -278,9 +278,7 @@ dialog[open]{animation:enter .2s ease}
 .subsection h3{font-size:.95rem;margin-bottom:13px}
 .synopsis{color:var(--muted);font-size:.87rem;line-height:1.9;overflow-wrap:anywhere}
 .synopsis p+p{margin-top:14px}
-.synopsis.collapsed{
-  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:12;overflow:hidden;
-}
+.synopsis.collapsed{overflow:hidden}
 .read-more{margin-top:10px;background:none;color:#ff9cb2;font-size:.79rem;font-weight:800;min-height:44px;padding:0}
 .details{border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:0}
 .details div{padding:12px 15px}
@@ -1919,14 +1917,15 @@ function fillGame(reset){
   $("gameTitle").textContent=g.title;
   $("gameMeta").textContent=metaText(g);
   $("gameCover").innerHTML=g.image?`<img src="${esc(g.image)}" alt="" class="${concealed(g.adult)?"blur":""}">`:"";
-  $("gameCategories").innerHTML=g.categories.map(c=>`<span class="chip">${esc(c)}</span>`).join("");
+  if(reset)modalCatsOpen=false;
+  drawModalCats();
   const details=[
     ["Plataformas",[g.pc?"PC (Windows)":"",g.android?"Android (APK)":""].filter(Boolean).join(" / ")],
     ["Peso",g.size],["Idioma","Traducción al español"],["Publicado",dateText(g.created)],
     ["Actualizado",dateText(g.updated)],["Temporadas",String(g.seasons.length)]
   ].filter(([,v])=>v);
   $("gameDetails").innerHTML=details.map(([k,v])=>`<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("");
-  synopsisParagraphs=g.description.replace(/\r\n?/g,"\n").split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean);
+  synopsisParagraphs=g.description.replace(/\r\n?/g,"\n").split(/\n+/).map(s=>s.trim()).filter(Boolean);
   if(!synopsisParagraphs.length)synopsisParagraphs=["Sin sinopsis disponible."];
   if(reset)synopsisExpanded=false;
   drawSynopsis();
@@ -1935,6 +1934,15 @@ function fillGame(reset){
   $("seasonLabel").hidden=g.seasons.length<2;
   updateFavoriteButton();drawDownloads();drawGallery();
 }
+let modalCatsOpen=false;
+// En la ficha se muestran 3 etiquetas; el resto aparece con "Ver más".
+function drawModalCats(){
+  if(!active)return;
+  const all=active.categories,list=modalCatsOpen?all:all.slice(0,3);
+  $("gameCategories").innerHTML=list.map(c=>`<span class="chip">${esc(c)}</span>`).join("")+
+    (all.length>3?`<button class="chip" type="button" data-modalcats="1" aria-expanded="${modalCatsOpen}">${modalCatsOpen?"Ver menos -":`Ver más + (${all.length-3})`}</button>`:"");
+}
+$("gameCategories").onclick=e=>{if(e.target.closest("[data-modalcats]")){modalCatsOpen=!modalCatsOpen;drawModalCats()}};
 function drawSynopsis(){
   const visible=synopsisExpanded?synopsisParagraphs:synopsisParagraphs.slice(0,3);
   $("synopsis").innerHTML=visible.map(p=>`<p>${esc(p).replace(/\n/g,"<br>")}</p>`).join("");
