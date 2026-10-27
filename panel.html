@@ -687,7 +687,7 @@ function editarDeJson(e){
  const i=migDatos.indexOf(e),d=migEditados.get(e)||docDesdeJuegoJson(e,i,F.fs,Date.now());
  editar({id:d.slug,...d});
  editandoJson=e;
- $("formTitulo").textContent="Editando (de juegos.json): "+d.titulo;$("guardar").textContent="Guardar juego y pasarlo a la página";
+ $("formTitulo").textContent="Editando (de juegos.json): "+d.titulo;$("guardar").textContent="Guardar juego";
 }
 async function leerArchivoJson(file,handle){
  const m=$("msgMig");m.className="mut";
