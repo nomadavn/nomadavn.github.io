@@ -172,15 +172,6 @@ details{margin-top:12px;font-size:13px;color:#cdbfba}summary{cursor:pointer;colo
         <p class="mut" style="margin-top:6px">Los enlaces de abajo son de la temporada elegida. Si el juego tiene una sola temporada, dejalo como está.</p>
       </div>
 
-      <!-- Enlaces de descarga. "Pegado inteligente": pegás todos los enlaces juntos (con o sin texto como "Android:" o "Traducción:") y se reparten solos. -->
-      <div style="margin-top:14px">
-        <label for="pegado">Pegado inteligente de enlaces</label>
-        <textarea id="pegado" placeholder="Pegá acá todos los enlaces juntos. Ejemplo:&#10;PC: https://mega.nz/... https://www.mediafire.com/...&#10;Traducción: https://drive.google.com/...&#10;Android: https://mega.nz/..."></textarea>
-        <div style="display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap">
-          <button type="button" class="sec" id="btnPegado">Repartir enlaces</button>
-          <span class="mut">Detecta Mega, Mediafire y Drive, y usa palabras como Android, APK, Traducción, Parche o PC para ubicar cada uno. Sin indicación, va a PC.</span>
-        </div>
-      </div>
       <div class="g g3" style="margin-top:12px">
         <div><label>Juego para PC: Mega</label><input type="text" id="lnkPcMega"></div>
         <div><label>Juego para PC: Mediafire</label><input type="text" id="lnkPcMf"></div>
@@ -235,9 +226,6 @@ details{margin-top:12px;font-size:13px;color:#cdbfba}summary{cursor:pointer;colo
     <div class="box">
       <h2>4. Estadísticas y recomendaciones</h2>
       <p class="mut">El sitio cuenta solo las vistas, los favoritos y las descargas de cada juego (se ven en la lista de arriba) y con eso arma "Populares" y "Para vos". No hace falta hacer nada.</p>
-      <p class="mut" style="margin-top:8px">Antes, las visitas y descargas se contaban en CountAPI. Este botón trae esos números viejos y los suma a las estadísticas nuevas. Se usa una sola vez: después queda bloqueado para no sumarlos dos veces.</p>
-      <button class="sec" id="btnStatsViejas" style="margin-top:10px">Traer visitas y descargas del contador viejo</button>
-      <div id="msgStats" class="mut" style="margin-top:8px;white-space:pre-wrap"></div>
     </div>
   </div>
 </div>
@@ -475,46 +463,6 @@ document.querySelectorAll(".slot").forEach(s=>{
 });
 $("subirCaps").onclick=()=>$("capsArchivos").click();
 $("capsArchivos").onchange=()=>{const fs=[...$("capsArchivos").files];$("capsArchivos").value="";if(fs.length)subirVarias(fs)};
-
-// =====================================================================
-// PEGADO INTELIGENTE DE ENLACES
-// =====================================================================
-// Dice a qué servidor pertenece un enlace (o null si no es Mega, Mediafire ni Drive).
-function servidorDe(u){
- let h="";try{h=new URL(u).hostname.toLowerCase()}catch(e){return null}
- if(/(^|\.)mega\.(nz|io|co\.nz)$/.test(h))return"Mega";
- if(/(^|\.)mediafire\.com$/.test(h))return"Mf";
- if(/(^|\.)(drive|docs)\.google\.com$/.test(h))return"Dr";
- return null;
-}
-// Mira el texto de una línea (sin los enlaces) y dice a qué sección se refiere: android, traduccion, pc o "" si no dice nada.
-function seccionDe(t){
- const l=norm(t);
- if(/android|apk|movil|celular|mobile/.test(l))return"An";
- if(/traduc|parche|patch|espanol|spanish|castellano/.test(l))return"Tr";
- if(/\bpc\b|windows|computadora|juego completo|ordenador/.test(l))return"Pc";
- return"";
-}
-// Reparte los enlaces de un texto: devuelve {Pc:{Mega,Mf,Dr},Tr:{...},An:{...}}. Si una línea no dice a qué sección va, usa la última sección nombrada (al principio, PC).
-function repartirEnlaces(texto){
- const res={Pc:{},Tr:{},An:{}};
- let actual="Pc";
- String(texto||"").split(/\r?\n/).forEach(lin=>{
-  const urls=lin.match(/https?:\/\/[^\s<>"')\]]+/gi)||[];
-  const sec=seccionDe(lin.replace(/https?:\/\/\S+/gi," "));
-  if(sec)actual=sec; // una palabra como Android o Traducción cambia la sección para esa línea y las siguientes
-  if(!urls.length)return;
-  urls.forEach(u=>{const s=servidorDe(u);if(s&&!res[actual][s])res[actual][s]=u});
- });
- return res;
-}
-$("btnPegado").onclick=()=>{
- const r=repartirEnlaces($("pegado").value);
- let n=0;
- ["Pc","Tr","An"].forEach(sec=>["Mega","Mf","Dr"].forEach(s=>{if(r[sec][s]){$("lnk"+sec+s).value=r[sec][s];n++}}));
- msg(n?`Se repartieron ${n} enlaces. Revisalos antes de guardar.`:"No encontré enlaces de Mega, Mediafire ni Drive en el texto.",n?"ok":"err");
- if(n)$("pegado").value="";
-};
 
 // =====================================================================
 // IMÁGENES AUTOMÁTICAS (HOTZONE18)
@@ -834,52 +782,6 @@ function textoStats(j){
  const s=stats[j.id]||{},n=x=>new Intl.NumberFormat("es-AR").format(x||0);
  return "Vistas: "+n(s.v)+" - Favoritos: "+n(s.f)+" - Descargas: "+n(s.d)+" - Puntaje en Populares: "+puntajePopular(j).toFixed(1).replace(".",",")+(puestos[j.id]?" (puesto #"+puestos[j.id]+")":"");
 }
-// --- Traer los números viejos de CountAPI (una sola vez) ---
-const CONTADOR_VIEJO="https://countapi.mileshilliard.com/api/v1";
-// Mismo nombre de contador que usaba el sitio: nomadavn_<juego>_visitas y nomadavn_<juego>_<pc|traduccion|android>[_t2, _t3...]
-const baseContador=slug=>"nomadavn_"+String(slug).replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"").slice(0,40);
-async function leerContadorViejo(clave){
- const r=await fetch(CONTADOR_VIEJO+"/get/"+clave,{cache:"no-store"});
- if(r.status===404)return 0; // ese contador nunca existió
- if(!r.ok)throw new Error("CountAPI respondió con el error "+r.status);
- const d=await r.json();
- return Number(d.value!==undefined?d.value:d.count!==undefined?d.count:d.data&&d.data.value)||0;
-}
-$("btnStatsViejas").onclick=async()=>{
- const m=$("msgStats"),btn=$("btnStatsViejas");m.className="mut";
- if(!F||!usuario){m.textContent="Primero iniciá sesión con tu cuenta de administrador.";m.className="err";return}
- btn.disabled=true;
- try{
-  const {fs,db}=F,marca=fs.doc(db,"meta","estadisticas");
-  const ya=await fs.getDoc(marca);
-  if(ya.exists()&&ya.data().countapiImportado){
-   const f=ya.data().countapiImportado.toDate?ya.data().countapiImportado.toDate().toLocaleString("es-AR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit",hour12:false}):"";
-   m.textContent="Los números viejos ya se trajeron"+(f?" el "+f:"")+". No se vuelve a hacer para no sumarlos dos veces.";m.className="ok";return;
-  }
-  if(!juegos.length)await cargarLista();
-  const porDoc={},fallos=[];let totV=0,totD=0;
-  for(let k=0;k<juegos.length;k+=4){
-   await Promise.all(juegos.slice(k,k+4).map(async j=>{
-    try{
-     const base=baseContador(j.id),temporadas=Array.isArray(j.temporadas)&&j.temporadas.length>1?j.temporadas.length:1;
-     const v=await leerContadorViejo(base+"_visitas");
-     const claves=[];for(let t=0;t<temporadas;t++)["pc","traduccion","android"].forEach(p=>claves.push(base+"_"+p+(t>0?"_t"+(t+1):"")));
-     const d=(await Promise.all(claves.map(leerContadorViejo))).reduce((a,b)=>a+b,0);
-     if(v||d){const x={};if(v)x.v=fs.increment(v);if(d)x.d=fs.increment(d);const f=recFraccion(j.id);(porDoc[f]||(porDoc[f]={}))[j.id]=x;totV+=v;totD+=d}
-    }catch(e){fallos.push(j.titulo+" -> "+e.message)}
-   }));
-   m.textContent="Leyendo el contador viejo: "+Math.min(k+4,juegos.length)+" de "+juegos.length+" juegos...";
-  }
-  // Si algún juego no se pudo leer, no se guarda nada (así se puede reintentar más tarde sin perder ni duplicar números).
-  if(fallos.length){m.textContent="No se guardó nada: CountAPI no respondió para "+fallos.length+" juego(s). Probá de nuevo más tarde.\n"+fallos.slice(0,5).join("\n");m.className="err";return}
-  for(const f in porDoc)await fs.setDoc(fs.doc(db,"estadisticas",f),{j:porDoc[f]},{merge:true});
-  await fs.setDoc(marca,{countapiImportado:fs.serverTimestamp(),visitas:totV,descargas:totD},{merge:true});
-  await cargarLista();
-  m.textContent="Listo: se sumaron "+totV+" visitas y "+totD+" descargas del contador viejo.";m.className="ok";
- }catch(e){console.error(e);m.textContent="No se pudo completar: "+(e.code==="permission-denied"?"las reglas de Firestore no te dan permiso (¿publicaste el firestore.rules nuevo?).":e.message);m.className="err"}
- finally{btn.disabled=false}
-};
-
 // Arranque
 renderCatsForm();
 iniciar();
