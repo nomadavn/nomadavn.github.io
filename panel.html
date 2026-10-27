@@ -570,8 +570,7 @@ function dibujarLista(){
   const a=document.createElement("div");a.className="acts";
   const b1=document.createElement("button");b1.className="sec";b1.textContent="Editar";b1.onclick=()=>editar(j);
   const b2=document.createElement("button");b2.className="del";b2.textContent="Eliminar";b2.onclick=()=>eliminar(j);
-  const b3=document.createElement("button");b3.className="sec";b3.textContent="Anunciar como nuevo";b3.title="Le pone la fecha de hoy: el sitio lo muestra como nuevo y se anuncia en Facebook, Discord, etc.";b3.onclick=()=>anunciarComoNuevo(j);
-  a.append(b1,b3,b2);f.append(t,a);l.append(f);puConectarFila(j, f);
+  a.append(b1,b2);f.append(t,a);l.append(f);puConectarFila(j, f);
  });
 }
 // Guarda el juego en Firestore (el identificador del documento es el nombre en minúsculas y con guiones).
@@ -599,7 +598,7 @@ $("guardar").onclick=async()=>{
    plataformas:[tvalidas.some(x=>hayLink(x.links.pc))?"PC":null,tvalidas.some(x=>hayLink(x.links.android))?"Android":null].filter(Boolean),
    portadaUrl:val("portada"),portadaAdulta:$("portadaAdulta").checked,capturas:[1,2,3,4,5].map(n=>val("cap"+n)).filter(Boolean),capturasAdultas:capsAdultas,
    links,peso:val("peso"),top,destacado:$("destacado").checked,
-   fechaCreacion:editandoId?(editandoFecha||fs.serverTimestamp()):fs.serverTimestamp(),
+   fechaCreacion:(editandoId&&!deJson)?(editandoFecha||fs.serverTimestamp()):fs.serverTimestamp(), // un juego que viene de juegos.json siempre sale como nuevo (fecha de este momento)
    fechaActualizacion:fs.serverTimestamp()
   };
   if(tvalidas.length>1)doc.temporadas=tvalidas.map((x,i)=>({nombre:(x.nombre||("Temporada "+(i+1))).slice(0,40),links:x.links}));
@@ -615,17 +614,6 @@ $("guardar").onclick=async()=>{
  }catch(e){console.error(e);msg("No se pudo guardar: "+(e.code==="permission-denied"?"las reglas de Firestore no te dan permiso (¿publicaste firestore.rules y entraste con el correo de administrador?).":e.message),"err")}
  b.disabled=false;
 };
-// Le pone la fecha de hoy a un juego ya publicado, para que cuente como nuevo (sitio, Facebook, Discord, Telegram y Bluesky).
-async function anunciarComoNuevo(j){
- if(!listaAbierta)return;
- if(!confirm('¿Anunciar "'+j.titulo+'" como nuevo? Va a aparecer primero en el sitio y se publica en Facebook como nuevo lanzamiento.'))return;
- try{
-  const fs=F.fs;
-  await fs.setDoc(fs.doc(F.db,"juegos",j.id),{fechaCreacion:fs.serverTimestamp(),fechaActualizacion:fs.serverTimestamp()},{merge:true});
-  await cargarLista();await tocarCatalogo();
-  msg('"'+j.titulo+'" ahora cuenta como nuevo. Facebook lo publica en la próxima revisión (cada 15 minutos, con 2 horas de separación entre un nuevo y otro).',"ok");
- }catch(e){msg("No se pudo: "+(e.code==="permission-denied"?"las reglas de Firestore no lo permiten.":e.message),"err")}
-}
 // Elimina un juego de Firestore (las imágenes en Pixhost no se pueden borrar desde el panel).
 async function eliminar(j){
  if(!listaAbierta)return;
