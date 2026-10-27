@@ -634,8 +634,8 @@ async function eliminar(j){
 // Convierte un juego del formato de juegos.json al formato de Firestore. "i" es la posición (los primeros de la lista son los más nuevos).
 function docDesdeJuegoJson(j,i,fs,ahora){
  const links={pc:j.pc&&j.pc.juego||{},traduccion:j.pc&&j.pc.traduccion||{},android:j.android||{}};
- const fecha=j.fecha?new Date(j.fecha+"T12:00:00Z"):null;
- const ts=fecha&&!isNaN(fecha)?fs.Timestamp.fromDate(fecha):fs.Timestamp.fromMillis(ahora-i*1000);
+ // Los juegos que se pasan desde juegos.json cuentan como nuevos: se publican con la fecha de hoy (así salen como "nuevo" en el sitio y en Facebook, Discord, etc.). Se conserva el orden del archivo.
+ const ts=fs.Timestamp.fromMillis(ahora-i*1000);
  const d={
   slug:slugTitulo(j.titulo),titulo:String(j.titulo||"").slice(0,200),sinopsis:String(j.sinopsis||"").slice(0,5000),categorias:Array.isArray(j.categorias)?j.categorias.slice(0,20):[],
   plataformas:[hayLink(links.pc)?"PC":null,hayLink(links.android)?"Android":null].filter(Boolean),
