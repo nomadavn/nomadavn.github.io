@@ -575,6 +575,7 @@ function dibujarLista(){
 }
 // Guarda el juego en Firestore (el identificador del documento es el nombre en minúsculas y con guiones).
 $("guardar").onclick=async()=>{
+ const deJson=editandoJson,puedeEscribir=deJson?await permisoEscritura():false;
  if(val("catNueva"))agregarCat(val("catNueva"));
  const titulo=val("titulo");
  if(!titulo){msg("Escribí el título del juego.","err");return}
@@ -602,17 +603,14 @@ $("guardar").onclick=async()=>{
   };
   if(tvalidas.length>1)doc.temporadas=tvalidas.map((x,i)=>({nombre:(x.nombre||("Temporada "+(i+1))).slice(0,40),links:x.links}));
   if($("marcarAct").checked)doc.actualizadoEn=fs.serverTimestamp();else if(editandoAct)doc.actualizadoEn=editandoAct;
-  // Si se está editando un juego de juegos.json, los cambios quedan guardados en esa lista y todavía no se publica.
-  if(editandoJson){
-   const e=editandoJson;migEditados.set(e,doc);limpiarForm();b.disabled=false;
-   msg("Cambios guardados. Marcá el juego en la sección de migración y tocá \"Pasar marcados\" para publicarlo.","ok");
-   dibujarMigracion();return;
-  }
   const lote=fs.writeBatch(db);
   lote.set(fs.doc(db,"juegos",id),doc);
   await lote.commit();
   await cargarLista();await tocarCatalogo();
-  limpiarForm();msg("Juego guardado. Ya está publicado en el sitio.","ok");
+  let extra="";
+  // Si el juego venía de juegos.json, se saca de la lista y del archivo.
+  if(deJson){migDatos=migDatos.filter(x=>x!==deJson);migMarcados.delete(deJson);migEditados.delete(deJson);extra=" "+await guardarJsonLocal(puedeEscribir);dibujarMigracion()}
+  limpiarForm();msg("Juego guardado. Ya está publicado en el sitio."+extra,"ok");
  }catch(e){console.error(e);msg("No se pudo guardar: "+(e.code==="permission-denied"?"las reglas de Firestore no te dan permiso (¿publicaste firestore.rules y entraste con el correo de administrador?).":e.message),"err")}
  b.disabled=false;
 };
@@ -689,7 +687,7 @@ function editarDeJson(e){
  const i=migDatos.indexOf(e),d=migEditados.get(e)||docDesdeJuegoJson(e,i,F.fs,Date.now());
  editar({id:d.slug,...d});
  editandoJson=e;
- $("formTitulo").textContent="Editando (de juegos.json, todavía sin publicar): "+d.titulo;$("guardar").textContent="Guardar cambios";
+ $("formTitulo").textContent="Editando (de juegos.json): "+d.titulo;$("guardar").textContent="Guardar juego y pasarlo a la página";
 }
 async function leerArchivoJson(file,handle){
  const m=$("msgMig");m.className="mut";
@@ -708,13 +706,28 @@ $("btnAbrirJson").onclick=async()=>{
 };
 $("migBuscar").oninput=()=>{migLimite=10;dibujarMigracion()};
 $("fileJson").onchange=e=>{const f=e.target.files[0];if(f)leerArchivoJson(f,null);e.target.value=""};
+// Pide permiso para guardar sobre el juegos.json abierto (hay que llamarlo apenas se toca un botón, mientras el clic sigue vigente).
+async function permisoEscritura(){
+ if(migArchivo&&migArchivo.requestPermission){try{return (await migArchivo.requestPermission({mode:"readwrite"}))==="granted"}catch{}}
+ return false;
+}
+// Guarda en tu PC el juegos.json sin los juegos que ya se pasaron: directo sobre el archivo si el navegador deja, o descargando uno nuevo.
+async function guardarJsonLocal(puedeEscribir){
+ const texto=JSON.stringify(migDatos,null,2);
+ try{
+  if(!puedeEscribir)throw new Error("sin permiso");
+  const w=await migArchivo.createWritable();await w.write(texto);await w.close();
+  return "Se borró de "+migNombre+".";
+ }catch{
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([texto],{type:"application/json"}));a.download=migNombre;document.body.append(a);a.click();a.remove();
+  return "Tu navegador no deja modificar el archivo directo: se descargó un "+migNombre+" nuevo, sin los juegos que pasaron. Reemplazá el que tenés en tu PC por ese.";
+ }
+}
 $("btnPasar").onclick=async()=>{
  const m=$("msgMig"),btn=$("btnPasar");m.className="mut";
  const sel=migDatos.filter(e=>migMarcados.has(e));
  if(!sel.length){m.textContent="Marcá al menos un juego.";return}
- // El permiso para guardar sobre el archivo hay que pedirlo ahora, mientras el clic sigue vigente.
- let puedeEscribir=false;
- if(migArchivo&&migArchivo.requestPermission){try{puedeEscribir=(await migArchivo.requestPermission({mode:"readwrite"}))==="granted"}catch{}}
+ const puedeEscribir=await permisoEscritura();
  btn.disabled=true;
  const fs=F.fs,ahora=Date.now(),hechos=[],fallos=[];
  for(let k=0;k<sel.length;k++){
@@ -729,15 +742,7 @@ $("btnPasar").onclick=async()=>{
  if(hechos.length){
   migDatos=migDatos.filter(e=>!hechos.includes(e));hechos.forEach(e=>{migMarcados.delete(e);migEditados.delete(e)});
   try{await cargarLista();await tocarCatalogo()}catch(err){fallos.push("Actualizar la lista -> "+(err.code||err.message))}
-  const texto=JSON.stringify(migDatos,null,2);
-  try{
-   if(!puedeEscribir)throw new Error("sin permiso");
-   const w=await migArchivo.createWritable();await w.write(texto);await w.close();
-   aviso="Se borraron del archivo "+migNombre+".";
-  }catch{
-   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([texto],{type:"application/json"}));a.download=migNombre;document.body.append(a);a.click();a.remove();
-   aviso="Tu navegador no deja modificar el archivo directo: se descargó un "+migNombre+" nuevo, sin los juegos que pasaron. Reemplazá el que tenés en tu PC por ese.";
-  }
+  aviso=await guardarJsonLocal(puedeEscribir);
  }
  m.textContent=(hechos.length?"Listo: se pasaron "+hechos.length+" juego"+(hechos.length>1?"s":"")+". "+aviso:"No se pasó ningún juego.")+(fallos.length?"\nNo se pudieron pasar "+fallos.length+" (quedan en el archivo):\n"+fallos.slice(0,8).join("\n"):"");
  m.className=fallos.length?"err":"ok";
