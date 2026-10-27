@@ -1,0 +1,215 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- Funciones auxiliares ----------
+
+    // Administradores: solo las cuentas cuyo correo esté en esta lista, y con el correo verificado (por ejemplo, entrando con Google).
+    // Para sumar otro administrador, agregá su correo en minúsculas, entre comillas y separado por coma,
+    // y también en la lista ADMIN_EMAILS de index.html.
+    function esAdmin() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in [
+          'braian.diaz.bdm@gmail.com'
+        ];
+    }
+
+    // ¿La persona que escribe está en la lista de bloqueados?
+    function bloqueado() {
+      return exists(/databases/$(database)/documents/bloqueados/$(request.auth.uid));
+    }
+
+    // Una respuesta solo puede colgar de un comentario principal del mismo juego (un nivel de hilo).
+    function padreValido(d) {
+      return d.padre == ''
+        || (exists(/databases/$(database)/documents/comentarios/$(d.padre))
+            && get(/databases/$(database)/documents/comentarios/$(d.padre)).data.juego == d.juego
+            && get(/databases/$(database)/documents/comentarios/$(d.padre)).data.padre == '');
+    }
+
+    // ---------- Valoraciones con estrellas ----------
+    // Todos las pueden leer. Cada sesión (anónima o con cuenta) deja UN voto por juego, de 1 a 5. Nadie puede borrar votos desde la página.
+    match /valoraciones/{id} {
+      allow read: if true;
+      allow create, update: if request.auth != null
+        && request.resource.data.keys().hasOnly(['juego', 'uid', 'estrellas', 'fecha'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.juego is string
+        && request.resource.data.juego.size() > 0
+        && request.resource.data.juego.size() <= 80
+        && id == request.resource.data.juego + '_' + request.auth.uid
+        && request.resource.data.estrellas is int
+        && request.resource.data.estrellas >= 1
+        && request.resource.data.estrellas <= 5
+        && request.resource.data.fecha == request.time;
+      allow delete: if false;
+    }
+
+    // ---------- Comentarios ----------
+    // Todos los pueden leer. Para escribir hace falta una cuenta con el correo verificado y no estar bloqueado.
+    // El campo esAdmin no se puede falsificar: tiene que coincidir con esAdmin().
+    // Nadie puede editar; solo el administrador puede eliminar.
+    match /comentarios/{id} {
+      allow read: if true;
+      allow create: if request.auth != null
+        && request.auth.token.email_verified == true
+        && !bloqueado()
+        && request.resource.data.keys().hasAll(['juego', 'texto', 'uid', 'nombre', 'padre', 'esAdmin', 'fecha'])
+        && request.resource.data.keys().hasOnly(['juego', 'texto', 'uid', 'nombre', 'padre', 'esAdmin', 'fecha'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.juego is string
+        && request.resource.data.juego.size() > 0
+        && request.resource.data.juego.size() <= 80
+        && request.resource.data.texto is string
+        && request.resource.data.texto.size() >= 1
+        && request.resource.data.texto.size() <= 1000
+        && request.resource.data.nombre is string
+        && request.resource.data.nombre.size() >= 1
+        && request.resource.data.nombre.size() <= 40
+        && request.resource.data.padre is string
+        && request.resource.data.padre.size() <= 40
+        && request.resource.data.esAdmin == esAdmin()
+        && request.resource.data.fecha == request.time
+        && padreValido(request.resource.data);
+      allow update: if false;
+      allow delete: if esAdmin();
+    }
+
+    // ---------- Personas bloqueadas ----------
+    // Cada persona puede ver si ella está bloqueada; el administrador ve la lista y bloquea o desbloquea.
+    match /bloqueados/{uid} {
+      allow get: if request.auth != null && (request.auth.uid == uid || esAdmin());
+      allow list: if esAdmin();
+      allow create, update: if esAdmin()
+        && request.resource.data.keys().hasOnly(['uid', 'nombre', 'fecha'])
+        && request.resource.data.uid == uid;
+      allow delete: if esAdmin();
+    }
+
+    // ---------- Favoritos sincronizados ----------
+    // Cada persona con cuenta (no anónima) lee y guarda SOLO su propia lista de favoritos (hasta 500 juegos).
+    match /favoritos/{uid} {
+      allow read, delete: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null
+        && request.auth.uid == uid
+        && request.auth.token.firebase.sign_in_provider != 'anonymous'
+        && request.resource.data.keys().hasOnly(['juegos', 'fecha'])
+        && request.resource.data.juegos is list
+        && request.resource.data.juegos.size() <= 500
+        && request.resource.data.fecha == request.time;
+    }
+
+    // Listas personales ("Por jugar", "Terminados") y cuántas temporadas vio cada persona de cada juego (para el aviso de "Nueva temporada").
+    // Cada persona con cuenta (no anónima) lee y guarda SOLO su propio documento.
+    match /listas/{uid} {
+      allow read, delete: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null
+        && request.auth.uid == uid
+        && request.auth.token.firebase.sign_in_provider != 'anonymous'
+        && request.resource.data.keys().hasOnly(['pendientes', 'terminados', 'vistas', 'fecha'])
+        && request.resource.data.pendientes is list
+        && request.resource.data.pendientes.size() <= 500
+        && request.resource.data.terminados is list
+        && request.resource.data.terminados.size() <= 500
+        && request.resource.data.vistas is map
+        && request.resource.data.fecha == request.time;
+    }
+
+    // ---------- Gustos de cada persona (recomendaciones "Para vos") ----------
+    // Cada persona con cuenta (no anónima) lee y guarda SOLO su propio documento. Sin cuenta, los gustos quedan en su navegador.
+    // e = puntos por etiqueta, p = puntos por plataforma, j = puntos por juego, t = última actualización (número).
+    match /intereses/{uid} {
+      allow read, delete: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null
+        && request.auth.uid == uid
+        && request.auth.token.firebase.sign_in_provider != 'anonymous'
+        && request.resource.data.keys().hasOnly(['e', 'p', 'j', 't', 'fecha'])
+        && request.resource.data.e is map
+        && request.resource.data.e.size() <= 200
+        && request.resource.data.p is map
+        && request.resource.data.p.keys().hasOnly(['pc', 'an'])
+        && request.resource.data.j is map
+        && request.resource.data.j.size() <= 300
+        && request.resource.data.t is number
+        && request.resource.data.fecha == request.time;
+    }
+
+    // ---------- Estadísticas públicas (vistas, favoritos y descargas de cada juego) ----------
+    // Las usa la sección "Populares". Están repartidas en 4 documentos: estadisticas/p0, p1, p2 y p3.
+    // Forma: {ultimo: "slug", j: {"slug": {v: vistas, f: favoritos, d: descargas}}}
+    // Todos las pueden leer. Cualquier visitante puede sumar, pero en cada escritura solo puede tocar UN contador de UN juego que exista:
+    // vistas y descargas solo +1; favoritos +1 o -1 (nunca por debajo de 0). El administrador puede corregir todo (lo usa el panel).
+    function cambio(ahora, antes, campo) {
+      return ahora.get(campo, 0) - antes.get(campo, 0);
+    }
+    function sumaValida(k) {
+      let viejoJ = resource == null ? {} : resource.data.get('j', {});
+      let antes = viejoJ.get(k, {});
+      let ahora = request.resource.data.j[k];
+      return request.resource.data.j.diff(viejoJ).affectedKeys().hasOnly([k])
+        && ahora is map
+        && ahora.keys().hasOnly(['v', 'f', 'd'])
+        && ahora.diff(antes).affectedKeys().size() == 1
+        && ahora.get('v', 0) is int && ahora.get('f', 0) is int && ahora.get('d', 0) is int
+        && cambio(ahora, antes, 'v') >= 0 && cambio(ahora, antes, 'v') <= 1
+        && cambio(ahora, antes, 'd') >= 0 && cambio(ahora, antes, 'd') <= 1
+        && cambio(ahora, antes, 'f') >= -1 && cambio(ahora, antes, 'f') <= 1
+        && ahora.get('f', 0) >= 0
+        && exists(/databases/$(database)/documents/juegos/$(k));
+    }
+    // ---------- Visitas al sitio ----------
+    // Un documento por día (por ejemplo 2026-10-27) con un solo campo "n": cuántas personas entraron ese día.
+    // Cualquiera puede sumar 1 al día (la página lo hace una vez por navegador por día); solo el administrador puede leer los números o borrarlos.
+    match /visitas/{dia} {
+      allow read, delete: if esAdmin();
+      allow create: if dia.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+        && request.resource.data.keys().hasOnly(['n'])
+        && request.resource.data.n == 1;
+      allow update: if dia.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+        && request.resource.data.keys().hasOnly(['n'])
+        && request.resource.data.n == resource.data.n + 1;
+    }
+
+    match /estadisticas/{doc} {
+      allow read: if true;
+      allow create, update: if doc in ['p0', 'p1', 'p2', 'p3']
+        && request.resource.data.keys().hasOnly(['ultimo', 'j'])
+        && request.resource.data.ultimo is string
+        && request.resource.data.ultimo.size() > 0
+        && request.resource.data.ultimo.size() <= 120
+        && request.resource.data.j is map
+        && sumaValida(request.resource.data.ultimo);
+      allow write: if esAdmin();
+    }
+
+    // ---------- Catálogo de juegos ----------
+    // Todos lo pueden leer (es el catálogo público). Solo los administradores crean, editan o eliminan juegos.
+    match /juegos/{id} {
+      allow read: if true;
+      allow create, update: if esAdmin()
+        && request.resource.data.titulo is string
+        && request.resource.data.titulo.size() > 0
+        && request.resource.data.titulo.size() <= 200
+        && request.resource.data.sinopsis is string
+        && request.resource.data.sinopsis.size() <= 5000
+        && request.resource.data.categorias is list
+        && request.resource.data.categorias.size() <= 20
+        && request.resource.data.capturas is list
+        && request.resource.data.capturas.size() <= 10
+        && request.resource.data.fechaCreacion is timestamp;
+      allow delete: if esAdmin();
+    }
+
+    // Número de versión del catálogo: el sitio lo lee primero para saber si tiene que volver a descargar los juegos.
+    match /meta/{doc} {
+      allow read: if true;
+      allow write: if esAdmin();
+    }
+
+    // Todo lo demás queda cerrado.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
