@@ -2587,6 +2587,19 @@ loadCatalog();
   start();
 })();
 
+/* ================= CONTADOR DE VISITAS ================= */
+// Suma 1 al día de hoy (hora de Argentina) la primera vez que cada navegador entra en el día. Se ven en el panel. No guarda datos de las personas: solo un número por día (Firestore, colección "visitas").
+(async()=>{
+  try{
+    const hoy=new Date(Date.now()-3*3600e3).toISOString().slice(0,10);
+    let ya="";try{ya=localStorage.getItem("nomada_visita_dia")||""}catch{}
+    if(ya===hoy)return;
+    const F=await database();
+    await F.fs.setDoc(F.fs.doc(F.db,"visitas",hoy),{n:F.fs.increment(1)},{merge:true});
+    try{localStorage.setItem("nomada_visita_dia",hoy)}catch{}
+  }catch(e){console.warn("Visitas:",e?.code||e)}
+})();
+
 /* Restaura la sesión existente sin crear usuarios anónimos al visitar. */
 authentication().catch(()=>{});
 /* ===== BUSCADOR EN VIVO (dropdown) ===== */

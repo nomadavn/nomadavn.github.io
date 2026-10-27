@@ -105,6 +105,16 @@ details{margin-top:12px;font-size:13px;color:#cdbfba}summary{cursor:pointer;colo
 
   <div id="panel" style="display:none">
 
+    <!-- VISITAS: cuántas personas entraron al sitio (una por navegador por día). Las cuenta index.html y se guardan en Firestore, colección "visitas". -->
+    <div class="box" id="boxVisitas">
+      <h2>Visitas al sitio</h2>
+      <div id="visitasNumeros" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:10px"></div>
+      <div id="visitasGrafico" style="display:flex;align-items:flex-end;gap:4px;height:90px;margin-top:16px"></div>
+      <div id="visitasEjes" class="mut" style="display:flex;justify-content:space-between;font-size:11px;margin-top:4px"></div>
+      <p class="mut" id="visitasNota" style="margin-top:10px;font-size:12px">Cuenta una visita por persona (por navegador) por día. Si alguien entra varias veces en el mismo día, cuenta una sola.</p>
+      <button class="sec" id="btnVisitas" type="button" style="margin-top:8px">Actualizar</button>
+    </div>
+
     <!-- 2. DATOS DEL JUEGO -->
     <div class="box" id="formJuego">
       <h2 id="formTitulo">1. Agregar un juego</h2>
@@ -281,9 +291,36 @@ function alCambiarSesion(u){
  $("panel").style.display=admin?"":"none";
  $("accesoEstado").textContent=!real?"Iniciá sesión con tu cuenta de administrador.":admin?"Sesión iniciada como administrador: "+u.email:"La cuenta "+u.email+" no tiene permisos de administrador.";
  if(admin)cargarLista().catch(e=>msg("No se pudo leer la lista: "+e.message,"err"));
+ if(admin)cargarVisitas();
 }
 $("btnGoogle").onclick=async()=>{try{await F.authM.signInWithPopup(F.auth,new F.authM.GoogleAuthProvider())}catch(e){$("accesoEstado").textContent="No se pudo iniciar sesión: "+(e.code||e.message)}};
 $("btnSalir").onclick=()=>F.authM.signOut(F.auth);
+
+// =====================================================================
+// VISITAS AL SITIO
+// =====================================================================
+// Lee la colección "visitas" (un documento por día, con el número de personas) y muestra hoy, ayer, los últimos 7 y 30 días, el total y un gráfico de 14 días.
+async function cargarVisitas(){
+ const num=$("visitasNumeros"),graf=$("visitasGrafico"),ejes=$("visitasEjes");
+ try{
+  const snap=await F.fs.getDocs(F.fs.collection(F.db,"visitas"));
+  const dia={};snap.forEach(d=>{dia[d.id]=+(d.data().n)||0});
+  const ar=n=>new Date(Date.now()-3*3600e3-n*864e5).toISOString().slice(0,10); // hora de Argentina
+  const suma=n=>{let t=0;for(let i=0;i<n;i++)t+=dia[ar(i)]||0;return t};
+  const total=Object.values(dia).reduce((a,b)=>a+b,0);
+  const tarj=(t,v)=>`<div style="background:#120d0f;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 12px"><div class="mut" style="font-size:11px">${t}</div><div style="font-size:22px;font-weight:800;margin-top:2px">${v.toLocaleString("es-AR")}</div></div>`;
+  num.innerHTML=tarj("Hoy",dia[ar(0)]||0)+tarj("Ayer",dia[ar(1)]||0)+tarj("Últimos 7 días",suma(7))+tarj("Últimos 30 días",suma(30))+tarj("Total",total);
+  const dias=Array.from({length:14},(_,i)=>ar(13-i)),max=Math.max(1,...dias.map(d=>dia[d]||0));
+  graf.innerHTML=dias.map(d=>`<div title="${d}: ${dia[d]||0}" style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%"><div style="height:${Math.max(3,Math.round(((dia[d]||0)/max)*100))}%;background:#f05a77;border-radius:3px 3px 0 0;opacity:${dia[d]?1:.25}"></div></div>`).join("");
+  ejes.innerHTML=`<span>${dias[0].slice(5)}</span><span>últimos 14 días</span><span>${dias[13].slice(5)}</span>`;
+  $("visitasNota").style.color="";
+ }catch(e){
+  console.warn("Visitas:",e);
+  num.innerHTML="";graf.innerHTML="";ejes.innerHTML="";
+  $("visitasNota").textContent="No se pudieron leer las visitas ("+(e.code||e.message)+"). Si es la primera vez, falta publicar las reglas nuevas en Firebase (archivo firestore.rules).";
+ }
+}
+$("btnVisitas").onclick=cargarVisitas;
 
 // =====================================================================
 // CATEGORÍAS (se crean solas: si escribís una nueva, queda disponible para todos los juegos)
