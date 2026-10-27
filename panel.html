@@ -216,12 +216,18 @@ details{margin-top:12px;font-size:13px;color:#cdbfba}summary{cursor:pointer;colo
       <div id="lista"></div>
     </div>
 
-    <!-- 4. MIGRACIÓN: se usa una sola vez para pasar los juegos de juegos.json a Firestore. -->
+    <!-- 4. MIGRACIÓN: abre el juegos.json de tu PC, se editan los juegos y se pasan a la página los que se marquen. -->
     <div class="box">
-      <h2>3. Migración única desde juegos.json</h2>
-      <p class="mut">Lee el archivo juegos.json de tu sitio y lo importa a Firestore con todo lo que trae: datos, enlaces, la portada y las capturas (con la dirección que tengan en el archivo, por ejemplo de Pixhost). Cada juego queda con su fecha de creación. Si lo repetís, los juegos con el mismo nombre se reemplazan, no se duplican.</p>
-      <button class="sec" id="btnMigrar" style="margin-top:10px">Importar juegos.json a Firestore</button>
-      <div id="msgMig" class="mut" style="margin-top:8px"></div>
+      <h2>3. Pasar juegos desde juegos.json</h2>
+      <p class="mut">Abrí el juegos.json que tenés en tu PC. Se ven solo los juegos que todavía no están en la página. Podés editar cada uno, marcar los que quieras y pasarlos. Los que se pasan bien se borran solos del archivo.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;align-items:center">
+        <button class="sec" id="btnAbrirJson" type="button">Abrir juegos.json</button>
+        <input type="file" id="fileJson" accept=".json,application/json" style="display:none">
+        <span class="mut" id="migArchivo"></span>
+      </div>
+      <div id="migLista" style="margin-top:12px"></div>
+      <div id="migAcciones" style="display:none;margin-top:12px"><button id="btnPasar" type="button">Pasar marcados</button> <span class="mut" id="migContador"></span></div>
+      <div id="msgMig" class="mut" style="margin-top:8px;white-space:pre-wrap"></div>
     </div>
 
     <!-- 5. ESTADÍSTICAS: vistas, favoritos y descargas de cada juego. Las usan las secciones "Populares" y "Para vos" del sitio. -->
@@ -261,7 +267,7 @@ async function llamarWorker(ruta,opc,ms){
 const FIREBASE_CONFIG={apiKey:"AIzaSyDBSieT2aJYXLOIJcInY5S6I9NnSVny29M",authDomain:"nomada-4a182.firebaseapp.com",projectId:"nomada-4a182",storageBucket:"nomada-4a182.firebasestorage.app",messagingSenderId:"475851285073",appId:"1:475851285073:web:b880e427175614daf28e70"};
 const FB="https://www.gstatic.com/firebasejs/10.12.2/";
 // F guarda las piezas de Firebase una vez cargadas. Estado del formulario:
-let F=null,usuario=null,juegos=[],editandoId="",editandoFecha=null,editandoAct=null,catsSel=[];
+let editandoJson=null,F=null,usuario=null,juegos=[],editandoId="",editandoFecha=null,editandoAct=null,catsSel=[];
 
 // Muestra un mensaje debajo del formulario (rojo = error, verde = todo bien).
 function msg(t,c){const m=$("msg");m.textContent=t;m.className=c||""}
@@ -561,7 +567,7 @@ function limpiarForm(){
  catsSel=[];renderCatsForm();
  $("destacado").checked=false;$("marcarAct").checked=false;
  $("portadaAdulta").checked=false;[1,2,3,4,5].forEach(n=>$("adulta"+n).checked=false);
- editandoId="";editandoFecha=null;editandoAct=null;
+ editandoId="";editandoFecha=null;editandoAct=null;editandoJson=null;
  $("formTitulo").textContent="1. Agregar un juego";$("guardar").textContent="Guardar juego";$("cancelar").style.display="none";
 }
 // Carga un juego existente en el formulario para modificarlo.
@@ -582,13 +588,34 @@ $("cancelar").onclick=()=>{limpiarForm();msg("")};
 // Avisa a la página principal que el catálogo cambió (así actualiza su copia guardada con una sola lectura).
 async function tocarCatalogo(){await F.fs.setDoc(F.fs.doc(F.db,"meta","catalogo"),{version:Date.now(),cantidad:juegos.length})}
 // Lee todos los juegos (los más nuevos primero) y dibuja la lista.
+// Contraseña para ver o borrar los juegos ya publicados (se guarda cifrada, no en texto; sirve para evitar borrados por error, no reemplaza el acceso de administrador de Firebase).
+const CLAVE_LISTA_HASH="28f25406df0b9f335b4b3b908cf763b9ee00ba38e7f8690c797bad8bca1dba6f";
+let listaAbierta=false;
+async function sha256(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+// Lee todos los juegos (los más nuevos primero) y dibuja la lista.
 async function cargarLista(){
  const snap=await F.fs.getDocs(F.fs.query(F.fs.collection(F.db,"juegos"),F.fs.orderBy("fechaCreacion","desc")));
  juegos=snap.docs.map(d=>({id:d.id,...d.data()}));
  await cargarStats();
  $("cuenta").textContent=juegos.length;
+ dibujarLista();
+ renderCatsForm();
+ if(typeof dibujarMigracion==="function")dibujarMigracion();
+}
+// Dibuja la lista de juegos publicados, o el pedido de contraseña si todavía no se desbloqueó.
+function dibujarLista(){
  const l=$("lista");l.innerHTML="";
- if(!juegos.length){l.innerHTML='<p class="mut">Todavía no hay juegos publicados. Agregá el primero arriba o usá la migración.</p>';renderCatsForm();return}
+ if(!listaAbierta){
+  l.innerHTML='<p class="mut">Los juegos publicados están ocultos. Escribí la contraseña para verlos, editarlos o borrarlos.</p><div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><input type="password" id="claveLista" placeholder="Contraseña" autocomplete="off" style="max-width:220px"><button class="sec" id="btnClaveLista" type="button">Ver juegos</button></div><div id="msgClave" class="mut" style="margin-top:6px"></div>';
+  const ir=async()=>{
+   let ok=false;try{ok=(await sha256($("claveLista").value))===CLAVE_LISTA_HASH}catch{}
+   if(ok){listaAbierta=true;dibujarLista()}else{$("msgClave").textContent="Contraseña incorrecta.";$("msgClave").className="err"}
+  };
+  $("btnClaveLista").onclick=ir;$("claveLista").onkeydown=e=>{if(e.key==="Enter")ir()};
+  return;
+ }
+ const ocultar=document.createElement("button");ocultar.className="sec";ocultar.type="button";ocultar.textContent="Ocultar lista";ocultar.style.marginBottom="10px";ocultar.onclick=()=>{listaAbierta=false;dibujarLista()};l.append(ocultar);
+ if(!juegos.length){const p=document.createElement("p");p.className="mut";p.textContent="Todavía no hay juegos publicados. Agregá el primero arriba o usá la migración.";l.append(p);return}
  juegos.forEach(j=>{
   const f=document.createElement("div");f.className="fila";
   const t=document.createElement("div");
@@ -601,7 +628,6 @@ async function cargarLista(){
   const b2=document.createElement("button");b2.className="del";b2.textContent="Eliminar";b2.onclick=()=>eliminar(j);
   a.append(b1,b2);f.append(t,a);l.append(f);puConectarFila(j, f);
  });
- renderCatsForm();
 }
 // Guarda el juego en Firestore (el identificador del documento es el nombre en minúsculas y con guiones).
 $("guardar").onclick=async()=>{
@@ -632,6 +658,12 @@ $("guardar").onclick=async()=>{
   };
   if(tvalidas.length>1)doc.temporadas=tvalidas.map((x,i)=>({nombre:(x.nombre||("Temporada "+(i+1))).slice(0,40),links:x.links}));
   if($("marcarAct").checked)doc.actualizadoEn=fs.serverTimestamp();else if(editandoAct)doc.actualizadoEn=editandoAct;
+  // Si se está editando un juego de juegos.json, los cambios quedan guardados en esa lista y todavía no se publica.
+  if(editandoJson){
+   const e=editandoJson;migEditados.set(e,doc);limpiarForm();b.disabled=false;
+   msg("Cambios guardados. Marcá el juego en la sección de migración y tocá \"Pasar marcados\" para publicarlo.","ok");
+   dibujarMigracion();return;
+  }
   const lote=fs.writeBatch(db);
   lote.set(fs.doc(db,"juegos",id),doc);
   await lote.commit();
@@ -642,6 +674,7 @@ $("guardar").onclick=async()=>{
 };
 // Elimina un juego de Firestore (las imágenes en Pixhost no se pueden borrar desde el panel).
 async function eliminar(j){
+ if(!listaAbierta)return;
  if(!confirm('¿Eliminar "'+j.titulo+'"? Esto lo saca del sitio.'))return;
  try{
   await F.fs.deleteDoc(F.fs.doc(F.db,"juegos",j.id));
@@ -670,50 +703,92 @@ function docDesdeJuegoJson(j,i,fs,ahora){
  if(j.actualizado){const a=new Date(j.actualizado+"T12:00:00Z");if(!isNaN(a))d.actualizadoEn=fs.Timestamp.fromDate(a)}
  return d;
 }
-$("btnMigrar").onclick=async()=>{
- const m=$("msgMig"),btn=$("btnMigrar");m.className="mut";m.style.whiteSpace="pre-wrap";
- try{
-  const r=await fetch("juegos.json?v="+Date.now(),{cache:"no-store"});
-  if(!r.ok)throw new Error("No pude leer juegos.json (error "+r.status+").");
-  const data=await r.json();
-  if(!Array.isArray(data)||!data.length){m.textContent="juegos.json está vacío: no hay nada para importar.";return}
-  btn.disabled=true;
-  const ahora=Date.now(),fs=F.fs;
-  let hechos=0;const fallos=[];
-  // Se sube de a un juego: si alguno falla, se sabe cuál es y por qué, y los demás igual se importan.
-  for(let k=0;k<data.length;k++){
-   const d=docDesdeJuegoJson(data[k],k,fs,ahora);
-   if(!d.slug){fallos.push((data[k].titulo||"(sin título)")+" -> no tiene un nombre válido");continue}
-   try{await fs.setDoc(fs.doc(F.db,"juegos",d.slug),d);hechos++}
-   catch(e){console.error(d.titulo,e);fallos.push(d.titulo+" -> "+(e.code||e.message))}
-   m.textContent="Importando "+(k+1)+" de "+data.length+"...";
-   // Si los primeros fallan todos, es un problema general (sesión o reglas): no tiene sentido seguir.
-   if(hechos===0&&fallos.length>=5){
-    m.textContent="Se detuvo: los primeros juegos fueron rechazados.\n"+fallos.slice(0,5).join("\n")+"\nSi dice permission-denied: cerrá sesión, entrá de nuevo con Google y probá otra vez. Si sigue igual, hay que revisar las reglas de Firestore.";
-    m.className="err";btn.disabled=false;return;
-   }
-  }
-  try{await cargarLista();await tocarCatalogo()}catch(e){fallos.push("Actualizar la lista -> "+(e.code||e.message))}
-  if(fallos.length)console.table(fallos);
-  m.textContent="Listo: se importaron "+hechos+" juegos."+(fallos.length?"\nNo se pudieron importar "+fallos.length+":\n"+fallos.slice(0,8).join("\n")+(fallos.length>8?"\n... (el resto está en la consola, F12)":""):"");
-  m.className=fallos.length?"err":"ok";
-  // Si se importó todo sin errores, se borra juegos.json de GitHub sin preguntar (queda en el historial de GitHub por si hace falta recuperarlo).
-  if(!fallos.length&&hechos>0)await ofrecerBorrarJson(m);
- }catch(e){console.error(e);m.textContent="No se pudo importar: "+e.message;m.className="err"}
- btn.disabled=false;
-};
-// Pide al Worker que borre juegos.json de GitHub (que tiene el token de GitHub guardado; el panel no lo ve).
-async function ofrecerBorrarJson(m){
- const base=m.textContent;
- m.textContent=base+"\nBorrando juegos.json de GitHub...";
- try{
-  const r=await llamarWorker("/borrar-juegos-json",{method:"POST"},60000);
-  const t=(await r.text()).trim();
-  if(r.status===404||r.status===405)throw new Error("Tu Worker todavía no tiene esta función: pegá la última versión de notificaciones-worker.js en Cloudflare y tocá Deploy.");
-  if(!r.ok)throw new Error(t||("error "+r.status));
-  m.textContent=base+"\n"+t.replace(/^ok:\s*/,"");m.className="ok";
- }catch(e){m.textContent=base+"\nNo se pudo borrar juegos.json de GitHub: "+e.message;m.className="err"}
+// ---- Lista de juegos.json abierta desde la PC ----
+const migEditados=new Map(); // juego de juegos.json -> versión editada (todavía sin publicar)
+const migMarcados=new Set();
+let migDatos=[],migArchivo=null,migNombre="juegos.json";
+function migPendientes(){const ya=new Set(juegos.map(j=>j.id));return migDatos.filter(e=>{const sl=slugTitulo(e&&e.titulo);return sl&&!ya.has(sl)})}
+function dibujarMigracion(){
+ const l=$("migLista");if(!l)return;l.innerHTML="";
+ if(!migDatos.length){$("migAcciones").style.display="none";return}
+ const pend=migPendientes(),ocultos=migDatos.length-pend.length;
+ $("migArchivo").textContent=migNombre+": "+pend.length+" por pasar"+(ocultos?" ("+ocultos+" ya están en la página y no se muestran)":"");
+ if(!pend.length){l.innerHTML='<p class="mut">No queda ningún juego por pasar.</p>';$("migAcciones").style.display="none";return}
+ pend.forEach(e=>{
+  const f=document.createElement("div");f.className="fila";
+  const cb=document.createElement("input");cb.type="checkbox";cb.checked=migMarcados.has(e);cb.style.cssText="width:20px;height:20px;flex:none;margin-right:10px";
+  cb.onchange=()=>{cb.checked?migMarcados.add(e):migMarcados.delete(e);contarMarcados()};
+  const t=document.createElement("div");t.style.flex="1";
+  t.innerHTML='<div style="font-size:14px;font-weight:600"></div><div class="mut"></div>';
+  const d=migEditados.get(e);
+  t.firstChild.textContent=(d?d.titulo:e.titulo)+(d?" (editado)":"");
+  t.lastChild.textContent=((d?d.categorias:e.categorias)||[]).join(", ");
+  const a=document.createElement("div");a.className="acts";
+  const b1=document.createElement("button");b1.className="sec";b1.type="button";b1.textContent="Editar";b1.onclick=()=>editarDeJson(e);
+  a.append(b1);
+  const w=document.createElement("label");w.style.cssText="display:flex;align-items:center;flex:1;cursor:pointer";w.append(cb,t);
+  f.append(w,a);l.append(f);
+ });
+ $("migAcciones").style.display="";contarMarcados();
 }
+function contarMarcados(){const n=[...migMarcados].filter(e=>migDatos.includes(e)).length;$("migContador").textContent=n?n+" marcado"+(n>1?"s":""):"Marcá los juegos que quieras pasar."}
+function editarDeJson(e){
+ const i=migDatos.indexOf(e),d=migEditados.get(e)||docDesdeJuegoJson(e,i,F.fs,Date.now());
+ editar({id:d.slug,...d});
+ editandoJson=e;
+ $("formTitulo").textContent="Editando (de juegos.json, todavía sin publicar): "+d.titulo;$("guardar").textContent="Guardar cambios";
+}
+async function leerArchivoJson(file,handle){
+ const m=$("msgMig");m.className="mut";
+ try{
+  const data=JSON.parse(await file.text());
+  if(!Array.isArray(data))throw new Error("el archivo no es una lista de juegos.");
+  migDatos=data;migArchivo=handle||null;migNombre=file.name||"juegos.json";migMarcados.clear();migEditados.clear();
+  m.textContent="";if(!juegos.length)await cargarLista();dibujarMigracion();
+ }catch(e){m.textContent="No se pudo leer el archivo: "+e.message;m.className="err"}
+}
+$("btnAbrirJson").onclick=async()=>{
+ if(window.showOpenFilePicker){
+  try{const [h]=await showOpenFilePicker({types:[{description:"juegos.json",accept:{"application/json":[".json"]}}]});await leerArchivoJson(await h.getFile(),h)}
+  catch(e){if(e.name!=="AbortError")$("fileJson").click()}
+ }else $("fileJson").click();
+};
+$("fileJson").onchange=e=>{const f=e.target.files[0];if(f)leerArchivoJson(f,null);e.target.value=""};
+$("btnPasar").onclick=async()=>{
+ const m=$("msgMig"),btn=$("btnPasar");m.className="mut";
+ const sel=migDatos.filter(e=>migMarcados.has(e));
+ if(!sel.length){m.textContent="Marcá al menos un juego.";return}
+ // El permiso para guardar sobre el archivo hay que pedirlo ahora, mientras el clic sigue vigente.
+ let puedeEscribir=false;
+ if(migArchivo&&migArchivo.requestPermission){try{puedeEscribir=(await migArchivo.requestPermission({mode:"readwrite"}))==="granted"}catch{}}
+ btn.disabled=true;
+ const fs=F.fs,ahora=Date.now(),hechos=[],fallos=[];
+ for(let k=0;k<sel.length;k++){
+  const e=sel[k];m.textContent="Pasando "+(k+1)+" de "+sel.length+"...";
+  const d=migEditados.get(e)||docDesdeJuegoJson(e,migDatos.indexOf(e),fs,ahora);
+  if(!d.slug){fallos.push((e.titulo||"(sin título)")+" -> no tiene un nombre válido");continue}
+  try{await fs.setDoc(fs.doc(F.db,"juegos",d.slug),d);hechos.push(e)}
+  catch(err){console.error(d.titulo,err);fallos.push(d.titulo+" -> "+(err.code||err.message))}
+ }
+ // Los que se pasaron bien se sacan de la lista y del archivo; los que fallaron se quedan.
+ let aviso="";
+ if(hechos.length){
+  migDatos=migDatos.filter(e=>!hechos.includes(e));hechos.forEach(e=>{migMarcados.delete(e);migEditados.delete(e)});
+  try{await cargarLista();await tocarCatalogo()}catch(err){fallos.push("Actualizar la lista -> "+(err.code||err.message))}
+  const texto=JSON.stringify(migDatos,null,2);
+  try{
+   if(!puedeEscribir)throw new Error("sin permiso");
+   const w=await migArchivo.createWritable();await w.write(texto);await w.close();
+   aviso="Se borraron del archivo "+migNombre+".";
+  }catch{
+   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([texto],{type:"application/json"}));a.download=migNombre;document.body.append(a);a.click();a.remove();
+   aviso="Tu navegador no deja modificar el archivo directo: se descargó un "+migNombre+" nuevo, sin los juegos que pasaron. Reemplazá el que tenés en tu PC por ese.";
+  }
+ }
+ m.textContent=(hechos.length?"Listo: se pasaron "+hechos.length+" juego"+(hechos.length>1?"s":"")+". "+aviso:"No se pasó ningún juego.")+(fallos.length?"\nNo se pudieron pasar "+fallos.length+" (quedan en el archivo):\n"+fallos.slice(0,8).join("\n"):"");
+ m.className=fallos.length?"err":"ok";
+ dibujarMigracion();btn.disabled=false;
+};
 
 // =====================================================================
 // ESTADÍSTICAS (las usan "Populares" y "Para vos" en el sitio)
