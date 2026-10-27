@@ -225,6 +225,7 @@ details{margin-top:12px;font-size:13px;color:#cdbfba}summary{cursor:pointer;colo
         <input type="file" id="fileJson" accept=".json,application/json" style="display:none">
         <span class="mut" id="migArchivo"></span>
       </div>
+      <input type="text" id="migBuscar" placeholder="Buscar un juego por nombre..." style="display:none;margin-top:12px;max-width:340px">
       <div id="migLista" style="margin-top:12px"></div>
       <div id="migAcciones" style="display:none;margin-top:12px"><button id="btnPasar" type="button">Pasar marcados</button> <span class="mut" id="migContador"></span></div>
       <div id="msgMig" class="mut" style="margin-top:8px;white-space:pre-wrap"></div>
@@ -706,15 +707,19 @@ function docDesdeJuegoJson(j,i,fs,ahora){
 // ---- Lista de juegos.json abierta desde la PC ----
 const migEditados=new Map(); // juego de juegos.json -> versión editada (todavía sin publicar)
 const migMarcados=new Set();
-let migDatos=[],migArchivo=null,migNombre="juegos.json";
+let migLimite=10,migDatos=[],migArchivo=null,migNombre="juegos.json";
 function migPendientes(){const ya=new Set(juegos.map(j=>j.id));return migDatos.filter(e=>{const sl=slugTitulo(e&&e.titulo);return sl&&!ya.has(sl)})}
 function dibujarMigracion(){
  const l=$("migLista");if(!l)return;l.innerHTML="";
  if(!migDatos.length){$("migAcciones").style.display="none";return}
  const pend=migPendientes(),ocultos=migDatos.length-pend.length;
  $("migArchivo").textContent=migNombre+": "+pend.length+" por pasar"+(ocultos?" ("+ocultos+" ya están en la página y no se muestran)":"");
- if(!pend.length){l.innerHTML='<p class="mut">No queda ningún juego por pasar.</p>';$("migAcciones").style.display="none";return}
- pend.forEach(e=>{
+ if(!pend.length){l.innerHTML='<p class="mut">No queda ningún juego por pasar.</p>';$("migAcciones").style.display="none";$("migBuscar").style.display="none";return}
+ $("migBuscar").style.display="";
+ const q=($("migBuscar").value||"").trim().toLowerCase();
+ const vis=q?pend.filter(e=>String(e.titulo||"").toLowerCase().includes(q)):pend;
+ if(!vis.length)l.innerHTML='<p class="mut">Ningún juego coincide con la búsqueda.</p>';
+ vis.slice(0,migLimite).forEach(e=>{
   const f=document.createElement("div");f.className="fila";
   const cb=document.createElement("input");cb.type="checkbox";cb.checked=migMarcados.has(e);cb.style.cssText="width:20px;height:20px;flex:none;margin-right:10px";
   cb.onchange=()=>{cb.checked?migMarcados.add(e):migMarcados.delete(e);contarMarcados()};
@@ -729,6 +734,11 @@ function dibujarMigracion(){
   const w=document.createElement("label");w.style.cssText="display:flex;align-items:center;flex:1;cursor:pointer";w.append(cb,t);
   f.append(w,a);l.append(f);
  });
+ if(vis.length>migLimite){
+  const mas=document.createElement("button");mas.className="sec";mas.type="button";mas.style.marginTop="10px";
+  mas.textContent="Ver 10 más (mostrando "+migLimite+" de "+vis.length+")";
+  mas.onclick=()=>{migLimite+=10;dibujarMigracion()};l.append(mas);
+ }
  $("migAcciones").style.display="";contarMarcados();
 }
 function contarMarcados(){const n=[...migMarcados].filter(e=>migDatos.includes(e)).length;$("migContador").textContent=n?n+" marcado"+(n>1?"s":""):"Marcá los juegos que quieras pasar."}
@@ -743,7 +753,7 @@ async function leerArchivoJson(file,handle){
  try{
   const data=JSON.parse(await file.text());
   if(!Array.isArray(data))throw new Error("el archivo no es una lista de juegos.");
-  migDatos=data;migArchivo=handle||null;migNombre=file.name||"juegos.json";migMarcados.clear();migEditados.clear();
+  migDatos=data;migArchivo=handle||null;migNombre=file.name||"juegos.json";migMarcados.clear();migEditados.clear();migLimite=10;
   m.textContent="";if(!juegos.length)await cargarLista();dibujarMigracion();
  }catch(e){m.textContent="No se pudo leer el archivo: "+e.message;m.className="err"}
 }
@@ -753,6 +763,7 @@ $("btnAbrirJson").onclick=async()=>{
   catch(e){if(e.name!=="AbortError")$("fileJson").click()}
  }else $("fileJson").click();
 };
+$("migBuscar").oninput=()=>{migLimite=10;dibujarMigracion()};
 $("fileJson").onchange=e=>{const f=e.target.files[0];if(f)leerArchivoJson(f,null);e.target.value=""};
 $("btnPasar").onclick=async()=>{
  const m=$("msgMig"),btn=$("btnPasar");m.className="mut";
