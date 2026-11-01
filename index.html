@@ -208,6 +208,12 @@ select{
 .grid.list .card-dl{width:auto;padding:7px 16px}
 /* Buscador grande de la portada */
 .header-actions{margin-left:auto}
+/* Tu biblioteca (Favoritos / Por jugar / Terminados): solo aparece cuando hay algo guardado. */
+.lib-filters{display:contents}
+.lib-filters[hidden]{display:none}
+/* La cantidad de juegos de cada etiqueta se ve solo al pasar el mouse o al elegirla. */
+.chip .n{display:none;opacity:.55;margin-left:6px}
+.chip:hover .n,.chip:focus-visible .n,.chip[aria-pressed="true"] .n{display:inline}
 .quick{position:relative;margin-top:18px;max-width:560px}
 .quick input{width:100%;height:54px;padding:0 18px 0 50px;border-radius:16px;background:var(--surface);border:1px solid #f05a7766;color:var(--text);font-size:1rem;box-shadow:0 10px 30px #0003}
 .quick input:focus{outline:2px solid var(--accent2);outline-offset:2px}
@@ -1065,9 +1071,11 @@ body #heroOpen:is(:disabled,[aria-disabled="true"]) {
           <button type="button" data-platform="pc" aria-pressed="false">PC</button>
           <button type="button" data-platform="android" aria-pressed="false">Android</button>
         </div>
-        <button class="btn small" id="favoritesFilter" type="button" aria-pressed="false">♡ Favoritos <span id="favoriteCount">0</span></button>
-        <button class="btn small" id="todoFilter" type="button" aria-pressed="false">Por jugar <span id="todoCount">0</span></button>
-        <button class="btn small" id="doneFilter" type="button" aria-pressed="false">Terminados <span id="doneCount">0</span></button>
+        <div class="lib-filters" id="libFilters" hidden>
+          <button class="btn small" id="favoritesFilter" type="button" aria-pressed="false">♡ Favoritos <span id="favoriteCount">0</span></button>
+          <button class="btn small" id="todoFilter" type="button" aria-pressed="false">Por jugar <span id="todoCount">0</span></button>
+          <button class="btn small" id="doneFilter" type="button" aria-pressed="false">Terminados <span id="doneCount">0</span></button>
+        </div>
         <div class="filter-end">
           <label class="sr" for="sort">Orden del catálogo</label>
           <select id="sort">
@@ -1445,8 +1453,8 @@ function categoryButtons(){
   const hidden=all.length-shown.length;
   $("categories").classList.toggle("open",catsOpen);
   $("categories").innerHTML=`<button class="chip" type="button" data-category="" aria-pressed="${!category}">Todas las etiquetas</button>`+
-    shown.map(([k,v])=>`<button class="chip" type="button" data-category="${esc(k)}" aria-pressed="${category===k}">${esc(v.name)} <span style="opacity:.5;margin-left:6px">${v.count}</span></button>`).join("")+
-    (all.length>3?`<button class="chip" type="button" data-morecats="1" aria-expanded="${catsOpen}">${catsOpen?"Ver menos -":`Ver más + (${hidden})`}</button>`:"");
+    shown.map(([k,v])=>`<button class="chip" type="button" data-category="${esc(k)}" aria-pressed="${category===k}">${esc(v.name)} <span class="n">${v.count}</span></button>`).join("")+
+    (all.length>3?`<button class="chip" type="button" data-morecats="1" aria-expanded="${catsOpen}">${catsOpen?"Ver menos -":"Ver más +"}</button>`:"");
 }
 function freshness(g){
   const now=Date.now(),created=Date.parse(g.created),updated=Date.parse(g.updated);
@@ -1504,6 +1512,7 @@ function render(){
   $("favoriteCount").textContent=games.filter(g=>favorites.has(g.slug)).length;
   $("todoCount").textContent=games.filter(g=>lists[g.slug]==="p").length;
   $("doneCount").textContent=games.filter(g=>lists[g.slug]==="t").length;
+  $("libFilters").hidden=!(favorites.size||Object.keys(lists).length||favoritesOnly||libFilter);
   [["todoFilter","p"],["doneFilter","t"]].forEach(([id,k])=>{$(id).setAttribute("aria-pressed",String(libFilter===k));$(id).classList.toggle("primary",libFilter===k)});
   const from=filtered.length?(page-1)*PAGE_SIZE+1:0,to=Math.min(page*PAGE_SIZE,filtered.length);
   $("pageInfo").textContent=filtered.length?`Mostrando ${from}–${to} de ${filtered.length} · Página ${page} de ${pages}`:"";
