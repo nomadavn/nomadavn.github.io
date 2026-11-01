@@ -315,6 +315,12 @@ dialog[open]{animation:enter .2s ease}
 .details dd{margin:4px 0 0;font-size:.78rem;font-weight:700}
 .downloads{margin-top:26px;padding:20px;border:1px solid var(--line);border-radius:18px;background:#100d1280}
 .downloads h3{font-size:1rem}
+.season-seg{max-width:100%;overflow-x:auto;flex-wrap:wrap}
+.season-seg button{white-space:nowrap}
+.dl-sticky{position:sticky;bottom:0;z-index:40;margin:18px -30px -32px;padding:12px 30px;background:linear-gradient(0deg,#100d12 60%,#100d1200);display:flex;justify-content:center;transition:opacity .2s}
+.dl-sticky.off{opacity:0;pointer-events:none}
+.dl-sticky .btn{width:100%;max-width:420px;min-height:46px;font-size:.92rem}
+.download-note{color:var(--muted);font-size:.8rem}
 .download-head{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px}
 .download-section+.download-section{margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
 .download-section h4{font-size:.8rem;margin:0 0 10px}
@@ -404,7 +410,7 @@ textarea.field{resize:vertical;min-height:100px}
   .details div+div{border-top:0}.details div{border-bottom:1px solid var(--line)}
   .modal-cover{height:220px}
   .modal-heading{padding-inline:22px}
-  .modal-body{padding:22px}
+  .modal-body{padding:22px}.dl-sticky{margin-inline:-22px;padding-inline:22px;margin-bottom:-22px}
   .section{margin-top:22px}.rail{grid-auto-columns:148px;gap:12px}
   .section-head p{display:none}
   .rail .card-dl{display:none}.rail .card-body{padding:10px 12px}.rail .card-meta{margin-top:6px}
@@ -417,7 +423,7 @@ textarea.field{resize:vertical;min-height:100px}
   .genres span{font-size:.6rem}
   .card-tags .age{display:none}
   .segment button{padding-inline:12px}
-  .modal-body{padding:18px}.modal-heading{padding-inline:18px}
+  .modal-body{padding:18px}.modal-heading{padding-inline:18px}.dl-sticky{margin-inline:-18px;padding-inline:18px;margin-bottom:-18px}
   .download-buttons{flex-direction:column}
   .footer-bottom{flex-direction:column;gap:5px}
 }
@@ -1186,10 +1192,15 @@ body #heroOpen:is(:disabled,[aria-disabled="true"]) {
       <aside aria-label="Ficha del juego"><dl class="details" id="gameDetails"></dl></aside>
     </div>
 
+    <section class="section" id="relatedSection" hidden style="margin-top:26px;margin-bottom:6px" aria-labelledby="relatedTitle">
+      <div class="section-head"><div><h3 id="relatedTitle" style="font-size:1rem">Más como este</h3></div></div>
+      <div class="rail" id="related"></div>
+    </section>
+
     <section class="downloads" aria-labelledby="downloadTitle">
       <div class="download-head">
         <h3 id="downloadTitle">Descargas</h3>
-        <label id="seasonLabel" hidden><span class="sr">Temporada</span><select id="season"></select></label>
+        <div id="seasonLabel" hidden style="flex-basis:100%"><div class="segment season-seg" id="seasonSeg" role="group" aria-label="Temporada"></div><select id="season" hidden aria-hidden="true"></select></div>
       </div>
       <div class="segment" role="group" aria-label="Plataforma de descarga" style="width:fit-content;margin-bottom:18px">
         <button id="downloadPC" type="button" aria-pressed="true">PC (Windows)</button>
@@ -1205,10 +1216,6 @@ body #heroOpen:is(:disabled,[aria-disabled="true"]) {
       <p class="status" id="ratingStatus" role="status"></p>
     </section>
 
-    <section class="section" id="relatedSection" hidden style="margin-top:26px" aria-labelledby="relatedTitle">
-      <div class="section-head"><div><h3 id="relatedTitle" style="font-size:1rem">Más como este</h3></div></div>
-      <div class="rail" id="related"></div>
-    </section>
 
     <div class="support">
       <div><strong>Gracias por jugar.</strong><p>Si te gustó la traducción y querés que siga compartiendo más historias, podés apoyarme acá.</p></div>
@@ -1217,7 +1224,7 @@ body #heroOpen:is(:disabled,[aria-disabled="true"]) {
 
     <section class="comments" aria-labelledby="commentsTitle">
       <h3 id="commentsTitle" style="font-size:.95rem">Conversación de la comunidad</h3>
-      <button class="btn small" id="loadComments" type="button" style="margin-top:14px">Ver comentarios</button>
+      <button class="btn small" id="loadComments" type="button" style="margin-top:14px">Ver comentarios <span id="commentCount"></span></button>
       <div id="commentArea" hidden>
         <div id="commentAccount" style="margin:16px 0"></div>
         <form id="commentForm" hidden>
@@ -1229,6 +1236,7 @@ body #heroOpen:is(:disabled,[aria-disabled="true"]) {
         <div id="commentList"></div>
       </div>
     </section>
+    <div class="dl-sticky" id="dlSticky"><button class="btn primary" id="dlJump" type="button">Descargar</button></div>
   </div>
 </dialog>
 
@@ -2018,6 +2026,7 @@ function fillGame(reset){
   $("season").innerHTML=g.seasons.map((s,i)=>`<option value="${i}">${esc(s.name)}</option>`).join("");
   $("season").value=seasonIndex;
   $("seasonLabel").hidden=g.seasons.length<2;
+  drawSeasonSeg();
   updateFavoriteButton();drawDownloads();drawGallery();
 }
 let modalCatsOpen=false;
@@ -2104,8 +2113,8 @@ function drawDownloads(){
   $("downloadAndroid").setAttribute("aria-pressed",String(downloadPlatform==="android"));
   let html="";
   if(downloadPlatform==="pc"){
-    html=downloadBlock("Juego para PC",s.pc,"Descargá la versión compatible con esta traducción.",true)+
-      downloadBlock("Traducción al español",s.translation,"Antes de reemplazar archivos, hacé una copia de seguridad.");
+    html=downloadBlock("Juego base para PC",s.pc,"Versión base del juego. Necesitás este archivo + el parche de traducción de abajo.",true)+
+      downloadBlock("Parche de traducción al español",s.translation,"¿Ya tenés el juego? Descargá solo este parche: reemplaza archivos del juego base. Hacé una copia de seguridad antes.");
     if(s.translation.length)html+=`<details class="install"><summary>Cómo instalar la traducción</summary><ol><li>Descargá y extraé el archivo.</li><li>Copiá la carpeta <strong>game</strong> dentro de la carpeta del juego.</li><li>Reemplazá los archivos cuando lo solicite.</li></ol><p>Si el archivo incluye instrucciones propias, seguí las indicaciones de esa versión.</p></details>`;
   }else html=downloadBlock("Android (APK)",s.android,"Versión en español. Revisá que tu dispositivo sea compatible.",true);
   $("reportLink").href="mailto:"+REPORT_EMAIL+"?subject="+encodeURIComponent("Enlace caído: "+active.title)+"&body="+encodeURIComponent("Juego: "+active.title+"\nPlataforma (PC o Android):\nEnlace que falla:\n");
@@ -2115,9 +2124,20 @@ $("downloadContent").addEventListener("click",e=>{
   const a=e.target.closest("a[href]");if(!a||!active)return;
   registerDownload(active);evento("descarga",{juego:active.slug,plataforma:downloadPlatform});
 });
-$("season").onchange=e=>{seasonIndex=Number(e.target.value);drawDownloads()};
+function drawSeasonSeg(){
+  if(!active)return;
+  $("seasonSeg").innerHTML=active.seasons.map((x,i)=>`<button type="button" data-season="${i}" aria-pressed="${i===seasonIndex}">${esc(x.name)}</button>`).join("");
+}
+$("seasonSeg").onclick=e=>{const b=e.target.closest("[data-season]");if(!b)return;seasonIndex=Number(b.dataset.season);$("season").value=seasonIndex;drawSeasonSeg();drawDownloads()};
+$("season").onchange=e=>{seasonIndex=Number(e.target.value);drawSeasonSeg();drawDownloads()};
 $("downloadPC").onclick=()=>{downloadPlatform="pc";drawDownloads()};
 $("downloadAndroid").onclick=()=>{downloadPlatform="android";drawDownloads()};
+
+/* Botón "Descargar" fijo en la ficha: lleva a las descargas y se oculta cuando ya se están viendo. */
+$("dlJump").onclick=()=>{const d=document.querySelector("#gameDialog .downloads");if(d)d.scrollIntoView({behavior:"smooth",block:"start"})};
+if("IntersectionObserver"in window){
+  new IntersectionObserver(en=>{$("dlSticky").classList.toggle("off",en[0].isIntersecting)},{root:$("gameDialog"),threshold:0.15}).observe(document.querySelector("#gameDialog .downloads"));
+}
 
 /* ================= GALERÍA ================= */
 function drawGallery(){
@@ -2250,24 +2270,37 @@ let myRating=0;
 function drawStars(){
   $("stars").innerHTML=[1,2,3,4,5].map(n=>`<button type="button" data-rating="${n}" class="${n<=myRating?"on":""}" aria-label="${n} ${n===1?"estrella":"estrellas"}" aria-pressed="${myRating===n}" ${ratingBusy?"disabled":""}>★</button>`).join("");
 }
-async function loadRating(){
+// Promedio, cantidad de votos y cantidad de comentarios: se guardan 10 minutos en el navegador para no leer Firestore cada vez que se abre una ficha.
+const AGG_KEY="nomada_agg_v1",AGG_MIN=10;
+function aggLeer(slug){try{const o=JSON.parse(localStorage.getItem(AGG_KEY)||"{}")[slug];return o&&Date.now()-o.t<AGG_MIN*60000?o:null}catch{return null}}
+function aggGuardar(slug,v){try{const o=JSON.parse(localStorage.getItem(AGG_KEY)||"{}");o[slug]={...v,t:Date.now()};const k=Object.keys(o);if(k.length>150)delete o[k.sort((a,b)=>o[a].t-o[b].t)[0]];localStorage.setItem(AGG_KEY,JSON.stringify(o))}catch{}}
+function aggBorrar(slug){try{const o=JSON.parse(localStorage.getItem(AGG_KEY)||"{}");delete o[slug];localStorage.setItem(AGG_KEY,JSON.stringify(o))}catch{}}
+function pintarComentarios(n){$("commentCount").textContent=n?`(${n})`:"";$("commentsTitle").textContent=n?`Conversación de la comunidad · ${n} ${n===1?"comentario":"comentarios"}`:"Conversación de la comunidad"}
+async function loadRating(force){
   if(!active)return;
   const slug=active.slug,token=++ratingToken;
-  myRating=0;drawStars();$("ratingStatus").textContent="Cargando valoraciones...";
+  myRating=0;drawStars();$("ratingStatus").textContent="Cargando valoraciones...";pintarComentarios(0);
   try{
     const F=await authentication();
-    const q=F.fs.query(F.fs.collection(F.db,"valoraciones"),F.fs.where("juego","==",slug));
-    const aggregate=await F.fs.getAggregateFromServer(q,{average:F.fs.average("estrellas"),count:F.fs.count()});
+    if(force)aggBorrar(slug);
+    let agg=aggLeer(slug);
+    if(!agg){
+      const q=F.fs.query(F.fs.collection(F.db,"valoraciones"),F.fs.where("juego","==",slug));
+      const r=(await F.fs.getAggregateFromServer(q,{average:F.fs.average("estrellas"),count:F.fs.count()})).data();
+      let com=0;
+      try{com=(await F.fs.getAggregateFromServer(F.fs.query(F.fs.collection(F.db,"comentarios"),F.fs.where("juego","==",slug)),{count:F.fs.count()})).data().count||0}catch{}
+      agg={average:Number(r.average||0),count:r.count||0,com};
+      aggGuardar(slug,agg);
+    }
     let mine=0;
     if(F.auth.currentUser){
       const d=await F.fs.getDoc(F.fs.doc(F.db,"valoraciones",slug+"_"+F.auth.currentUser.uid));
       if(d.exists())mine=Number(d.data().estrellas)||0;
     }
     if(token!==ratingToken||active?.slug!==slug)return;
-    myRating=mine;drawStars();
-    const data=aggregate.data();
-    $("ratingStatus").textContent=data.count?
-      `${Number(data.average||0).toFixed(1).replace(".",",")} de 5 · ${data.count} ${data.count===1?"voto":"votos"}${mine?` · Tu voto: ${mine}`:""}`:
+    myRating=mine;drawStars();pintarComentarios(agg.com||0);
+    $("ratingStatus").textContent=agg.count?
+      `${agg.average.toFixed(1).replace(".",",")} de 5 · ${agg.count} ${agg.count===1?"voto":"votos"}${mine?` · Tu voto: ${mine}`:""}`:
       "Todavía no hay valoraciones. Podés dejar la primera.";
   }catch(e){
     if(token===ratingToken)$("ratingStatus").textContent="Las valoraciones no están disponibles en este momento.";
@@ -2282,7 +2315,7 @@ $("stars").onclick=async e=>{
     await F.fs.setDoc(F.fs.doc(F.db,"valoraciones",slug+"_"+uid),{
       juego:slug,uid,estrellas:n,fecha:F.fs.serverTimestamp()
     });
-    if(active?.slug===slug){myRating=n;toast("Tu valoración se guardó.");await loadRating()}
+    if(active?.slug===slug){myRating=n;toast("Tu valoración se guardó.");await loadRating(true)}
   }catch(e){if(active?.slug===slug)$("ratingStatus").textContent=friendlyError(e)}
   finally{ratingBusy=false;drawStars()}
 };
@@ -2334,6 +2367,7 @@ async function loadComments(){
     const snap=await F.fs.getDocs(F.fs.query(F.fs.collection(F.db,"comentarios"),F.fs.where("juego","==",slug)));
     if(token!==commentToken||active?.slug!==slug)return;
     comments=snap.docs.map(d=>({id:d.id,...d.data()}));
+    pintarComentarios(comments.length);aggBorrar(slug);
     blockedSet=new Set();
     if(isAdminUser()){try{(await F.fs.getDocs(F.fs.collection(F.db,"bloqueados"))).forEach(d=>blockedSet.add(d.id))}catch{}}
     drawComments();
