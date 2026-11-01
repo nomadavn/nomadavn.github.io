@@ -207,6 +207,7 @@ select{
 .card-dl:hover,.card-dl:focus-visible{background:var(--accent2);color:#fff;border-color:transparent}
 .grid.list .card-dl{width:auto;padding:7px 16px}
 /* Buscador grande de la portada */
+.header-actions{margin-left:auto}
 .quick{position:relative;margin-top:18px;max-width:560px}
 .quick input{width:100%;height:54px;padding:0 18px 0 50px;border-radius:16px;background:var(--surface);border:1px solid #f05a7766;color:var(--text);font-size:1rem;box-shadow:0 10px 30px #0003}
 .quick input:focus{outline:2px solid var(--accent2);outline-offset:2px}
@@ -988,10 +989,6 @@ body #heroOpen:is(:disabled,[aria-disabled="true"]) {
       <img src="assets/images/logo/logo.png" alt="Nómada VN" id="brandLogo">
       <span class="brand-fallback" id="brandFallback" hidden>Nómada<span>VN</span></span>
     </a>
-    <div class="search" role="search">
-      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="m16 16 5 5"/></svg>
-      <input id="search" type="search" placeholder="Buscá tu próxima historia..." autocomplete="off" aria-label="Buscar juegos por título, sinopsis o categoría">
-    </div>
     <div class="header-actions">
       <a href="https://ko-fi.com/nomadavn" target="_blank" rel="noopener noreferrer" class="btn support-header"><img src="assets/images/logo/kofi.webp" alt="" style="height:22px;width:auto;display:block"> Apoyar</a>
       <button class="btn primary" id="accountButton" type="button">Iniciar sesión</button>
@@ -1007,7 +1004,7 @@ body #heroOpen:is(:disabled,[aria-disabled="true"]) {
       <p>Buscá tu novela visual y descargala en 2 clics, para PC o Android.</p>
       <div class="quick" id="quick">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="quickSearch" type="search" placeholder="¿Qué juego querés descargar?" autocomplete="off" aria-label="Buscar un juego para descargar" aria-controls="quickList">
+        <input id="search" type="search" placeholder="¿Qué juego querés descargar?" autocomplete="off" aria-label="Buscar un juego para descargar" aria-controls="quickList">
         <div class="quick-list" id="quickList" hidden></div>
       </div>
     </div>
@@ -1873,7 +1870,7 @@ function drawRelated(){
 $("search").oninput=e=>{query=e.target.value;page=1;render()};
 /* Buscador grande de la portada: sugiere juegos y abre la ficha directo en las descargas. */
 (()=>{
-  const inp=$("quickSearch"),list=$("quickList");
+  const inp=$("search"),list=$("quickList");
   const cerrar=()=>{list.hidden=true;list.innerHTML=""};
   const pintar=()=>{
     const t=norm(inp.value).split(/\s+/).filter(Boolean);
@@ -1891,7 +1888,7 @@ $("search").oninput=e=>{query=e.target.value;page=1;render()};
   list.addEventListener("click",e=>{
     const all=e.target.closest("[data-quickall]");
     if(all){
-      query=inp.value;page=1;$("search").value=inp.value;render();
+      query=inp.value;page=1;render();
       $("catalogo").scrollIntoView({behavior:"smooth",block:"start"});
     }
     cerrar();
