@@ -986,15 +986,15 @@ body #heroOpen:is(:disabled,[aria-disabled="true"]) {
 }
 #forYou .fy-dismiss {
   position: absolute;
-  inset: 6px 6px auto auto;
-  z-index: 2;
-  width: 44px;
-  height: 44px;
+  inset: 54px 8px auto auto; /* debajo del corazón, sobre la portada */
+  z-index: 4;
+  width: 34px;
+  height: 34px;
   border: 1px solid #ffffff80;
   border-radius: 50%;
   background: #161616eb;
   color: #fff;
-  font: 26px/1 system-ui;
+  font: 20px/1 system-ui;
   cursor: pointer;
 }
 #forYou .fy-dismiss:focus-visible { outline: 3px solid #ffca5c; }
@@ -1231,13 +1231,9 @@ body #accountButton.primary:hover{background:var(--surface3)!important;box-shado
     </div>
 
     <section class="section" id="relatedSection" hidden style="margin-top:26px;margin-bottom:6px" aria-labelledby="relatedTitle">
-      <div class="section-head"><div><h3 id="relatedTitle" style="font-size:1rem">Más como este</h3></div></div>
-      <div class="rail" id="related"></div>
-      <div id="forYouSection" hidden style="margin-top:20px">
-        <div class="section-head"><div><h4 style="font-size:.92rem">Elegidos para vos</h4><p>Juegos parecidos a los que mirás, guardás y descargás.</p></div>
-          <button class="row-reset" id="resetTastes" type="button">Reiniciar mis gustos</button></div>
-        <div class="rail" id="forYou"></div>
-      </div>
+      <div class="section-head"><div><h3 id="relatedTitle" style="font-size:1rem">Más como este</h3></div>
+        <button class="row-reset" id="resetTastes" type="button">Reiniciar mis gustos</button></div>
+      <div class="rail" id="forYou"></div>
     </section>
 
     <section class="downloads" aria-labelledby="downloadTitle">
@@ -1938,9 +1934,6 @@ function renderRows(){
   const pop=games.length>1?[...games].sort((a,b)=>popularScore(b)-popularScore(a)||newestFirst(a,b)).slice(0,ROW_SIZE):[];
   $("popularSection").hidden=pop.length<2;
   $("popular").innerHTML=pop.map((g,k)=>card(g,{rank:k+1})).join("");
-  const fy=hasTastes()?forYouList():[];
-  $("forYouSection").hidden=!fy.length;
-  $("forYou").innerHTML=fy.map(x=>card(x.g,{note:x.reason?"Porque te gusta "+esc(x.reason):"Popular ahora"})).join("");
   requestViews();
   if(active)drawRelated(); // "Más como este" incluye los juegos elegidos para vos
 }
@@ -1953,12 +1946,11 @@ function relatedGames(g){
     return {x,shared,s:shared/Math.sqrt(Math.max(1,k.length*mine.size))+.02*forYouScore(x)+.05*Math.log10(1+rawScore(x))};
   }).filter(r=>r.shared>0).sort((a,b)=>b.s-a.s).slice(0,8).map(r=>r.x);
 }
+let relatedPaint=null; // lo define el parche "Para vos" (más abajo): mezcla juegos parecidos y elegidos para vos
 function drawRelated(){
   if(!active)return;
-  const list=relatedGames(active);
-  $("related").hidden=!list.length;
-  $("relatedSection").hidden=!list.length&&$("forYouSection").hidden;
-  $("related").innerHTML=list.map(g=>card(g)).join("");
+  if(typeof relatedPaint==="function")relatedPaint();
+  else{const list=relatedGames(active);$("relatedSection").hidden=!list.length;$("forYou").innerHTML=list.map(g=>card(g)).join("")}
   paintAllViews();
 }
 
@@ -3222,19 +3214,38 @@ authentication().catch(()=>{});
     pending = true;
     Promise.resolve().then(() => { pending = false; paint(); });
   }
+  // Una sola fila: juegos parecidos al que estás mirando, mezclados con los elegidos para vos.
+  function mixed() {
+    if (!active) return [];
+    const sim = relatedGames(active);
+    const pers = hasTastes() ? buildList() : [];
+    const out = [], used = new Set([A.slug(active)]);
+    const add = (g, reason, p) => {
+      const sl = A.slug(g);
+      if (used.has(sl) || out.length >= 12) return;
+      used.add(sl); out.push({ g, reason, p });
+    };
+    for (let i = 0; i < Math.max(sim.length, pers.length); i++) {
+      if (sim[i]) add(sim[i], "", false);
+      if (pers[i]) add(pers[i].g, pers[i].reason, true);
+    }
+    return out;
+  }
+  relatedPaint = () => paint();
   function paint() {
     const rail = A.rail();
     if (!rail) return;
     const scroll = rail.scrollLeft;
     const focus = document.activeElement;
     const focusSlug = rail.contains(focus) ? focus?.dataset?.fyDismiss : null;
-    const items = buildList().filter(x => !active || A.slug(x.g) !== active.slug);
+    const items = mixed();
+    $("relatedSection").hidden = !items.length;
     rail.classList.add("fy-plus");
-    rail.innerHTML = items.map(({ g, reason }) => {
+    rail.innerHTML = items.map(({ g, reason, p }) => {
       const slug = esc(A.slug(g)), title = esc(String(A.title(g)));
-      return `<div class="fy-item">${card(g, { note: reason })}
+      return `<div class="fy-item">${card(g, { note: reason })}${p ? `
         <button type="button" class="fy-dismiss" data-fy-dismiss="${slug}"
-        aria-label="No me interesa ${title}">×</button></div>`;
+        aria-label="No me interesa ${title}">×</button>` : ""}</div>`;
     }).join("");
     rail.scrollLeft = scroll;
     if (focusSlug != null) {
