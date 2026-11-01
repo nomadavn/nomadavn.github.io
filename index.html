@@ -389,7 +389,6 @@ textarea.field{resize:vertical;min-height:100px}
   .search input{height:44px}.search>.icon{top:12px}
   .intro{padding:16px 0 18px}.intro h1{font-size:2.3rem;margin:8px 0}
   .quick{margin-top:12px}.quick input{height:50px}.quick svg{top:15px}
-  #recentSection{display:none} /* en el celular el catálogo ya arranca con los más recientes */
   /* Destacado compacto en el celular: imagen a la izquierda, título y botón a la derecha. */
   .hero{min-height:0;border-radius:var(--r-lg);display:grid;grid-template-columns:92px minmax(0,1fr);align-items:stretch}
   .hero:has(.hero-bg[hidden]){grid-template-columns:minmax(0,1fr)}
@@ -1089,14 +1088,6 @@ body #accountButton.primary:hover{background:var(--surface3)!important;box-shado
     <span class="intro-note">Traducciones y juegos · Exclusivo +18</span>
   </section>
 
-  <section class="section" id="recentSection" hidden aria-labelledby="recentTitle" style="margin-top:6px">
-    <div class="section-head">
-      <div><h2 id="recentTitle">Recién agregados</h2><p>Las últimas traducciones que subimos.</p></div>
-      <a class="btn small" href="#catalogo">Ver catálogo</a>
-    </div>
-    <div class="rail" id="recent"></div>
-  </section>
-
   <section class="hero" id="hero" aria-label="Juego destacado" hidden>
     <img id="heroImage" class="hero-bg" alt="">
     <span id="heroIndex" class="hero-index"></span>
@@ -1112,14 +1103,6 @@ body #accountButton.primary:hover{background:var(--surface3)!important;box-shado
       <button class="btn iconbtn" id="heroPrev" type="button" aria-label="Destacado anterior">←</button>
       <button class="btn iconbtn" id="heroNext" type="button" aria-label="Destacado siguiente">→</button>
     </div>
-  </section>
-
-  <section class="section" id="forYouSection" hidden aria-labelledby="forYouTitle">
-    <div class="section-head">
-      <div><h2 id="forYouTitle">Para vos</h2><p>Juegos parecidos a los que mirás, guardás y descargás.</p></div>
-      <button class="row-reset" id="resetTastes" type="button">Reiniciar mis gustos</button>
-    </div>
-    <div class="rail" id="forYou"></div>
   </section>
 
   <section class="section" id="popularSection" hidden aria-labelledby="popularTitle">
@@ -1250,6 +1233,11 @@ body #accountButton.primary:hover{background:var(--surface3)!important;box-shado
     <section class="section" id="relatedSection" hidden style="margin-top:26px;margin-bottom:6px" aria-labelledby="relatedTitle">
       <div class="section-head"><div><h3 id="relatedTitle" style="font-size:1rem">Más como este</h3></div></div>
       <div class="rail" id="related"></div>
+      <div id="forYouSection" hidden style="margin-top:20px">
+        <div class="section-head"><div><h4 style="font-size:.92rem">Elegidos para vos</h4><p>Juegos parecidos a los que mirás, guardás y descargás.</p></div>
+          <button class="row-reset" id="resetTastes" type="button">Reiniciar mis gustos</button></div>
+        <div class="rail" id="forYou"></div>
+      </div>
     </section>
 
     <section class="downloads" aria-labelledby="downloadTitle">
@@ -1948,15 +1936,13 @@ document.addEventListener("visibilitychange",()=>{if(document.visibilityState===
 /* ================= FILAS: POPULARES, PARA VOS Y RELACIONADOS ================= */
 function renderRows(){
   const pop=games.length>1?[...games].sort((a,b)=>popularScore(b)-popularScore(a)||newestFirst(a,b)).slice(0,ROW_SIZE):[];
-  const rec=games.length>1?[...games].sort(newestFirst).slice(0,ROW_SIZE):[];
-  $("recentSection").hidden=rec.length<2;
-  $("recent").innerHTML=rec.map(g=>card(g)).join("");
   $("popularSection").hidden=pop.length<2;
   $("popular").innerHTML=pop.map((g,k)=>card(g,{rank:k+1})).join("");
   const fy=hasTastes()?forYouList():[];
   $("forYouSection").hidden=!fy.length;
   $("forYou").innerHTML=fy.map(x=>card(x.g,{note:x.reason?"Porque te gusta "+esc(x.reason):"Popular ahora"})).join("");
   requestViews();
+  if(active)drawRelated(); // "Más como este" incluye los juegos elegidos para vos
 }
 $("resetTastes").onclick=resetTastes;
 // "Más como este": juegos que comparten etiquetas con el que estás mirando (y un empujoncito por tus gustos y los populares).
@@ -1970,7 +1956,8 @@ function relatedGames(g){
 function drawRelated(){
   if(!active)return;
   const list=relatedGames(active);
-  $("relatedSection").hidden=!list.length;
+  $("related").hidden=!list.length;
+  $("relatedSection").hidden=!list.length&&$("forYouSection").hidden;
   $("related").innerHTML=list.map(g=>card(g)).join("");
   paintAllViews();
 }
@@ -3241,7 +3228,7 @@ authentication().catch(()=>{});
     const scroll = rail.scrollLeft;
     const focus = document.activeElement;
     const focusSlug = rail.contains(focus) ? focus?.dataset?.fyDismiss : null;
-    const items = buildList();
+    const items = buildList().filter(x => !active || A.slug(x.g) !== active.slug);
     rail.classList.add("fy-plus");
     rail.innerHTML = items.map(({ g, reason }) => {
       const slug = esc(A.slug(g)), title = esc(String(A.title(g)));
