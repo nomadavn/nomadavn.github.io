@@ -372,15 +372,24 @@ textarea.field{resize:vertical;min-height:100px}
   .wrap{width:calc(100% - 32px)}
   .header-inner{flex-wrap:wrap;gap:12px;padding:14px 0}
   .brand img{height:34px;max-width:150px}
-  .header-actions{margin-left:auto}.header-actions .support-header{display:none}
+  .header-actions{margin-left:auto}.header-actions .support-label{display:none}.header-actions .support-header{padding-inline:10px}
   .search{order:3;flex-basis:100%;max-width:none}
   .search input{height:44px}.search>.icon{top:12px}
-  .intro{padding-top:30px}.intro h1{font-size:2.3rem}
-  .hero{min-height:300px;border-radius:22px}
-  .hero-copy{padding:22px 22px 70px}
-  .hero p{-webkit-line-clamp:2}
-  .hero-nav{right:18px;bottom:18px}
-  .hero-index{right:20px;top:18px}
+  .intro{padding:16px 0 18px}.intro h1{font-size:2.3rem;margin:8px 0}
+  .quick{margin-top:12px}.quick input{height:50px}.quick svg{top:15px}
+  #recentSection{display:none} /* en el celular el catálogo ya arranca con los más recientes */
+  /* Destacado compacto en el celular: imagen a la izquierda, título y botón a la derecha. */
+  .hero{min-height:0;border-radius:18px;display:grid;grid-template-columns:92px minmax(0,1fr);align-items:stretch}
+  .hero:has(.hero-bg[hidden]){grid-template-columns:minmax(0,1fr)}
+  .hero-bg{position:relative;inset:auto;z-index:auto;width:92px;height:100%;min-height:124px}
+  .hero::after{display:none}
+  .hero-copy{padding:12px 14px;display:flex;flex-direction:column;justify-content:center;gap:6px;max-width:none;min-width:0}
+  .hero-tags{margin:0}.hero-tags .tag:not(.accent){display:none}
+  .hero h2{font-size:1.05rem;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .hero p{display:none}
+  .hero-bottom .btn{padding:7px 12px;font-size:.74rem}
+  .hero-nav{display:none}
+  .hero-index{right:12px;top:8px}
   .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
   .grid.list{grid-template-columns:1fr}
   .card-body{padding:14px}.card-title{font-size:.86rem}
@@ -396,7 +405,9 @@ textarea.field{resize:vertical;min-height:100px}
   .modal-cover{height:220px}
   .modal-heading{padding-inline:22px}
   .modal-body{padding:22px}
-  .section{margin-top:32px}.rail{grid-auto-columns:200px}
+  .section{margin-top:22px}.rail{grid-auto-columns:148px;gap:12px}
+  .section-head p{display:none}
+  .rail .card-dl{display:none}.rail .card-body{padding:10px 12px}.rail .card-meta{margin-top:6px}
   .support{align-items:start;flex-direction:column}
 }
 @media(max-width:420px){
@@ -996,7 +1007,7 @@ body #heroOpen:is(:disabled,[aria-disabled="true"]) {
       <span class="brand-fallback" id="brandFallback" hidden>Nómada<span>VN</span></span>
     </a>
     <div class="header-actions">
-      <a href="https://ko-fi.com/nomadavn" target="_blank" rel="noopener noreferrer" class="btn support-header"><img src="assets/images/logo/kofi.webp" alt="" style="height:22px;width:auto;display:block"> Apoyar</a>
+      <a href="https://ko-fi.com/nomadavn" target="_blank" rel="noopener noreferrer" class="btn support-header" aria-label="Apoyar en Ko-fi"><img src="assets/images/logo/kofi.webp" alt="" style="height:22px;width:auto;display:block"><span class="support-label"> Apoyar</span></a>
       <button class="btn primary" id="accountButton" type="button">Iniciar sesión</button>
     </div>
   </div>
