@@ -7,7 +7,7 @@
 <meta name="description" content="Explorá novelas visuales en español para PC y Android. Lanzamientos, traducciones y temporadas en Nómada VN. Exclusivo para mayores de 18 años.">
 <meta name="robots" content="index, follow">
 <meta name="rating" content="RTA-5042-1996-1400-1577-RTA">
-<meta name="theme-color" content="#100d12">
+<meta name="theme-color" content="#0a070c">
 <meta name="color-scheme" content="dark">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://nomadavn.github.io/">
@@ -25,21 +25,26 @@
 <style>
 /* Todo el diseño está acá. No requiere Tailwind ni styles.css. */
 :root{
-  --bg:#100d12;
-  --surface:#19151c;
-  --surface2:#211b25;
-  --surface3:#2b2330;
+  --bg:#0a070c; /* fondo más oscuro, casi negro profundo */
+  --surface:#141016;
+  --surface2:#1e1622;
+  --surface3:#2a1e30;
   --text:#f6f0f4;
   --muted:#b6aab9;
   --dim:#928497;
-  --accent:#f05a77;
-  --accent2:#d73357;
-  --soft:rgba(240,90,119,.12);
+
+  /* EL COLOR DEL BANNER */
+  --accent:#ff3b5c;  /* rosa neón brillante */
+  --accent2:#e61e42; /* rojo profundo para los degradados */
+
+  --soft:rgba(255,59,92,.15);
   --line:rgba(255,255,255,.09);
   --green:#a2e6bc;
   --gold:#f5cd7c;
   --radius:24px;
-  --shadow:0 24px 70px rgba(0,0,0,.32);
+  --r-sm:8px;--r-md:12px;--r-lg:16px;--r-xl:24px;
+  --line-strong:rgba(255,255,255,.26);
+  --shadow:0 24px 70px rgba(0,0,0,.5);
   --max:1280px;
 }
 *{box-sizing:border-box}
@@ -50,10 +55,12 @@ body{
   line-height:1.6;-webkit-font-smoothing:antialiased;
 }
 body::before{
-  content:"";position:absolute;inset:0 0 auto;height:750px;
+  content:"";position:absolute;inset:0 0 auto;height:800px;
   pointer-events:none;z-index:-1;
-  background:radial-gradient(ellipse at 15% 0%,#6b2a4acc,transparent 60%),
-             radial-gradient(ellipse at 90% 15%,#3a336a66,transparent 55%);
+  /* Halo rojo en el centro y arriba */
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(230, 30, 66, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 15% 10%, rgba(255, 59, 92, 0.1) 0%, transparent 50%);
 }
 h1,h2,h3,p{margin:0}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -178,7 +185,7 @@ select{
 .chip[aria-pressed="true"]{color:#ffc3d0;background:var(--soft);border-color:#f05a7777}
 .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
 .card{
-  min-width:0;overflow:hidden;border-radius:var(--r-lg);background:var(--surface);
+  min-width:0;overflow:hidden;border-radius:var(--r-lg);background:linear-gradient(180deg,var(--surface) 0%,#0d0910 100%);
   border:1px solid var(--line);position:relative;
   transition:transform .22s,border-color .22s,box-shadow .22s;
 }
@@ -729,11 +736,15 @@ body .iconbtn {
   border-radius: 50%;
 }
 body .btn.primary {
-  background: linear-gradient(135deg,var(--accent),var(--accent2));
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
   border-color: var(--accent);
   color: #fff;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.15),
-    0 6px 24px rgba(215,51,87,.32);
+  /* Efecto de luz neón */
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.2),
+    0 0 15px rgba(255, 59, 92, 0.4),
+    0 4px 20px rgba(230, 30, 66, 0.3);
+  text-shadow: 0 0 8px rgba(255,255,255,.3);
 }
 
 /* ===== BUSCADOR: contorno, lupa y foco ===== */
@@ -866,8 +877,11 @@ body .hero h2 {
   }
   body .btn.primary:not(:disabled):not([aria-disabled="true"]):hover {
     background: linear-gradient(135deg,var(--accent),var(--accent2));
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.15),
-      0 10px 40px rgba(215,51,87,.58);
+    /* Brilla más al pasar el mouse */
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.2),
+      0 0 25px rgba(255, 59, 92, 0.7),
+      0 6px 25px rgba(230, 30, 66, 0.5);
   }
   body #heroOpen:hover {
     animation: none;
@@ -1014,17 +1028,8 @@ body .segment button:is([aria-pressed="true"],[aria-selected="true"],[data-state
   color: #100d12;
   box-shadow: none;
 }
-body #accountButton.primary {
-  background: var(--surface3);
-  border-color: rgba(255,255,255,.18);
-  box-shadow: none;
-}
 @media (hover: hover) and (pointer: fine) {
   body :is(.btn,.iconbtn):not(:disabled):not([aria-disabled="true"]):hover { border-color: rgba(255,255,255,.3); }
-  body :is(.card,.rail > .card):hover {
-    border-color: rgba(255,255,255,.28);
-    box-shadow: 0 22px 48px rgba(0,0,0,.48);
-  }
   body .card-title button:hover { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
 }
 .quick input { border-color: var(--line); }
@@ -1039,17 +1044,17 @@ body .segment button:is([aria-pressed="true"],[aria-selected="true"],[data-state
 body .pager button[aria-current="page"]{
   background:var(--surface3)!important;color:#fff!important;border-color:var(--line-strong)!important;box-shadow:none!important;
 }
-/* Hover: borde neutro, sin rosa */
+/* Hover de botones y filtros: borde neutro */
 body :is(.btn,.iconbtn,.dialog-close,.chip,.fav,.shot):not(.primary):not(.card-dl):hover,
-body .segment button:hover,
-body :is(.card,.rail>.card):hover,body .card:focus-within{border-color:var(--line-strong)!important}
-body :is(.card,.rail>.card):hover{box-shadow:0 22px 48px rgba(0,0,0,.48)!important}
+body .segment button:hover{border-color:var(--line-strong)!important}
+/* Tarjetas: al pasar el mouse brillan con el color del banner */
+body :is(.card,.rail>.card):hover,body .card:focus-within{
+  border-color:var(--accent)!important;
+  box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 20px rgba(255,59,92,.15)!important;
+}
 body .card-title button:hover{color:#fff}
 body.ux-polish .card:hover :where(.card-tags,.platforms,.tag):not(.accent){border-color:var(--line)}
 body .genres span,body .card-note{color:var(--muted)}
-/* El botón de entrar es neutro: el rosa queda para descargar */
-body #accountButton.primary{background:var(--surface2);border:1px solid var(--line);box-shadow:none;color:#fff}
-body #accountButton.primary:hover{background:var(--surface3)!important;box-shadow:none!important;border-color:var(--line-strong)!important}
 /* Buscador y bloque de apoyo sobrios */
 .quick input{border-color:var(--line)}
 .quick svg{color:var(--muted)}
