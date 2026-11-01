@@ -315,6 +315,7 @@ dialog[open]{animation:enter .2s ease}
 .details dd{margin:4px 0 0;font-size:.78rem;font-weight:700}
 .downloads{margin-top:26px;padding:20px;border:1px solid var(--line);border-radius:18px;background:#100d1280}
 .downloads h3{font-size:1rem}
+.season-lbl{display:block;font-size:.72rem;font-weight:800;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
 .season-seg{max-width:100%;overflow-x:auto;flex-wrap:wrap}
 .season-seg button{white-space:nowrap}
 .dl-sticky{position:sticky;bottom:0;z-index:40;margin:18px -30px -32px;padding:12px 30px;background:linear-gradient(0deg,#100d12 60%,#100d1200);display:flex;justify-content:center;transition:opacity .2s}
@@ -1200,7 +1201,7 @@ body #heroOpen:is(:disabled,[aria-disabled="true"]) {
     <section class="downloads" aria-labelledby="downloadTitle">
       <div class="download-head">
         <h3 id="downloadTitle">Descargas</h3>
-        <div id="seasonLabel" hidden style="flex-basis:100%"><div class="segment season-seg" id="seasonSeg" role="group" aria-label="Temporada"></div><select id="season" hidden aria-hidden="true"></select></div>
+        <div id="seasonLabel" hidden style="flex-basis:100%"><span class="season-lbl">Temporada</span><div class="segment season-seg" id="seasonSeg" role="group" aria-label="Temporada"></div><select id="season" hidden aria-hidden="true"></select></div>
       </div>
       <div class="segment" role="group" aria-label="Plataforma de descarga" style="width:fit-content;margin-bottom:18px">
         <button id="downloadPC" type="button" aria-pressed="true">PC (Windows)</button>
@@ -1227,9 +1228,9 @@ body #heroOpen:is(:disabled,[aria-disabled="true"]) {
       <button class="btn small" id="loadComments" type="button" style="margin-top:14px">Ver comentarios <span id="commentCount"></span></button>
       <div id="commentArea" hidden>
         <div id="commentAccount" style="margin:16px 0"></div>
-        <form id="commentForm" hidden>
+        <form id="commentForm" hidden aria-describedby="commentStatus">
           <label class="sr" for="commentText">Tu comentario</label>
-          <textarea id="commentText" class="field" maxlength="1000" required placeholder="Compartí tu opinión o dejá una consulta..."></textarea>
+          <textarea id="commentText" class="field" maxlength="1000" required aria-describedby="commentStatus" placeholder="Compartí tu opinión o dejá una consulta..."></textarea>
           <button class="btn primary small" type="submit" style="margin-top:10px">Publicar comentario</button>
         </form>
         <p class="status" id="commentStatus" role="status"></p>
@@ -1269,11 +1270,11 @@ body #heroOpen:is(:disabled,[aria-disabled="true"]) {
   </div>
 </dialog>
 
-<dialog id="ageDialog" class="gate" aria-labelledby="ageTitle">
+<dialog id="ageDialog" class="gate" aria-labelledby="ageTitle" aria-describedby="ageText">
   <div class="auth-body">
     <div class="gate-symbol">18+</div>
     <h2 id="ageTitle">Un espacio para adultos</h2>
-    <p>Este sitio contiene material para adultos. Para entrar tenés que tener al menos 18 años y cumplir la mayoría de edad exigida en tu país.</p>
+    <p id="ageText">Este sitio contiene material para adultos. Para entrar tenés que tener al menos 18 años y cumplir la mayoría de edad exigida en tu país.</p>
     <div class="gate-actions">
       <button class="btn primary" id="acceptAge" type="button">Tengo 18 años o más</button>
       <a class="btn" href="https://www.google.com">Salir</a>
@@ -1608,6 +1609,7 @@ async function loadCatalog(){
     $("catalogStatus").textContent=next.length?"":"Todavía no hay juegos publicados.";
   }catch(e){
     console.error(e);
+    $("grid").setAttribute("aria-busy","false");
     if(!cache){games=[];render();$("emptyTitle").textContent="No pudimos cargar el catálogo";$("emptyText").textContent="Revisá tu conexión y volvé a cargar la página."}
     $("catalogStatus").textContent=cache?"Estás viendo una copia guardada. No se pudo comprobar si hay novedades.":"El catálogo no está disponible en este momento.";
   }
@@ -2205,7 +2207,14 @@ function updateAccount(){
   onSessionChange();
   if(games.length){render();renderRows()}
   if(active){
+    // Si el foco estaba en algo de la ficha que se vuelve a dibujar, se le devuelve después.
+    const fa=document.activeElement,dlg=$("gameDialog");let sel="";
+    if(fa&&fa!==document.body&&dlg.contains(fa)){
+      if(fa.id)sel="#"+CSS.escape(fa.id);
+      else{const k=Object.keys(fa.dataset||{})[0];if(k)sel=`[data-${k.replace(/[A-Z]/g,m=>"-"+m.toLowerCase())}="${CSS.escape(fa.dataset[k])}"]`;else if(fa.getAttribute("href"))sel=`a[href="${CSS.escape(fa.getAttribute("href"))}"]`}
+    }
     fillGame(false);
+    if(sel){const n=dlg.querySelector(sel);if(n&&n!==document.activeElement)n.focus({preventScroll:true})}
     if(!$("commentArea").hidden)drawCommentAccount();
   }
   if(!isMember()&&$("imageDialog").open)closeDialog("imageDialog");
@@ -2268,6 +2277,7 @@ $("resetPassword").onclick=async()=>{
 /* ================= VALORACIONES ================= */
 let myRating=0;
 function drawStars(){
+  $("stars").setAttribute("aria-label",myRating?`Tu voto: ${myRating} de 5`:"Valorar de 1 a 5 estrellas");
   $("stars").innerHTML=[1,2,3,4,5].map(n=>`<button type="button" data-rating="${n}" class="${n<=myRating?"on":""}" aria-label="${n} ${n===1?"estrella":"estrellas"}" aria-pressed="${myRating===n}" ${ratingBusy?"disabled":""}>★</button>`).join("");
 }
 // Promedio, cantidad de votos y cantidad de comentarios: se guardan 10 minutos en el navegador para no leer Firestore cada vez que se abre una ficha.
