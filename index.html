@@ -3243,9 +3243,7 @@ authentication().catch(()=>{});
     rail.classList.add("fy-plus");
     rail.innerHTML = items.map(({ g, reason, p }) => {
       const slug = esc(A.slug(g)), title = esc(String(A.title(g)));
-      return `<div class="fy-item">${card(g, { note: reason })}${p ? `
-        <button type="button" class="fy-dismiss" data-fy-dismiss="${slug}"
-        aria-label="No me interesa ${title}">×</button>` : ""}</div>`;
+      return `<div class="fy-item">${card(g)}</div>`;
     }).join("");
     rail.scrollLeft = scroll;
     if (focusSlug != null) {
