@@ -201,7 +201,12 @@ select{
 }
 .card-title button::after{content:"";position:absolute;inset:0;z-index:1}
 .card-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--dim);font-size:.72rem;margin-top:10px}
-.card-meta .views{margin-left:auto}
+.card-meta .views{margin-left:auto;flex:none}
+.card-meta>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rel-short{display:none}
+.card-excerpt{margin-top:8px;color:var(--muted);font-size:.72rem;line-height:1.5;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.rail .card-excerpt{display:none}
+@media(max-width:760px){.rel-full{display:none}.rel-short{display:inline}}
 /* Botón de descarga en cada tarjeta: abre la ficha directo en las descargas. */
 .card-dl{position:relative;z-index:3;width:100%;margin-top:12px;padding:9px 12px;border-radius:var(--r-md);background:var(--soft);color:#ffc3d0;border:1px solid #f05a7744;font-size:.76rem;font-weight:800;letter-spacing:.01em;transition:background .2s,color .2s,border-color .2s}
 .card-dl:hover,.card-dl:focus-visible{background:var(--accent2);color:#fff;border-color:transparent}
@@ -1531,6 +1536,30 @@ function freshness(g){
   if(updated<=now&&now-updated<14*864e5)return '<span class="tag gold">Actualizado</span>';
   return "";
 }
+/* Tiempo relativo en español: "hoy", "hace 3 días", "hace 2 semanas", "hace 1 mes". */
+function plural(n,uno,otros){return `${n} ${n===1?uno:otros}`}
+function tiempoRelativo(fecha){
+  const t=Date.parse(fecha);if(!t)return null;
+  const dias=Math.floor((Date.now()-t)/864e5);
+  if(dias<0)return null;
+  if(dias<1)return "hoy";
+  if(dias<7)return "hace "+plural(dias,"día","días");
+  if(dias<30)return "hace "+plural(Math.floor(dias/7),"semana","semanas");
+  if(dias<365)return "hace "+plural(Math.floor(dias/30),"mes","meses");
+  return "hace "+plural(Math.floor(dias/365),"año","años");
+}
+function fechaCard(g){
+  const upd=tiempoRelativo(g.updated),cre=tiempoRelativo(g.created);
+  const r=upd||cre;if(!r)return "";
+  const verbo=upd?"Actualizado":"Publicado";
+  return `<span class="rel-full">${verbo} ${r}</span><span class="rel-short">${r==="hoy"?(upd?"Actualizado hoy":"Hoy"):r.charAt(0).toUpperCase()+r.slice(1)}</span>`;
+}
+function extracto(texto,max=90){
+  const t=String(texto||"").replace(/\s+/g," ").trim();
+  if(t.length<=max)return t;
+  const corte=t.slice(0,max),ult=corte.lastIndexOf(" ");
+  return (ult>40?corte.slice(0,ult):corte).replace(/[\s,.;:–-]+$/,"")+"…";
+}
 function card(g,o={}){
   const fav=favorites.has(g.slug),blur=concealed(g.adult);
   return `<article class="card">
@@ -1545,7 +1574,8 @@ function card(g,o={}){
     <div class="card-body">
       <div class="genres">${g.categories.slice(0,2).map(c=>`<span>${esc(c)}</span>`).join('<span aria-hidden="true">/</span>')}</div>
       <h3 class="card-title"><button type="button" data-game="${esc(g.slug)}">${esc(g.title)}</button></h3>
-      <div class="card-meta"><span>${esc(g.size||"Novela visual")}</span><span class="views" data-vis="${esc(g.slug)}"></span></div>
+      ${g.description?`<p class="card-excerpt">${esc(extracto(g.description))}</p>`:""}
+      <div class="card-meta"><span>${esc(g.size||"Novela visual")}${fechaCard(g)?` · ${fechaCard(g)}`:""}</span><span class="views" data-vis="${esc(g.slug)}"></span></div>
       <button class="card-dl" type="button" data-download="${esc(g.slug)}" aria-label="Descargar ${esc(g.title)}">Descargar</button>
       ${!o.rank&&!o.note&&lists[g.slug]?`<div class="card-note">${lists[g.slug]==="p"?"En tu lista: por jugar":"Terminado"}</div>`:""}
     </div>
