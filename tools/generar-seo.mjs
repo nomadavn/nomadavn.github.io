@@ -125,4 +125,19 @@ for (const j of juegos) {
 }
 xml += "</urlset>\n";
 fs.writeFileSync(path.join(RAIZ, "sitemap.xml"), xml);
+
+// Lista de enlaces a todos los juegos, al pie de la portada (así Google los descubre sin JavaScript).
+const ordenados = [...juegos].sort((a, b) => String(b.fechaCreacion || "").localeCompare(String(a.fechaCreacion || "")));
+const lista = ordenados.map((j) => '    <li><a href="juego/' + encodeURIComponent(j.slug) + '/">' + esc(limpiarTitulo(j.titulo) || j.titulo) + "</a></li>").join("\n");
+const seo = "<!--SEO_JUEGOS_INICIO-->\n" +
+  '<nav class="seo-juegos" aria-label="Todos los juegos"><div class="wrap"><details><summary>Todos los juegos en español (' + juegos.length + ")</summary>\n  <ul>\n" + lista + "\n  </ul></details></div></nav>\n" +
+  "<style>.seo-juegos{margin:24px 0;font-size:.9rem;opacity:.85}.seo-juegos summary{cursor:pointer}.seo-juegos ul{columns:2 260px;padding-left:18px;margin:10px 0}.seo-juegos a{color:inherit}</style>\n" +
+  "<!--SEO_JUEGOS_FIN-->";
+const ruta = path.join(RAIZ, "index.html");
+let idx = fs.readFileSync(ruta, "utf8");
+const a = idx.indexOf("<!--SEO_JUEGOS_INICIO-->"), b = idx.indexOf("<!--SEO_JUEGOS_FIN-->");
+if (a >= 0 && b > a) {
+  idx = idx.slice(0, a) + seo + idx.slice(b + "<!--SEO_JUEGOS_FIN-->".length);
+  fs.writeFileSync(ruta, idx);
+}
 console.log("Listo: " + juegos.length + " páginas de juegos.");
